@@ -5,7 +5,8 @@ import com.vaadin.server.VaadinRequest;
 import com.vaadin.ui.*;
 import com.vaadin.ui.themes.ValoTheme;
 
-@Theme(ValoTheme.THEME_NAME)
+@Theme("valo")
+
 public class MainUI extends UI {
 
     @Override
@@ -17,5 +18,6 @@ public class MainUI extends UI {
         layout.addComponent(new Label("Main UI"));
 
         setContent(layout);
+
     }
 }
