@@ -2,6 +2,7 @@ package dao;
 
 
 import models.Client;
+import models.Mechanic;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -82,5 +83,53 @@ public class DAO {
             }
         }
         return currentClient;
+    }
+
+    public List<Mechanic> LoadAllMechanics() throws SQLException {
+        List<Mechanic> data = new ArrayList<Mechanic>();
+        String selectSQL = "SELECT * FROM MECHANIC";
+        Connection dbConnection = getDBConnection();
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
+        ResultSet rsMechanic = preparedStatement.executeQuery();
+        Mechanic currentMechanic = null;
+        while (rsMechanic.next()) {
+            int pizzaMakerID = rsMechanic.getInt("id");
+            String name = rsMechanic.getString("NAME");
+            String surname = rsMechanic.getString("SURNAME");
+            String patronymic = rsMechanic.getString("PATRONYMIC");
+            int hourlypay = rsMechanic.getInt("HOURLYPAY");
+            currentMechanic = new Mechanic(pizzaMakerID, name, surname, patronymic, hourlypay);
+            data.add(currentMechanic);
+        }
+        if (preparedStatement != null) {
+            preparedStatement.close();
+        }
+        if (dbConnection != null) {
+            dbConnection.close();
+        }
+        return data;
+    }
+
+    public Mechanic loadMechanic(int mechanicID) throws SQLException {
+        String selectSQL = "SELECT * FROM MECHANIC WHERE ID = ?";
+        Connection dbConnection = getDBConnection();
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
+        preparedStatement.setInt(1, mechanicID);
+        ResultSet rsPizzaMakers = preparedStatement.executeQuery();
+        Mechanic currentMechanic = null;
+        if (rsPizzaMakers.next()) {
+            String name = rsPizzaMakers.getString("NAME");
+            String surname = rsPizzaMakers.getString("SURNAME");
+            String patronymic = rsPizzaMakers.getString("PATRONYMIC");
+            int hourlypay = rsPizzaMakers.getInt("HOURLYPAY");
+            currentMechanic = new Mechanic(mechanicID, name, surname, patronymic, hourlypay);
+            if (preparedStatement != null) {
+                preparedStatement.close();
+            }
+            if (dbConnection != null) {
+                dbConnection.close();
+            }
+        }
+        return currentMechanic;
     }
 }

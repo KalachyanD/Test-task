@@ -7,8 +7,30 @@
  </head>
  <body>
   <vaadin-form-layout size-full>
-   <vaadin-horizontal-layout _id="horizont">
-    <vaadin-grid caption="Клиенты" height="191px" _id="grid_Clients">
+   <vaadin-horizontal-layout spacing margin _id="horizont">
+    <vaadin-grid caption="Клиенты" height="191px" _id="gridClients">
+     <table>
+      <colgroup>
+       <col property-id="ID" sortable>
+       <col property-id="Name" sortable>
+       <col property-id="Surname" sortable>
+       <col property-id="Patronymic" sortable>
+       <col property-id="Telephone" sortable>
+      </colgroup>
+      <thead>
+       <tr default>
+        <th plain-text>ID</th>
+        <th plain-text>Name</th>
+        <th plain-text>Surname</th>
+        <th plain-text>Patronymic</th>
+        <th plain-text>Telephone</th>
+       </tr>
+      </thead>
+      <tbody></tbody>
+     </table>
+    </vaadin-grid>
+    <vaadin-grid caption="Механики
+" width="500px" height="191px" _id="gridMechanics">
      <table>
       <colgroup>
        <col property-id="ID" sortable>

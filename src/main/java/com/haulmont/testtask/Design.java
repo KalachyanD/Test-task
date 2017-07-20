@@ -20,7 +20,8 @@ import com.vaadin.ui.Grid;
 @SuppressWarnings("serial")
 public class Design extends FormLayout {
     protected HorizontalLayout horizont;
-    protected Grid grid_Clients;
+    protected Grid gridClients;
+    protected Grid gridMechanics;
 
     public Design() {
         com.vaadin.ui.declarative.Design.read(this);
