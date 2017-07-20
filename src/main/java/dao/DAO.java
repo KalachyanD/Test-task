@@ -88,6 +88,26 @@ public class DAO {
         return currentClient;
     }
 
+    public void storeClient(Client client) throws SQLException {
+        String insertTableSQL = "INSERT INTO CLIENT"
+                + "(NAME, SURNAME, PATRONYMIC, TELEPHONENUMBER) VALUES"
+                + "(?,?,?,?)";
+        Connection dbConnection = getDBConnection();
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(insertTableSQL);
+        preparedStatement.setString(1, client.getName());
+        preparedStatement.setString(2, client.getSurname());
+        preparedStatement.setString(3, client.getPatronymic());
+        preparedStatement.setInt(4, client.getTelephone());
+        System.out.println(preparedStatement.toString());
+        preparedStatement.executeUpdate();
+        if (preparedStatement != null) {
+            preparedStatement.close();
+        }
+        if (dbConnection != null) {
+            dbConnection.close();
+        }
+    }
+
     public List<Mechanic> LoadAllMechanics() throws SQLException {
         List<Mechanic> data = new ArrayList<Mechanic>();
         String selectSQL = "SELECT * FROM MECHANIC";
