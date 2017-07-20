@@ -6,8 +6,29 @@
   <meta name="vaadin-version" content="7.7.7">
  </head>
  <body>
-  <vaadin-form-layout size-full>
-   <vaadin-horizontal-layout spacing margin _id="horizont">
+  <vaadin-absolute-layout>
+   <vaadin-horizontal-layout spacing width="1345px" height="253px" margin _id="horizontTopGrids">
+    <vaadin-grid caption="Механики" height="191px" _id="gridMechanics">
+     <table>
+      <colgroup>
+       <col property-id="ID" sortable>
+       <col property-id="Name" sortable>
+       <col property-id="Surname" sortable>
+       <col property-id="Patronymic" sortable>
+       <col property-id="Telephone" sortable>
+      </colgroup>
+      <thead>
+       <tr default>
+        <th plain-text>ID</th>
+        <th plain-text>Name</th>
+        <th plain-text>Surname</th>
+        <th plain-text>Patronymic</th>
+        <th plain-text>Telephone</th>
+       </tr>
+      </thead>
+      <tbody></tbody>
+     </table>
+    </vaadin-grid>
     <vaadin-grid caption="Клиенты" height="191px" _id="gridClients">
      <table>
       <colgroup>
@@ -29,29 +50,27 @@
       <tbody></tbody>
      </table>
     </vaadin-grid>
-    <vaadin-grid caption="Механики
-" width="500px" height="191px" _id="gridMechanics">
-     <table>
-      <colgroup>
-       <col property-id="ID" sortable>
-       <col property-id="Name" sortable>
-       <col property-id="Surname" sortable>
-       <col property-id="Patronymic" sortable>
-       <col property-id="Telephone" sortable>
-      </colgroup>
-      <thead>
-       <tr default>
-        <th plain-text>ID</th>
-        <th plain-text>Name</th>
-        <th plain-text>Surname</th>
-        <th plain-text>Patronymic</th>
-        <th plain-text>Telephone</th>
-       </tr>
-      </thead>
-      <tbody></tbody>
-     </table>
-    </vaadin-grid>
    </vaadin-horizontal-layout>
-  </vaadin-form-layout>
+   <vaadin-absolute-layout width="87.67%" height="37px" :top="262px" :left="37px">
+    <vaadin-button plain-text _id="buttonDeleteClient" :top="0px" :left="403px">
+      Удалить 
+    </vaadin-button>
+    <vaadin-button plain-text _id="buttinAddClient" :top="0px" :left="192px">
+      Добавить 
+    </vaadin-button>
+    <vaadin-button plain-text _id="buttonEditClient" :top="0px" :left="297px">
+      Изменить 
+    </vaadin-button>
+    <vaadin-button plain-text _id="buttonEditMechanic" :top="0px" :left="940px">
+      Изменить 
+    </vaadin-button>
+    <vaadin-button plain-text _id="buttonDeleteMechanic" :top="0px" :left="1046px">
+      Удалить 
+    </vaadin-button>
+    <vaadin-button plain-text _id="buttonAddMechanic" :top="0px" :left="835px">
+      Добавить 
+    </vaadin-button>
+   </vaadin-absolute-layout>
+  </vaadin-absolute-layout>
  </body>
 </html>

@@ -13,9 +13,9 @@ import java.util.List;
  * Created by User on 19.07.2017.
  */
 
-public class DesignExt extends Design {
+public class MainDesignExt extends MainDesign {
 
-    public DesignExt(){
+    public MainDesignExt(){
         super();
         
         
@@ -55,13 +55,13 @@ public class DesignExt extends Design {
         // Create a gridClients bound to the containerGridClients
         gridClients.removeAllColumns();
         gridClients.setContainerDataSource(containerGridClients);
-        horizont.addComponent(gridClients);
+        horizontTopGrids.addComponent(gridClients);
 
         BeanItemContainer<Mechanic> containerGridMechanics = new BeanItemContainer<>(Mechanic.class, mechanics);
         // Create a gridMechanics bound to the containerMechanics
         gridMechanics.removeAllColumns();
         gridMechanics.setContainerDataSource(containerGridMechanics);
-        horizont.addComponent(gridMechanics);
+        horizontTopGrids.addComponent(gridMechanics);
         
         
 

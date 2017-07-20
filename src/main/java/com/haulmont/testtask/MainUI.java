@@ -12,7 +12,7 @@ import com.vaadin.ui.UI;
 public class MainUI extends UI {
 
     //@WebServlet(Value = "/*", asyncSupported = true)
-    //@VaadinServletConfiguration(productionMode = false, ui = DesignExt.class)
+    //@VaadinServletConfiguration(productionMode = false, ui = MainDesignExt.class)
    // public static class Servlet extends Vaadinservlet {
 
     //}
@@ -20,7 +20,7 @@ public class MainUI extends UI {
     @Override
     protected void init(VaadinRequest request) {
 
-        DesignExt design = new DesignExt();
+        MainDesignExt design = new MainDesignExt();
 
         setContent(design);
 
