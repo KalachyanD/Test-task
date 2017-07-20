@@ -51,7 +51,7 @@
      </table>
     </vaadin-grid>
    </vaadin-horizontal-layout>
-   <vaadin-absolute-layout width="87.67%" height="37px" :top="262px" :left="37px">
+   <vaadin-absolute-layout width="87.67%" height="37px" _id="absoluteLayoutButtonsCM" :top="262px" :left="37px">
     <vaadin-button plain-text _id="buttonDeleteClient" :top="0px" :left="403px">
       Удалить 
     </vaadin-button>
@@ -69,6 +69,44 @@
     </vaadin-button>
     <vaadin-button plain-text _id="buttonAddMechanic" :top="0px" :left="835px">
       Добавить 
+    </vaadin-button>
+   </vaadin-absolute-layout>
+   <vaadin-horizontal-layout width="1141px" height="375px" _id="horizontBottomGrid" :top="332px" :left="37px">
+    <vaadin-grid caption="Заказы" width="1141px" height="260px" _id="gridOrders">
+     <table>
+      <colgroup>
+       <col property-id="Description" sortable>
+       <col property-id="Client" sortable>
+       <col property-id="Mechanic" sortable>
+       <col property-id="Start" sortable>
+       <col property-id="Finish" sortable>
+       <col property-id="Cost" sortable>
+       <col property-id="Status" sortable>
+      </colgroup>
+      <thead>
+       <tr default>
+        <th plain-text>Description</th>
+        <th plain-text>Client</th>
+        <th plain-text>Mechanic</th>
+        <th plain-text>Start</th>
+        <th plain-text>Finish</th>
+        <th plain-text>Cost</th>
+        <th plain-text>Status</th>
+       </tr>
+      </thead>
+      <tbody></tbody>
+     </table>
+    </vaadin-grid>
+   </vaadin-horizontal-layout>
+   <vaadin-absolute-layout width="167px" height="337px" _id="absoluteLayoutButtonsOrders" :top="357px" :left="1184px">
+    <vaadin-button plain-text _id="buttonAddOrder">
+      Добавить 
+    </vaadin-button>
+    <vaadin-button plain-text _id="buttonEditOrder" :top="37px" :left="0px">
+      Изменить 
+    </vaadin-button>
+    <vaadin-button width="105px" plain-text _id="buttonDeleteOrder" :top="74px" :left="0px">
+      Удалить 
     </vaadin-button>
    </vaadin-absolute-layout>
   </vaadin-absolute-layout>

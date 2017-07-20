@@ -23,12 +23,19 @@ public class MainDesign extends AbsoluteLayout {
     protected HorizontalLayout horizontTopGrids;
     protected Grid gridMechanics;
     protected Grid gridClients;
+    protected AbsoluteLayout absoluteLayoutButtonsCM;
     protected Button buttonDeleteClient;
     protected Button buttinAddClient;
     protected Button buttonEditClient;
     protected Button buttonEditMechanic;
     protected Button buttonDeleteMechanic;
     protected Button buttonAddMechanic;
+    protected HorizontalLayout horizontBottomGrid;
+    protected Grid gridOrders;
+    protected AbsoluteLayout absoluteLayoutButtonsOrders;
+    protected Button buttonAddOrder;
+    protected Button buttonEditOrder;
+    protected Button buttonDeleteOrder;
 
     public MainDesign() {
         com.vaadin.ui.declarative.Design.read(this);
