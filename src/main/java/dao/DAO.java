@@ -3,8 +3,11 @@ package dao;
 
 import models.Client;
 import models.Mechanic;
+import models.Order;
 
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -73,7 +76,7 @@ public class DAO {
             String name = rsClients.getString("NAME");
             String surname = rsClients.getString("SURNAME");
             String patronymic = rsClients.getString("PATRONYMIC");
-            int telephoneNumber = rsClients.getInt("phoneNum");
+            int telephoneNumber = rsClients.getInt("telephoneNumber");
             currentClient = new Client(clientID, name, surname, patronymic, telephoneNumber);
             if (preparedStatement != null) {
                 preparedStatement.close();
@@ -93,12 +96,12 @@ public class DAO {
         ResultSet rsMechanic = preparedStatement.executeQuery();
         Mechanic currentMechanic = null;
         while (rsMechanic.next()) {
-            int pizzaMakerID = rsMechanic.getInt("id");
+            int mechanicID = rsMechanic.getInt("id");
             String name = rsMechanic.getString("NAME");
             String surname = rsMechanic.getString("SURNAME");
             String patronymic = rsMechanic.getString("PATRONYMIC");
             int hourlypay = rsMechanic.getInt("HOURLYPAY");
-            currentMechanic = new Mechanic(pizzaMakerID, name, surname, patronymic, hourlypay);
+            currentMechanic = new Mechanic(mechanicID, name, surname, patronymic, hourlypay);
             data.add(currentMechanic);
         }
         if (preparedStatement != null) {
@@ -115,13 +118,13 @@ public class DAO {
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
         preparedStatement.setInt(1, mechanicID);
-        ResultSet rsPizzaMakers = preparedStatement.executeQuery();
+        ResultSet rsMechanic = preparedStatement.executeQuery();
         Mechanic currentMechanic = null;
-        if (rsPizzaMakers.next()) {
-            String name = rsPizzaMakers.getString("NAME");
-            String surname = rsPizzaMakers.getString("SURNAME");
-            String patronymic = rsPizzaMakers.getString("PATRONYMIC");
-            int hourlypay = rsPizzaMakers.getInt("HOURLYPAY");
+        if (rsMechanic.next()) {
+            String name = rsMechanic.getString("NAME");
+            String surname = rsMechanic.getString("SURNAME");
+            String patronymic = rsMechanic.getString("PATRONYMIC");
+            int hourlypay = rsMechanic.getInt("HOURLYPAY");
             currentMechanic = new Mechanic(mechanicID, name, surname, patronymic, hourlypay);
             if (preparedStatement != null) {
                 preparedStatement.close();
@@ -132,4 +135,66 @@ public class DAO {
         }
         return currentMechanic;
     }
+
+    public List<Order> LoadAllOrders() throws SQLException {
+        List<Order> data = new ArrayList<Order>();
+        String selectSQL = "SELECT * FROM ORDERS";
+        Connection dbConnection = getDBConnection();
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
+        ResultSet rsOrders = preparedStatement.executeQuery();
+        Order currentOrder = null;
+        while (rsOrders.next()) {
+            int orderID = rsOrders.getInt("id");
+            String description = rsOrders.getString("description");
+            int clientID = rsOrders.getInt("client_id");
+            Client client = loadClient(clientID);
+            int mechanicID = rsOrders.getInt("mechanic_id");
+            Mechanic mechanic = loadMechanic(mechanicID);
+            String format = rsOrders.getTimestamp("dateStart").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+            LocalDateTime startDate = LocalDateTime.parse(format, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+            format = rsOrders.getTimestamp("dateFinish").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+            LocalDateTime endDate = LocalDateTime.parse(format, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+            double cost = rsOrders.getDouble("cost");
+            currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, Order.Status.START);
+            data.add(currentOrder);
+        }
+        if (preparedStatement != null) {
+            preparedStatement.close();
+        }
+        if (dbConnection != null) {
+            dbConnection.close();
+        }
+        return data;
+    }
+
+    public Order loadOrder(int id) throws SQLException {
+        String selectSQL = "SELECT * FROM ORDERS WHERE ID = ?";
+        Connection dbConnection = getDBConnection();
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
+        preparedStatement.setInt(1, id);
+        ResultSet rsOrders = preparedStatement.executeQuery();
+        Order currentOrder = null;
+        if (rsOrders.next()) {
+            int orderID = rsOrders.getInt("id");
+            String description = rsOrders.getString("description");
+            int clientID = rsOrders.getInt("client_id");
+            Client client = loadClient(clientID);
+            int mechanicID = rsOrders.getInt("mechanic_id");
+            Mechanic mechanic = loadMechanic(mechanicID);
+            String format = rsOrders.getTimestamp("startDate").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+            LocalDateTime startDate = LocalDateTime.parse(format, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+            format = rsOrders.getTimestamp("endDate").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+            LocalDateTime endDate = LocalDateTime.parse(format, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+            double cost = rsOrders.getDouble("cost");
+            currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, Order.Status.START);
+        }
+        if (preparedStatement != null) {
+            preparedStatement.close();
+        }
+        if (dbConnection != null) {
+            dbConnection.close();
+        }
+        return currentOrder;
+    }
+
 }

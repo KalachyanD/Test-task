@@ -13,7 +13,7 @@ public class MainUI extends UI {
 
     //@WebServlet(Value = "/*", asyncSupported = true)
     //@VaadinServletConfiguration(productionMode = false, ui = MainDesignExt.class)
-   // public static class Servlet extends Vaadinservlet {
+    // public static class Servlet extends Vaadinservlet {
 
     //}
 
@@ -24,13 +24,21 @@ public class MainUI extends UI {
 
         setContent(design);
 
-        //VerticalLayout layout = new VerticalLayout();
-       // layout.setSizeFull();
+
+
+        // Create a sub-window and set the content
+       // WindowAddClient subWindow = new WindowAddClient();
+
+        // Open it in the UI
+       // addWindow(subWindow);
+
+        //VerticalLayout layout = new VerticalLayout()
+        // layout.setSizeFull();
         //layout.setMargin(true);
 
         //layout.addComponent(new Label("Main UI"));
 
-       // setContent(layout);
+        // setContent(layout);
 
     }
 }
