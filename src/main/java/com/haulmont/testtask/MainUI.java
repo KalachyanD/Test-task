@@ -27,7 +27,7 @@ public class MainUI extends UI {
 
 
         // Create a sub-window and set the content
-       // TestWindow subWindow = new TestWindow();
+       // WindowSuccessful subWindow = new WindowSuccessful();
 
         // Open it in the UI
        // addWindow(subWindow);

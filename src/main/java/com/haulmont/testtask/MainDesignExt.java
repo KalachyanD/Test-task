@@ -86,7 +86,7 @@ public class MainDesignExt extends MainDesign {
             // Add it to the root component
             UI.getCurrent().addWindow(window);
         });
-
+        /*
         gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridClients.addSelectionListener(event -> {
             Client client =(Client)gridClients.getSelectedRow();
@@ -99,7 +99,7 @@ public class MainDesignExt extends MainDesign {
 
             });
 
-        });
+        });*/
 
         gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridClients.addSelectionListener(event -> {

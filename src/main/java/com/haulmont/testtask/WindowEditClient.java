@@ -47,6 +47,8 @@ public class WindowEditClient extends Window {
             try {
                 WindowEditClient.EventClickOk(clientID, fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephone.getValue()));
                 close();
+                WindowSuccessful successful = new WindowSuccessful();
+                UI.getCurrent().addWindow(successful);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
