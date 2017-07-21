@@ -1,7 +1,7 @@
 package com.haulmont.testtask;
 
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.event.SelectionEvent;
+import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import dao.DAO;
 import models.Client;
@@ -11,7 +11,6 @@ import models.Order;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by User on 19.07.2017.
@@ -45,22 +44,6 @@ public class MainDesignExt extends MainDesign {
         }
 
 
-         
-        /*Lists.newArrayList(
-                new Client(0, "Name", "Surname", "Johnson", 89371762),
-                new Client(1, "Name", "Surname", "Johnson", 89371762),
-                new Client(2, "Name", "Surname", "Johnson", 89371762));
-        */
-
-        // Create a gridClients bound to the list
-        //gridClients.set
-        //gridClients.setItems(clients);
-        //gridClients.addColumn("Name", Person::getName);
-        //gridClients.addColumn("Year of birth", Person::getBirthYear);
-        //layout.addComponent(gridClients);
-
-        //Display data from database in grid.
-
         // Have a containerGridClients of some type to contain the data
         BeanItemContainer<Client> containerGridClients = new BeanItemContainer<>(Client.class, clients);
         // Create a gridClients bound to the containerGridClients
@@ -82,56 +65,36 @@ public class MainDesignExt extends MainDesign {
 
         // UI logic to open the sub-window
         buttinAddClient.addClickListener(event -> {
-            WindowAddClient window = new WindowAddClient();
+            WindowAdd window = new WindowAdd("Add Client");
             // Add it to the root component
             UI.getCurrent().addWindow(window);
         });
-        /*
+
+
         gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridClients.addSelectionListener(event -> {
             Client client =(Client)gridClients.getSelectedRow();
             buttonDeleteClient.addClickListener(eventButton -> {
                 try {
                     DAO.getInstance().deleteClient(client.getID());
+                    Page.getCurrent().reload();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
 
             });
 
-        });*/
+        });
 
         gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridClients.addSelectionListener(event -> {
             Client client =(Client)gridClients.getSelectedRow();
             buttonEditClient.addClickListener(eventButton -> {
-                WindowEditClient window = new WindowEditClient(client.getID());
+                WindowEdit window = new WindowEdit("Edit Client", client.getID());
                 UI.getCurrent().addWindow(window);
             });
 
         });
-
-        /* gridClients.addSelectionListener(new SelectionEvent.SelectionListener() {
-            @Override
-            public void select(SelectionEvent event) {
-                Set clients = event.getSelected();
-                StringBuilder clientsString = new StringBuilder();
-                clients.forEach(item -> clientsString.append(item.toString()).append(" "));
-                horizont.addComponent(new Label(clientsString.toString()));
-            }
-        });
-        */
-
-        /*buttonDeleteClient.addClickListener(event -> {
-            if(){
-
-            }
-
-
-        });
-        */
-
-
 
     }
 
