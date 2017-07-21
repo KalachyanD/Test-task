@@ -3,23 +3,24 @@ package com.haulmont.testtask;
 import com.vaadin.ui.*;
 import dao.DAO;
 import models.Client;
-import com.vaadin.ui.UI;
 
 import java.sql.SQLException;
 
 /**
  * Created by User on 21.07.2017.
  */
-class WindowAddClient extends Window  {
+public class WindowEditClient extends Window {
 
+    int clientID;
     TextField fieldName;
     TextField fieldSurname;
     TextField fieldPatronymic;
     TextField fieldTelephone ;
 
-    public WindowAddClient() {
+    public WindowEditClient(int clientID) {
 
-        super("Add Client"); // Set window caption
+        super("Edit Client"); // Set window caption
+        this.clientID = clientID;
         TextField fieldName = new TextField("Name");
         TextField fieldSurname = new TextField("Surname");;
         TextField fieldPatronymic = new TextField("Patronymic");;
@@ -42,9 +43,9 @@ class WindowAddClient extends Window  {
         HorizontalLayout horizontButtons = new HorizontalLayout();
         horizontButtons.setSpacing(true);
         horizontButtons.setMargin(true);
-        horizontButtons.addComponent(new Button("ОК",event -> {
+        horizontButtons.addComponent(new Button("ОК", event -> {
             try {
-                WindowAddClient.EventClickOk(fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephone.getValue()));
+                WindowEditClient.EventClickOk(clientID, fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephone.getValue()));
                 close();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -62,9 +63,8 @@ class WindowAddClient extends Window  {
         setContent(verticalMain);
     }
 
-    public static void EventClickOk(String fieldName, String fieldSurname, String fieldPatronymic, int fieldTelephone) throws SQLException {
-        Client client = new Client(0,fieldName, fieldSurname, fieldPatronymic, fieldTelephone);
-        DAO.getInstance().storeClient(client);
-
+    public static void EventClickOk(int clientID, String fieldName, String fieldSurname, String fieldPatronymic, int fieldTelephone) throws SQLException {
+        DAO.getInstance().updateClient(clientID , fieldName, fieldSurname, fieldPatronymic, fieldTelephone);
     }
+
 }

@@ -1,7 +1,8 @@
 package com.haulmont.testtask;
 
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.UI;
+import com.vaadin.event.SelectionEvent;
+import com.vaadin.ui.*;
 import dao.DAO;
 import models.Client;
 import models.Mechanic;
@@ -10,6 +11,7 @@ import models.Order;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by User on 19.07.2017.
@@ -78,21 +80,38 @@ public class MainDesignExt extends MainDesign {
         gridOrders.setContainerDataSource(containerGridOrders);
         horizontBottomGrid.addComponent(gridOrders);
 
-        // Some UI logic to open the sub-window
+        // UI logic to open the sub-window
         buttinAddClient.addClickListener(event -> {
-            WindowAddClient sub = new WindowAddClient();
+            WindowAddClient window = new WindowAddClient();
             // Add it to the root component
-            UI.getCurrent().addWindow(sub);
+            UI.getCurrent().addWindow(window);
         });
 
+        gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
+        gridClients.addSelectionListener(event -> {
+            Client client =(Client)gridClients.getSelectedRow();
+            buttonDeleteClient.addClickListener(eventButton -> {
+                try {
+                    DAO.getInstance().deleteClient(client.getID());
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
 
+            });
 
+        });
 
+        gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
+        gridClients.addSelectionListener(event -> {
+            Client client =(Client)gridClients.getSelectedRow();
+            buttonEditClient.addClickListener(eventButton -> {
+                WindowEditClient window = new WindowEditClient(client.getID());
+                UI.getCurrent().addWindow(window);
+            });
 
-        
-        
+        });
 
-        /*gridClients.addSelectionListener(new SelectionEvent.SelectionListener() {
+        /* gridClients.addSelectionListener(new SelectionEvent.SelectionListener() {
             @Override
             public void select(SelectionEvent event) {
                 Set clients = event.getSelected();
@@ -100,6 +119,15 @@ public class MainDesignExt extends MainDesign {
                 clients.forEach(item -> clientsString.append(item.toString()).append(" "));
                 horizont.addComponent(new Label(clientsString.toString()));
             }
+        });
+        */
+
+        /*buttonDeleteClient.addClickListener(event -> {
+            if(){
+
+            }
+
+
         });
         */
 

@@ -108,6 +108,39 @@ public class DAO {
         }
     }
 
+    public void deleteClient(int clientID) throws SQLException {
+        Connection dbConnection = getDBConnection();
+        String deleteSQL = "DELETE FROM CLIENT WHERE ID = ?";
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteSQL);
+        preparedStatement.setInt(1, clientID);
+
+        preparedStatement.executeUpdate();
+        if (preparedStatement != null) {
+            preparedStatement.close();
+        }
+        if (dbConnection != null) {
+            dbConnection.close();
+        }
+    }
+
+    public void updateClient(int clientID, String name, String surname, String patronymic, int telephoneNumber) throws SQLException {
+        String updateTableSQL = "UPDATE CLIENT SET NAME= ?,SURNAME= ?,PATRONYMIC= ?,TELEPHONENUMBER= ? WHERE id = ?";
+        Connection dbConnection = getDBConnection();
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(updateTableSQL);
+        preparedStatement.setString(1, name);
+        preparedStatement.setString(2, surname);
+        preparedStatement.setString(3, patronymic);
+        preparedStatement.setInt(4, telephoneNumber);
+        preparedStatement.setInt(5, clientID);
+        preparedStatement.executeUpdate();
+        if (preparedStatement != null) {
+            preparedStatement.close();
+        }
+        if (dbConnection != null) {
+            dbConnection.close();
+        }
+    }
+
     public List<Mechanic> LoadAllMechanics() throws SQLException {
         List<Mechanic> data = new ArrayList<Mechanic>();
         String selectSQL = "SELECT * FROM MECHANIC";
@@ -217,4 +250,39 @@ public class DAO {
         return currentOrder;
     }
 
+    public void updateOrder(int orderID, String description, int clientID, int mechanicID, LocalDateTime startDate, LocalDateTime endDate, double cost, Order.Status status) throws SQLException {
+        String updateTableSQL = "UPDATE ORDERS SET DESCRIPTION= ?, CLIENT_ID= ?, MECHANIC_ID= ?, DATESTART= ?, DATEFINISH= ?, COST= ?, STATUS = ? WHERE id = ?";
+        Connection dbConnection = getDBConnection();
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(updateTableSQL);
+        preparedStatement.setString(1, description);
+        preparedStatement.setInt(2, clientID);
+        preparedStatement.setInt(3, mechanicID);
+        preparedStatement.setTimestamp(4, Timestamp.valueOf(startDate));
+        preparedStatement.setTimestamp(5, Timestamp.valueOf(endDate));
+        preparedStatement.setDouble(6, cost);
+        preparedStatement.setInt(7, status.ordinal());
+        preparedStatement.setInt(8, orderID);
+        preparedStatement.executeUpdate();
+        if (preparedStatement != null) {
+            preparedStatement.close();
+        }
+        if (dbConnection != null) {
+            dbConnection.close();
+        }
+    }
+
+    public void deleteOrder(int orderID) throws SQLException {
+        Connection dbConnection = getDBConnection();
+        String deleteSQL = "DELETE FROM ORDERS WHERE ID = ?";
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteSQL);
+        preparedStatement.setInt(1, orderID);
+        preparedStatement.executeUpdate();
+        preparedStatement.executeUpdate();
+        if (preparedStatement != null) {
+            preparedStatement.close();
+        }
+        if (dbConnection != null) {
+            dbConnection.close();
+        }
+    }
 }
