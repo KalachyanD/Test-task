@@ -301,6 +301,28 @@ public class DAO {
         return currentOrder;
     }
 
+    public void storeOrder(String description, int clientID, int mechanicID, LocalDateTime startDate, LocalDateTime endDate, double cost, Order.Status status) throws SQLException {
+        String insertTableSQL = "INSERT INTO ORDERS"
+                + "(DESCRIPTION, CLIENT_ID, MECHANIC_ID, DATESTART, DATEFINISH, COST, STATUS) VALUES"
+                + "(?,?,?,?,?,?,?)";
+        Connection dbConnection = getDBConnection();
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(insertTableSQL);
+        preparedStatement.setString(1, description);
+        preparedStatement.setInt(2, clientID);
+        preparedStatement.setInt(3, mechanicID);
+        preparedStatement.setTimestamp(4, Timestamp.valueOf(startDate));
+        preparedStatement.setTimestamp(5, Timestamp.valueOf(endDate));
+        preparedStatement.setDouble(6, cost);
+        preparedStatement.setInt(7, status.ordinal());
+        preparedStatement.executeUpdate();
+        if (preparedStatement != null) {
+            preparedStatement.close();
+        }
+        if (dbConnection != null) {
+            dbConnection.close();
+        }
+    }
+
     public void updateOrder(int orderID, String description, int clientID, int mechanicID, LocalDateTime startDate, LocalDateTime endDate, double cost, Order.Status status) throws SQLException {
         String updateTableSQL = "UPDATE ORDERS SET DESCRIPTION= ?, CLIENT_ID= ?, MECHANIC_ID= ?, DATESTART= ?, DATEFINISH= ?, COST= ?, STATUS = ? WHERE id = ?";
         Connection dbConnection = getDBConnection();

@@ -125,6 +125,42 @@ public class MainDesignExt extends MainDesign {
             });
         });
 
+        // Add Order
+        buttonAddOrder.addClickListener(event -> {
+            WindowAddOrder window = new WindowAddOrder();
+            // Add it to the root component
+            UI.getCurrent().addWindow(window);
+        });
+
+        // Delete Order
+        gridOrders.setSelectionMode(Grid.SelectionMode.SINGLE);
+        gridOrders.addSelectionListener(event -> {
+            Order order =(Order)gridOrders.getSelectedRow();
+            buttonDeleteOrder.addClickListener(eventButton -> {
+                try {
+                    DAO.getInstance().deleteOrder(order.getID());
+                    Page.getCurrent().reload();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+        });
+
+        //Edit Order
+        gridOrders.setSelectionMode(Grid.SelectionMode.SINGLE);
+        gridOrders.addSelectionListener(event -> {
+            Order order =(Order)gridOrders.getSelectedRow();
+            buttonEditOrder.addClickListener(eventButton -> {
+                WindowEditOrder window = new WindowEditOrder(order.getID());
+                UI.getCurrent().addWindow(window);
+            });
+        });
+
+
+
+
+
+
 
 
 
