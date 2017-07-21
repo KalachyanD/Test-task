@@ -189,6 +189,57 @@ public class DAO {
         return currentMechanic;
     }
 
+    public void updateMechanic(int mechanicID, String name, String surname, String patronymic, int hourlypay) throws SQLException {
+        String updateTableSQL = "UPDATE MECHANIC SET NAME= ?,SURNAME= ?,PATRONYMIC= ?,HOURLYPAY= ? WHERE id = ?";
+        Connection dbConnection = getDBConnection();
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(updateTableSQL);
+        preparedStatement.setString(1, name);
+        preparedStatement.setString(2, surname);
+        preparedStatement.setString(3, patronymic);
+        preparedStatement.setInt(4, hourlypay);
+        preparedStatement.setInt(5, mechanicID);
+        preparedStatement.executeUpdate();
+        if (preparedStatement != null) {
+            preparedStatement.close();
+        }
+        if (dbConnection != null) {
+            dbConnection.close();
+        }
+    }
+
+    public void storeMechanic(Mechanic mechanic) throws SQLException {
+        String insertTableSQL = "INSERT INTO MECHANIC"
+                + "(NAME, SURNAME, PATRONYMIC, HOURLYPAY) VALUES"
+                + "(?,?,?,?)";
+        Connection dbConnection = getDBConnection();
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(insertTableSQL);
+        preparedStatement.setString(1, mechanic.getName());
+        preparedStatement.setString(2, mechanic.getSurname());
+        preparedStatement.setString(3, mechanic.getPatronymic());
+        preparedStatement.setDouble(4, mechanic.getHourlyPay());
+        preparedStatement.executeUpdate();
+        if (preparedStatement != null) {
+            preparedStatement.close();
+        }
+        if (dbConnection != null) {
+            dbConnection.close();
+        }
+    }
+
+    public void deleteMechanic(int mechanicID) throws SQLException {
+        Connection dbConnection = getDBConnection();
+        String deleteSQL = "DELETE FROM MECHANIC WHERE ID = ?";
+        PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteSQL);
+        preparedStatement.setInt(1, mechanicID);
+        preparedStatement.executeUpdate();
+        if (preparedStatement != null) {
+            preparedStatement.close();
+        }
+        if (dbConnection != null) {
+            dbConnection.close();
+        }
+    }
+
     public List<Order> LoadAllOrders() throws SQLException {
         List<Order> data = new ArrayList<Order>();
         String selectSQL = "SELECT * FROM ORDERS";

@@ -63,14 +63,14 @@ public class MainDesignExt extends MainDesign {
         gridOrders.setContainerDataSource(containerGridOrders);
         horizontBottomGrid.addComponent(gridOrders);
 
-        // UI logic to open the sub-window
+        // Add Client
         buttinAddClient.addClickListener(event -> {
-            WindowAdd window = new WindowAdd("Add Client");
+            WindowAddClient window = new WindowAddClient();
             // Add it to the root component
             UI.getCurrent().addWindow(window);
         });
 
-
+        // Delete Client
         gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridClients.addSelectionListener(event -> {
             Client client =(Client)gridClients.getSelectedRow();
@@ -81,20 +81,52 @@ public class MainDesignExt extends MainDesign {
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
-
             });
-
         });
 
+        //Edit Client
         gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridClients.addSelectionListener(event -> {
             Client client =(Client)gridClients.getSelectedRow();
             buttonEditClient.addClickListener(eventButton -> {
-                WindowEdit window = new WindowEdit("Edit Client", client.getID());
+                WindowEditClient window = new WindowEditClient(client.getID());
                 UI.getCurrent().addWindow(window);
             });
-
         });
+
+        // Add Mechanic
+        buttonAddMechanic.addClickListener(event -> {
+            WindowAddMechanic window = new WindowAddMechanic();
+            // Add it to the root component
+            UI.getCurrent().addWindow(window);
+        });
+
+        // Delete Mechanic
+        gridMechanics.setSelectionMode(Grid.SelectionMode.SINGLE);
+        gridMechanics.addSelectionListener(event -> {
+            Mechanic mechanic =(Mechanic)gridMechanics.getSelectedRow();
+            buttonDeleteMechanic.addClickListener(eventButton -> {
+                try {
+                    DAO.getInstance().deleteMechanic(mechanic.getID());
+                    Page.getCurrent().reload();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            });
+        });
+
+        //Edit Mechanic
+        gridMechanics.setSelectionMode(Grid.SelectionMode.SINGLE);
+        gridMechanics.addSelectionListener(event -> {
+            Mechanic mechanic =(Mechanic)gridMechanics.getSelectedRow();
+            buttonEditMechanic.addClickListener(eventButton -> {
+                WindowEditMechanic window = new WindowEditMechanic(mechanic.getID());
+                UI.getCurrent().addWindow(window);
+            });
+        });
+
+
+
 
     }
 

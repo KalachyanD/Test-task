@@ -10,15 +10,15 @@ public class Mechanic {
     private String surname;
     //Отчество
     private String patronymic;
-    //Номер телефона
-    private int telephone;
+
+    private int hourlyPay;
 
     public Mechanic(int id, String name, String surname, String patronymic, int telephoneNumber) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
-        this.telephone = telephoneNumber;
+        this.hourlyPay= telephoneNumber;
 
     }
 
@@ -46,12 +46,12 @@ public class Mechanic {
         this.patronymic = patronymic;
     }
 
-    public int getTelephone() {
-        return telephone;
+    public int getHourlyPay() {
+        return hourlyPay;
     }
 
-    public void setTelephone(int telephone) {
-        this.telephone = telephone;
+    public void setHourlyPay(int hourlyPay) {
+        this.hourlyPay = hourlyPay;
     }
 
     public int getID() {
