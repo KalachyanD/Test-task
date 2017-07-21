@@ -3,8 +3,11 @@ package com.haulmont.testtask;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import dao.DAO;
+import models.Client;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by User on 21.07.2017.
@@ -22,10 +25,23 @@ public class WindowEditClient extends Window {
         super("Edit Client"); // Set window caption
         this.clientID = clientID;
         fieldName = new TextField("Name");
-        fieldSurname = new TextField("Surname");;
-        fieldPatronymic = new TextField("Patronymic");;
-        fieldTelephone = new TextField("Telephone");;
+        fieldSurname = new TextField("Surname");
+        fieldPatronymic = new TextField("Patronymic");
+        fieldTelephone = new TextField("Telephone");
 
+        /*
+        List<Client> clients = new ArrayList<>();
+        try {
+            clients = DAO.getInstance().LoadAllClients();
+        } catch (SQLException e) {
+
+        }
+
+        fieldName.setValue(clients.get(clientID-1).getName());
+        fieldSurname.setValue(clients.get(clientID-1).getSurname());
+        fieldPatronymic.setValue(clients.get(clientID-1).getPatronymic());
+        fieldTelephone.setValue(Integer.toString(clients.get(clientID-1).getTelephone()));
+        */
 
         center(); //Position of window
         setClosable(true); // Disable the close button

@@ -43,7 +43,6 @@ public class MainDesignExt extends MainDesign {
 
         }
 
-
         // Have a containerGridClients of some type to contain the data
         BeanItemContainer<Client> containerGridClients = new BeanItemContainer<>(Client.class, clients);
         // Create a gridClients bound to the containerGridClients
@@ -155,14 +154,6 @@ public class MainDesignExt extends MainDesign {
                 UI.getCurrent().addWindow(window);
             });
         });
-
-
-
-
-
-
-
-
 
     }
 

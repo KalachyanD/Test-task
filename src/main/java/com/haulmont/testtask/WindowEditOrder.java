@@ -8,6 +8,8 @@ import models.Order;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by User on 21.07.2017.
@@ -32,6 +34,22 @@ class WindowEditOrder extends Window  {
         fieldDateStart = new TextField("Date start");
         fieldDateFinish = new TextField("Date finish");
         fieldCost = new TextField("Cost");
+
+        List<Order> orders = new ArrayList<>();
+        try {
+            orders = DAO.getInstance().LoadAllOrders();
+        } catch (SQLException e) {
+
+        }
+
+        fieldDescription.setValue(orders.get(1).getDescription());
+        fieldClientID.setValue(Integer.toString(orders.get(1).getClient().getID()));
+        fieldMechanicID.setValue(Integer.toString(orders.get(1).getMechanic().getID()));
+        fieldDateStart.setValue(LocalDateTime.now().plusMinutes(2).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
+        fieldDateFinish.setValue(LocalDateTime.now().plusMinutes(500).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
+        //fieldDateStart.setValue(orders.get(1).getStartDate().toString());
+        //fieldDateFinish.setValue(orders.get(1).getEndDate().toString());
+        fieldCost.setValue(Double.toString(orders.get(1).getCost()));
 
         center(); //Position of window
         setClosable(true); // Disable the close button
