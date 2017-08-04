@@ -4,16 +4,15 @@ import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import dao.DAO;
 import models.Client;
-import models.Order;
+
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * Created by User on 21.07.2017.
  */
-class WindowAddClient extends Window  {
+public class WindowAddClient extends Window  {
 
     TextField fieldName;
     TextField fieldSurname;

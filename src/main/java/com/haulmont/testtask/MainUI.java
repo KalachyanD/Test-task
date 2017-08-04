@@ -11,17 +11,16 @@ import com.vaadin.ui.UI;
 @Title("Vaadin application")
 public class MainUI extends UI {
 
-    //@WebServlet(Value = "/*", asyncSupported = true)
-    //@VaadinServletConfiguration(productionMode = false, ui = MainDesignExt.class)
-    // public static class Servlet extends Vaadinservlet {
 
-    //}
 
     @Override
     protected void init(VaadinRequest request) {
 
-        MainDesignExt design = new MainDesignExt();
 
+
+        VerticalLayoutUI design = new VerticalLayoutUI();
+        design.setMargin(true);
+        design.setSpacing(true);
         setContent(design);
 
 

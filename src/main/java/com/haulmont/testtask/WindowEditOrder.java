@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by User on 21.07.2017.
  */
-class WindowEditOrder extends Window  {
+public class WindowEditOrder extends Window  {
 
     int orderID;
     TextField fieldDescription;

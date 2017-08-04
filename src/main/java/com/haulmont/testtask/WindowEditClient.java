@@ -3,11 +3,10 @@ package com.haulmont.testtask;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import dao.DAO;
-import models.Client;
+
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
 
 /**
  * Created by User on 21.07.2017.

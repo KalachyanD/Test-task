@@ -10,7 +10,7 @@ import java.sql.SQLException;
 /**
  * Created by User on 21.07.2017.
  */
-class WindowAddMechanic extends Window  {
+public class WindowAddMechanic extends Window  {
 
     TextField fieldName;
     TextField fieldSurname;
