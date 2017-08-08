@@ -40,9 +40,9 @@ public class WindowAddMechanic extends Window  {
         verticalFields.addComponent(fieldHourlyPay);
 
         HorizontalLayout horizontButtons = new HorizontalLayout();
-        horizontButtons.setSpacing(true);
-        horizontButtons.setMargin(true);
-        horizontButtons.addComponent(new Button("ОК",event -> {
+        horizontButtons.setSpacing(false);
+        horizontButtons.setMargin(false);
+        horizontButtons.addComponent(new Button("OK",event -> {
             try {
                 WindowAddMechanic.EventClickOk(fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldHourlyPay.getValue()));
                 close();
@@ -51,7 +51,7 @@ public class WindowAddMechanic extends Window  {
                 e.printStackTrace();
             }
         }));
-        horizontButtons.addComponent(new Button("Отмена",event -> close()));
+        horizontButtons.addComponent(new Button("Cancel",event -> close()));
 
         VerticalLayout verticalMain = new VerticalLayout ();
         verticalMain.setSpacing(true);

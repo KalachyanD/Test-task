@@ -65,25 +65,25 @@ public class WindowAddOrder extends Window  {
         verticalFields.addComponent(fieldCost);
 
         HorizontalLayout horizontButtons = new HorizontalLayout();
-        horizontButtons.setSpacing(true);
-        horizontButtons.setMargin(true);
+        horizontButtons.setSpacing(false);
+        horizontButtons.setMargin(false);
 
 
 
-        horizontButtons.addComponent(new Button("ОК",event -> {
+        horizontButtons.addComponent(new Button("OK",event -> {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
             LocalDateTime dateStart =  LocalDateTime.parse(fieldDateStart.getValue(), formatter);
             LocalDateTime dateFinish = LocalDateTime.parse(fieldDateFinish.getValue(), formatter);
             try {
-                DAO.getInstance().storeOrder(fieldDescription.getValue(), Integer.parseInt(fieldClientID.getValue()), Integer.parseInt(fieldMechanicID.getValue()), dateStart, dateFinish, Double.parseDouble(fieldCost.getValue()), Order.Status.START);
+                DAO.getInstance().storeOrder(fieldDescription.getValue(), Integer.parseInt(fieldClientID.getValue()), Integer.parseInt(fieldMechanicID.getValue()), dateStart, dateFinish, Double.parseDouble(fieldCost.getValue()), Order.Status.Start);
                 close();
                 Page.getCurrent().reload();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }));
-        horizontButtons.addComponent(new Button("Отмена",event -> close()));
+        horizontButtons.addComponent(new Button("Cancel",event -> close()));
 
         VerticalLayout verticalMain = new VerticalLayout ();
         verticalMain.setSpacing(true);

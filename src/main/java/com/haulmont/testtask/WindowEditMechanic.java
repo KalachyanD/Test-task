@@ -24,7 +24,7 @@ public class WindowEditMechanic extends Window {
         fieldSurname = new TextField("Surname");
         fieldPatronymic = new TextField("Patronymic");
         fieldHourlyPay = new TextField("HourlyPay");
-        this.mechanicID = mechanicID;
+
 
 
         center(); //Position of window
@@ -32,8 +32,8 @@ public class WindowEditMechanic extends Window {
         setModal(true); // Enable modal window mode
 
         VerticalLayout verticalFields = new VerticalLayout ();
-        verticalFields.setSpacing(true);
-        verticalFields.setMargin(true);
+        verticalFields.setSpacing(false);
+        verticalFields.setMargin(false);
 
         verticalFields.addComponent(fieldName);
         verticalFields.addComponent(fieldSurname);
@@ -43,7 +43,7 @@ public class WindowEditMechanic extends Window {
         HorizontalLayout horizontButtons = new HorizontalLayout();
         horizontButtons.setSpacing(true);
         horizontButtons.setMargin(true);
-        horizontButtons.addComponent(new Button("ОК", event -> {
+        horizontButtons.addComponent(new Button("OK", event -> {
             try {
                 WindowEditMechanic.EventClickOk(mechanicID, fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldHourlyPay.getValue()));
                 close();
@@ -52,7 +52,7 @@ public class WindowEditMechanic extends Window {
                 e.printStackTrace();
             }
         }));
-        horizontButtons.addComponent(new Button("Отмена",event -> close()));
+        horizontButtons.addComponent(new Button("Cancel",event -> close()));
 
         VerticalLayout verticalMain = new VerticalLayout ();
         verticalMain.setSpacing(true);

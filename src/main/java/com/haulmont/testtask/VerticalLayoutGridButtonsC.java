@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class VerticalLayoutGridButtonsC extends VerticalLayout {
 
-    Grid gridClients = new Grid("Механики");
+    Grid gridClients = new Grid("Mechanics");
     Button buttonDeleteClient = new Button("Delete");
     Button buttonEditClient = new Button("Edit");
     Button buttonAddClient = new Button("Add");

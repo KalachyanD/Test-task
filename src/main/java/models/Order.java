@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 public class Order {
     public static enum Status {
-        START, PROCESS, FINISH
+        Start, Process, Finish
     }
     private int id;
     private String description;

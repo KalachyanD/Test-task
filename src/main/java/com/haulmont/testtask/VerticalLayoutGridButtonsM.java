@@ -7,7 +7,6 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import dao.DAO;
-import models.Client;
 import models.Mechanic;
 
 import java.sql.SQLException;
@@ -19,7 +18,7 @@ import java.util.List;
  */
 public class VerticalLayoutGridButtonsM extends VerticalLayout {
 
-    Grid gridMechanics = new Grid("Клиенты");
+    Grid gridMechanics = new Grid("Clients");
 
     Button buttonDeleteMechanic = new Button("Delete");
     Button buttonEditMechanic = new Button("Edit");

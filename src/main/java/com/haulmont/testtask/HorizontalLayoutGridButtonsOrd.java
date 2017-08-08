@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
 
-    Grid gridOrders = new Grid("Заказы");
+    Grid gridOrders = new Grid("Orders");
     Button buttonAddOrder = new Button("Add");
     Button buttonEditOrder = new Button("Edit");
     Button buttonDeleteOrder = new Button("Delete");

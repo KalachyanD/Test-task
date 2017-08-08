@@ -259,7 +259,8 @@ public class DAO {
             format = rsOrders.getTimestamp("dateFinish").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
             LocalDateTime endDate = LocalDateTime.parse(format, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
             double cost = rsOrders.getDouble("cost");
-            currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, Order.Status.START);
+            Order.Status status = Order.Status.valueOf(rsOrders.getString("status"));
+            currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, status);
             data.add(currentOrder);
         }
         if (preparedStatement != null) {
@@ -290,7 +291,8 @@ public class DAO {
             format = rsOrders.getTimestamp("endDate").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
             LocalDateTime endDate = LocalDateTime.parse(format, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
             double cost = rsOrders.getDouble("cost");
-            currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, Order.Status.START);
+            Order.Status status = Order.Status.valueOf(rsOrders.getString("status"));
+            currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, status);
         }
         if (preparedStatement != null) {
             preparedStatement.close();
@@ -333,7 +335,7 @@ public class DAO {
         preparedStatement.setTimestamp(4, Timestamp.valueOf(startDate));
         preparedStatement.setTimestamp(5, Timestamp.valueOf(endDate));
         preparedStatement.setDouble(6, cost);
-        preparedStatement.setInt(7, status.ordinal());
+        preparedStatement.setString(7, status.toString());
         preparedStatement.setInt(8, orderID);
         preparedStatement.executeUpdate();
         if (preparedStatement != null) {

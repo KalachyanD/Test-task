@@ -56,9 +56,9 @@ public class WindowEditClient extends Window {
         verticalFields.addComponent(fieldTelephone);
 
         HorizontalLayout horizontButtons = new HorizontalLayout();
-        horizontButtons.setSpacing(true);
-        horizontButtons.setMargin(true);
-        horizontButtons.addComponent(new Button("ОК", event -> {
+        horizontButtons.setSpacing(false);
+        horizontButtons.setMargin(false);
+        horizontButtons.addComponent(new Button("OK", event -> {
             try {
                 WindowEditClient.EventClickOk(clientID, fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephone.getValue()));
                 close();
@@ -67,7 +67,7 @@ public class WindowEditClient extends Window {
                 e.printStackTrace();
             }
         }));
-        horizontButtons.addComponent(new Button("Отмена",event -> close()));
+        horizontButtons.addComponent(new Button("Cancel",event -> close()));
 
         VerticalLayout verticalMain = new VerticalLayout ();
         verticalMain.setSpacing(true);
