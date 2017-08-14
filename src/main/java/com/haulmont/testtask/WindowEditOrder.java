@@ -17,24 +17,21 @@ import java.util.List;
 public class WindowEditOrder extends Window  {
 
 
-    TextField fieldDescription;
-    TextField fieldClientID;
-    TextField fieldMechanicID;
-    TextField fieldDateStart;
-    TextField fieldDateFinish;
-    TextField fieldCost;
-    NativeSelect selectStatus;
+    TextField fieldDescription = new TextField("Description");
+    TextField fieldClientID  = new TextField("Client ID");
+    TextField fieldMechanicID = new TextField("Mechanic ID");
+    TextField fieldDateStart = new TextField("Date start");
+    TextField fieldDateFinish = new TextField("Date finish");
+    TextField fieldCost = new TextField("Cost");
+    NativeSelect selectStatus = new NativeSelect("Status");
+    int orderID;
 
     public WindowEditOrder(int orderID) {
 
         super("Edit Order"); // Set window caption
-        fieldDescription = new TextField("Description");
-        fieldClientID  = new TextField("Client ID");
-        fieldMechanicID = new TextField("Mechanic ID");
-        fieldDateStart = new TextField("Date start");
-        fieldDateFinish = new TextField("Date finish");
-        fieldCost = new TextField("Cost");
-        selectStatus = new NativeSelect("Status");
+        center(); //Position of window
+        setClosable(true); // Disable the close button
+        setModal(true); // Enable modal window mode
 
         List<Order> orders = new ArrayList<>();
         try {
@@ -43,23 +40,24 @@ public class WindowEditOrder extends Window  {
 
         }
 
-        fieldDescription.setValue(orders.get(orderID-1).getDescription());
-        fieldClientID.setValue(Integer.toString(orders.get(orderID-1).getClient().getID()));
-        fieldMechanicID.setValue(Integer.toString(orders.get(orderID-1).getMechanic().getID()));
+        for(int i = 0;i < orders.size();++i){
+            if(orderID == orders.get(i).getID()){
+                this.orderID = i;
+            }
+
+        }
+
+        fieldDescription.setValue(orders.get(this.orderID).getDescription());
+        fieldClientID.setValue(Integer.toString(orders.get(this.orderID).getClient().getID()));
+        fieldMechanicID.setValue(Integer.toString(orders.get(this.orderID).getMechanic().getID()));
         fieldDateStart.setValue(LocalDateTime.now().plusMinutes(2).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
         fieldDateFinish.setValue(LocalDateTime.now().plusMinutes(500).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
-        fieldCost.setValue(Double.toString(orders.get(orderID-1).getCost()));
+        fieldCost.setValue(Double.toString(orders.get(this.orderID).getCost()));
         selectStatus.addItem(Order.Status.Start);
         selectStatus.addItem(Order.Status.Process);
         selectStatus.addItem(Order.Status.Finish);
-        selectStatus.setValue(orders.get(orderID-1).getStatus());
+        selectStatus.setValue(orders.get(this.orderID).getStatus());
         selectStatus.setNullSelectionAllowed(false);
-
-
-
-        center(); //Position of window
-        setClosable(true); // Disable the close button
-        setModal(true); // Enable modal window mode
 
         VerticalLayout verticalFields = new VerticalLayout ();
         verticalFields.setSpacing(false);
@@ -76,8 +74,6 @@ public class WindowEditOrder extends Window  {
         HorizontalLayout horizontButtons = new HorizontalLayout();
         horizontButtons.setSpacing(true);
         horizontButtons.setMargin(true);
-
-
 
         horizontButtons.addComponent(new Button("OK",event -> {
 

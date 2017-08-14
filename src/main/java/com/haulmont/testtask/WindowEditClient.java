@@ -3,9 +3,11 @@ package com.haulmont.testtask;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import dao.DAO;
-
+import models.Client;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -13,22 +15,21 @@ import java.sql.SQLException;
  */
 public class WindowEditClient extends Window {
 
+
+    TextField fieldName = new TextField("Name");
+    TextField fieldSurname = new TextField("Surname");
+    TextField fieldPatronymic = new TextField("Patronymic");
+    TextField fieldTelephone = new TextField("Telephone");
     int clientID;
-    TextField fieldName;
-    TextField fieldSurname;
-    TextField fieldPatronymic;
-    TextField fieldTelephone ;
 
     public WindowEditClient(int clientID) {
 
         super("Edit Client"); // Set window caption
-        this.clientID = clientID;
-        fieldName = new TextField("Name");
-        fieldSurname = new TextField("Surname");
-        fieldPatronymic = new TextField("Patronymic");
-        fieldTelephone = new TextField("Telephone");
+        center(); //Position of window
+        setClosable(true); // Disable the close button
+        setModal(true); // Enable modal window mode
 
-        /*
+
         List<Client> clients = new ArrayList<>();
         try {
             clients = DAO.getInstance().LoadAllClients();
@@ -36,15 +37,17 @@ public class WindowEditClient extends Window {
 
         }
 
-        fieldName.setValue(clients.get(clientID-1).getName());
-        fieldSurname.setValue(clients.get(clientID-1).getSurname());
-        fieldPatronymic.setValue(clients.get(clientID-1).getPatronymic());
-        fieldTelephone.setValue(Integer.toString(clients.get(clientID-1).getTelephone()));
-        */
+        for(int i = 0;i < clients.size();++i){
+            if(clientID == clients.get(i).getID()){
+                this.clientID = i;
+            }
 
-        center(); //Position of window
-        setClosable(true); // Disable the close button
-        setModal(true); // Enable modal window mode
+        }
+
+        fieldName.setValue(clients.get(this.clientID).getName());
+        fieldSurname.setValue(clients.get(this.clientID).getSurname());
+        fieldPatronymic.setValue(clients.get(this.clientID).getPatronymic());
+        fieldTelephone.setValue(Integer.toString(clients.get(this.clientID).getTelephone()));
 
         VerticalLayout verticalFields = new VerticalLayout ();
         verticalFields.setSpacing(true);
@@ -58,29 +61,26 @@ public class WindowEditClient extends Window {
         HorizontalLayout horizontButtons = new HorizontalLayout();
         horizontButtons.setSpacing(false);
         horizontButtons.setMargin(false);
+        VerticalLayout verticalMain = new VerticalLayout ();
+        verticalMain.setSpacing(true);
+        verticalMain.setMargin(true);
+
         horizontButtons.addComponent(new Button("OK", event -> {
             try {
-                WindowEditClient.EventClickOk(clientID, fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephone.getValue()));
+                DAO.getInstance().updateClient(clientID, fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephone.getValue()));
                 close();
                 Page.getCurrent().reload();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }));
-        horizontButtons.addComponent(new Button("Cancel",event -> close()));
 
-        VerticalLayout verticalMain = new VerticalLayout ();
-        verticalMain.setSpacing(true);
-        verticalMain.setMargin(true);
+        horizontButtons.addComponent(new Button("Cancel",event -> close()));
 
         verticalMain.addComponent(verticalFields);
         verticalMain.addComponent(horizontButtons);
 
         setContent(verticalMain);
-    }
 
-    public static void EventClickOk(int clientID, String fieldName, String fieldSurname, String fieldPatronymic, int fieldTelephone) throws SQLException {
-        DAO.getInstance().updateClient(clientID , fieldName, fieldSurname, fieldPatronymic, fieldTelephone);
     }
-
 }

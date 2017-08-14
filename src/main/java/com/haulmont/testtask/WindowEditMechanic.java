@@ -3,33 +3,50 @@ package com.haulmont.testtask;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import dao.DAO;
+import models.Client;
+import models.Mechanic;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by User on 21.07.2017.
  */
 public class WindowEditMechanic extends Window {
 
+
+    TextField fieldName = new TextField("Name");
+    TextField fieldSurname = new TextField("Surname");
+    TextField fieldPatronymic = new TextField("Patronymic");
+    TextField fieldHourlyPay = new TextField("HourlyPay");
     int mechanicID;
-    TextField fieldName;
-    TextField fieldSurname;
-    TextField fieldPatronymic;
-    TextField fieldHourlyPay ;
 
     public WindowEditMechanic(int mechanicID) {
 
         super("Edit Mechanic"); // Set window caption
-        fieldName = new TextField("Name");
-        fieldSurname = new TextField("Surname");
-        fieldPatronymic = new TextField("Patronymic");
-        fieldHourlyPay = new TextField("HourlyPay");
-
-
-
         center(); //Position of window
         setClosable(true); // Disable the close button
         setModal(true); // Enable modal window mode
+
+        List<Mechanic> mechanics = new ArrayList<>();
+        try {
+            mechanics = DAO.getInstance().LoadAllMechanics();
+        } catch (SQLException e) {
+
+        }
+
+        for(int i = 0;i < mechanics.size();++i){
+            if(mechanicID == mechanics.get(i).getID()){
+                this.mechanicID = i;
+            }
+
+        }
+
+        fieldName.setValue(mechanics.get(this.mechanicID).getName());
+        fieldSurname.setValue(mechanics.get(this.mechanicID).getSurname());
+        fieldPatronymic.setValue(mechanics.get(this.mechanicID).getPatronymic());
+        fieldHourlyPay.setValue(Integer.toString(mechanics.get(this.mechanicID).getHourlyPay()));
 
         VerticalLayout verticalFields = new VerticalLayout ();
         verticalFields.setSpacing(false);
@@ -43,9 +60,10 @@ public class WindowEditMechanic extends Window {
         HorizontalLayout horizontButtons = new HorizontalLayout();
         horizontButtons.setSpacing(true);
         horizontButtons.setMargin(true);
+
         horizontButtons.addComponent(new Button("OK", event -> {
             try {
-                WindowEditMechanic.EventClickOk(mechanicID, fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldHourlyPay.getValue()));
+                DAO.getInstance().updateMechanic(mechanicID, fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldHourlyPay.getValue()));
                 close();
                 Page.getCurrent().reload();
             } catch (SQLException e) {
@@ -63,9 +81,4 @@ public class WindowEditMechanic extends Window {
 
         setContent(verticalMain);
     }
-
-    public static void EventClickOk(int mechanicID, String fieldName, String fieldSurname, String fieldPatronymic, int fieldHourlyPay) throws SQLException {
-        DAO.getInstance().updateMechanic(mechanicID , fieldName, fieldSurname, fieldPatronymic, fieldHourlyPay);
-    }
-
 }

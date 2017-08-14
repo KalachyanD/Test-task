@@ -18,10 +18,11 @@ import java.util.List;
  */
 public class VerticalLayoutGridButtonsC extends VerticalLayout {
 
-    Grid gridClients = new Grid("Mechanics");
+    Grid gridClients = new Grid("Clients");
     Button buttonDeleteClient = new Button("Delete");
     Button buttonEditClient = new Button("Edit");
     Button buttonAddClient = new Button("Add");
+    Client client;
 
     public VerticalLayoutGridButtonsC(){
 
@@ -43,37 +44,36 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
         // Create a gridClients bound to the containerGridClients
         gridClients.removeAllColumns();
         gridClients.setContainerDataSource(containerGridClients);
-        //horizontTopGrids.addComponent(gridClients);
+        gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
 
         // Add Client
         buttonAddClient.addClickListener(event -> {
             WindowAddClient window = new WindowAddClient();
-            // Add it to the root component
             UI.getCurrent().addWindow(window);
         });
 
-        // Delete Client
-        gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
+        //Selection listener
         gridClients.addSelectionListener(event -> {
-            Client client =(Client)gridClients.getSelectedRow();
-            buttonDeleteClient.addClickListener(eventButton -> {
-                try {
-                    DAO.getInstance().deleteClient(client.getID());
-                    Page.getCurrent().reload();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
+            client =(Client)gridClients.getSelectedRow();
+        });
+
+        // Delete Client
+        buttonDeleteClient.addClickListener(eventButton -> {
+            try {
+                DAO.getInstance().deleteClient(client.getID());
+                Page.getCurrent().reload();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         });
 
         //Edit Client
-        gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
-        gridClients.addSelectionListener(event -> {
-            Client client =(Client)gridClients.getSelectedRow();
-            buttonEditClient.addClickListener(eventButton -> {
-                WindowEditClient window = new WindowEditClient(client.getID());
-                UI.getCurrent().addWindow(window);
-            });
+        buttonEditClient.addClickListener(eventButton -> {
+            WindowEditClient window = new WindowEditClient(client.getID());
+            UI.getCurrent().addWindow(window);
         });
+
+
+
     }
 }

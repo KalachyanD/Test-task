@@ -8,6 +8,7 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import dao.DAO;
 import models.Mechanic;
+import models.Order;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -18,11 +19,13 @@ import java.util.List;
  */
 public class VerticalLayoutGridButtonsM extends VerticalLayout {
 
-    Grid gridMechanics = new Grid("Clients");
+    Grid gridMechanics = new Grid("Mechanics");
 
     Button buttonDeleteMechanic = new Button("Delete");
     Button buttonEditMechanic = new Button("Edit");
     Button buttonAddMechanic = new Button("Add");
+    Button buttonStatistics = new Button("Statistics");
+    Mechanic mechanic;
 
     public VerticalLayoutGridButtonsM(){
 
@@ -31,8 +34,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
         addComponent(buttonDeleteMechanic);
         addComponent(buttonEditMechanic);
         addComponent(buttonAddMechanic);
-
-
+        addComponent(buttonStatistics);
 
         List<Mechanic> mechanics = new ArrayList<>();
         try {
@@ -41,46 +43,46 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
 
         }
 
-
-
         BeanItemContainer<Mechanic> containerGridMechanics = new BeanItemContainer<>(Mechanic.class, mechanics);
         // Create a gridMechanics bound to the containerMechanics
         gridMechanics.removeAllColumns();
         gridMechanics.setContainerDataSource(containerGridMechanics);
-        //horizontTopGrids.addComponent(gridMechanics);
-
-
+        gridMechanics.setSelectionMode(Grid.SelectionMode.SINGLE);
 
         // Add Mechanic
         buttonAddMechanic.addClickListener(event -> {
             WindowAddMechanic window = new WindowAddMechanic();
-            // Add it to the root component
             UI.getCurrent().addWindow(window);
         });
 
-        // Delete Mechanic
-        gridMechanics.setSelectionMode(Grid.SelectionMode.SINGLE);
+        //Selection listener
         gridMechanics.addSelectionListener(event -> {
-            Mechanic mechanic =(Mechanic)gridMechanics.getSelectedRow();
-            buttonDeleteMechanic.addClickListener(eventButton -> {
-                try {
-                    DAO.getInstance().deleteMechanic(mechanic.getID());
-                    Page.getCurrent().reload();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            });
+            mechanic =(Mechanic)gridMechanics.getSelectedRow();
+        });
+
+        // Delete Mechanic
+        buttonDeleteMechanic.addClickListener(eventButton -> {
+            try {
+                DAO.getInstance().deleteMechanic(mechanic.getID());
+                Page.getCurrent().reload();
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+            }
         });
 
         //Edit Mechanic
-        gridMechanics.setSelectionMode(Grid.SelectionMode.SINGLE);
-        gridMechanics.addSelectionListener(event -> {
-            Mechanic mechanic =(Mechanic)gridMechanics.getSelectedRow();
-            buttonEditMechanic.addClickListener(eventButton -> {
-                WindowEditMechanic window = new WindowEditMechanic(mechanic.getID());
-                UI.getCurrent().addWindow(window);
-            });
+        buttonEditMechanic.addClickListener(eventButton -> {
+            WindowEditMechanic window = new WindowEditMechanic(mechanic.getID());
+            UI.getCurrent().addWindow(window);
         });
+
+        //Statistics
+        buttonStatistics.addClickListener(eventButton -> {
+            WindowStatistics window = new WindowStatistics(mechanic);
+            UI.getCurrent().addWindow(window);
+        });
+
 
     }
 }
