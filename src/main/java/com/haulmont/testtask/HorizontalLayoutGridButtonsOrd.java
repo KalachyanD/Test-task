@@ -1,6 +1,7 @@
 package com.haulmont.testtask;
 
 import com.vaadin.data.util.BeanItemContainer;
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
@@ -25,6 +26,8 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
     Order order;
 
     public HorizontalLayoutGridButtonsOrd(){
+
+
 
         gridOrders.setWidth("1000");
         gridOrders.setHeight("300");
