@@ -88,16 +88,16 @@ public class DAO {
         return currentClient;
     }
 
-    public void storeClient(Client client) throws SQLException {
+    public void storeClient(String name, String surname, String patronymic, int telephoneNumber) throws SQLException {
         String insertTableSQL = "INSERT INTO CLIENT"
                 + "(NAME, SURNAME, PATRONYMIC, TELEPHONENUMBER) VALUES"
                 + "(?,?,?,?)";
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(insertTableSQL);
-        preparedStatement.setString(1, client.getName());
-        preparedStatement.setString(2, client.getSurname());
-        preparedStatement.setString(3, client.getPatronymic());
-        preparedStatement.setInt(4, client.getTelephone());
+        preparedStatement.setString(1, name);
+        preparedStatement.setString(2, surname);
+        preparedStatement.setString(3, patronymic);
+        preparedStatement.setInt(4, telephoneNumber);
         System.out.println(preparedStatement.toString());
         preparedStatement.executeUpdate();
         if (preparedStatement != null) {
@@ -207,16 +207,16 @@ public class DAO {
         }
     }
 
-    public void storeMechanic(Mechanic mechanic) throws SQLException {
+    public void storeMechanic(String name, String surname, String patronymic, int hourlypay) throws SQLException {
         String insertTableSQL = "INSERT INTO MECHANIC"
                 + "(NAME, SURNAME, PATRONYMIC, HOURLYPAY) VALUES"
                 + "(?,?,?,?)";
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(insertTableSQL);
-        preparedStatement.setString(1, mechanic.getName());
-        preparedStatement.setString(2, mechanic.getSurname());
-        preparedStatement.setString(3, mechanic.getPatronymic());
-        preparedStatement.setDouble(4, mechanic.getHourlyPay());
+        preparedStatement.setString(1, name);
+        preparedStatement.setString(2, surname);
+        preparedStatement.setString(3, patronymic);
+        preparedStatement.setDouble(4, hourlypay);
         preparedStatement.executeUpdate();
         if (preparedStatement != null) {
             preparedStatement.close();

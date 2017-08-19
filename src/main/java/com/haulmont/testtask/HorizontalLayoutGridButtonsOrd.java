@@ -45,7 +45,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         }
 
         BeanItemContainer<Order> containerGridOrders = new BeanItemContainer<>(Order.class, orders);
-        // Create a gridOrders bound to the containerOrders
+        // Create firstField gridOrders bound to the containerOrders
         gridOrders.removeAllColumns();
         gridOrders.setContainerDataSource(containerGridOrders);
         gridOrders.setSelectionMode(Grid.SelectionMode.SINGLE);

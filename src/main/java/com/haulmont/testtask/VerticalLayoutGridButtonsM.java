@@ -8,7 +8,6 @@ import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import dao.DAO;
 import models.Mechanic;
-import models.Order;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -44,14 +43,14 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
         }
 
         BeanItemContainer<Mechanic> containerGridMechanics = new BeanItemContainer<>(Mechanic.class, mechanics);
-        // Create a gridMechanics bound to the containerMechanics
+        // Create firstField gridMechanics bound to the containerMechanics
         gridMechanics.removeAllColumns();
         gridMechanics.setContainerDataSource(containerGridMechanics);
         gridMechanics.setSelectionMode(Grid.SelectionMode.SINGLE);
 
         // Add Mechanic
         buttonAddMechanic.addClickListener(event -> {
-            WindowAddMechanic window = new WindowAddMechanic();
+            WindowEditAddClientMechanic window = new WindowEditAddClientMechanic(0,"Add","Mechanic");
             UI.getCurrent().addWindow(window);
         });
 
@@ -73,7 +72,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
 
         //Edit Mechanic
         buttonEditMechanic.addClickListener(eventButton -> {
-            WindowEditMechanic window = new WindowEditMechanic(mechanic.getID());
+            WindowEditAddClientMechanic window = new WindowEditAddClientMechanic(mechanic.getID(),"Edit","Mechanic");
             UI.getCurrent().addWindow(window);
         });
 

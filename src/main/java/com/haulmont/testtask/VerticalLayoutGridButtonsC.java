@@ -39,16 +39,16 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
 
         }
 
-        // Have a containerGridClients of some type to contain the data
+        // Have firstField containerGridClients of some type to contain the data
         BeanItemContainer<Client> containerGridClients = new BeanItemContainer<>(Client.class, clients);
-        // Create a gridClients bound to the containerGridClients
+        // Create firstField gridClients bound to the containerGridClients
         gridClients.removeAllColumns();
         gridClients.setContainerDataSource(containerGridClients);
         gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
 
         // Add Client
         buttonAddClient.addClickListener(event -> {
-            WindowAddClient window = new WindowAddClient();
+            WindowEditAddClientMechanic window = new WindowEditAddClientMechanic(0,"Add","Client");
             UI.getCurrent().addWindow(window);
         });
 
@@ -69,7 +69,7 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
 
         //Edit Client
         buttonEditClient.addClickListener(eventButton -> {
-            WindowEditClient window = new WindowEditClient(client.getID());
+            WindowEditAddClientMechanic window = new WindowEditAddClientMechanic(client.getID(),"Edit","Client");
             UI.getCurrent().addWindow(window);
         });
 
