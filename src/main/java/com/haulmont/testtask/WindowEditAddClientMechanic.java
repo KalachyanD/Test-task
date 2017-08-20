@@ -47,9 +47,10 @@ public class WindowEditAddClientMechanic extends Window {
             fieldTelephoneAndHourlyPay = new TextField("Hourly Pay");
         }
         center(); //Position of window
-        setClosable(true); // Disable the close button
+        setClosable(true); // Enable the close button
         setModal(true); // Enable modal window mode
 
+        //Preload data into fields
         if(addOrEdit == "Edit" && clientOrMechanic == "Client") {
             List<Client> clients = new ArrayList<>();
             try {
@@ -90,10 +91,6 @@ public class WindowEditAddClientMechanic extends Window {
             fieldPatronymic.setValue(clients.get(this.id).getPatronymic());
             fieldTelephoneAndHourlyPay.setValue(Integer.toString(clients.get(this.id).getHourlyPay()));
         }
-        if(addOrEdit == "Add"){
-            this.id = id;
-        }
-
 
         fieldName.setMaxLength(50);
         fieldSurname.setMaxLength(50);
@@ -108,8 +105,9 @@ public class WindowEditAddClientMechanic extends Window {
         fieldTelephoneAndHourlyPay.setRequiredError("Prompt is empty.");
 
         //To convert string value to integer before validation
-        //fieldTelephoneAndHourlyPay.setConverter(new StringToIntegerConverter());
-        //fieldTelephoneAndHourlyPay.addValidator(new IntegerRangeValidator("Value is negative",0,Integer.MAX_VALUE));
+        fieldTelephoneAndHourlyPay.setConverter(new StringToIntegerConverter());
+        fieldTelephoneAndHourlyPay.addValidator(new IntegerRangeValidator("Value is negative",0,Integer.MAX_VALUE));
+
         //What if text field is empty - integer will be null in that case, so show blank when null
         fieldTelephoneAndHourlyPay.setNullRepresentation("");
 
@@ -235,7 +233,7 @@ public class WindowEditAddClientMechanic extends Window {
         if(addOrEdit == "Edit" && clientOrMechanic == "Client") {
             ok = new Button("OK", event -> {
                 try {
-                    DAO.getInstance().updateClient(id, fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephoneAndHourlyPay.getValue()));
+                    DAO.getInstance().updateClient(id, fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephoneAndHourlyPay.getConvertedValue().toString()));
                     close();
                     Page.getCurrent().reload();
                 } catch (SQLException e) {
@@ -246,7 +244,7 @@ public class WindowEditAddClientMechanic extends Window {
         if(addOrEdit == "Edit" && clientOrMechanic == "Mechanic"){
             ok = new Button("OK", event -> {
                 try {
-                    DAO.getInstance().updateMechanic(id, fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephoneAndHourlyPay.getValue()));
+                    DAO.getInstance().updateMechanic(id, fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephoneAndHourlyPay.getConvertedValue().toString()));
                     close();
                     Page.getCurrent().reload();
                 } catch (SQLException e) {
@@ -257,7 +255,7 @@ public class WindowEditAddClientMechanic extends Window {
         if(addOrEdit == "Add" && clientOrMechanic == "Mechanic"){
             ok = new Button("OK",event -> {
                 try {
-                    DAO.getInstance().storeMechanic(fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephoneAndHourlyPay.getValue()));
+                    DAO.getInstance().storeMechanic(fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephoneAndHourlyPay.getConvertedValue().toString()));
                     close();
                     Page.getCurrent().reload();
                 } catch (SQLException e) {
@@ -268,7 +266,7 @@ public class WindowEditAddClientMechanic extends Window {
         if(addOrEdit == "Add" && clientOrMechanic == "Client"){
             ok = new Button("OK",event -> {
                 try {
-                    DAO.getInstance().storeClient(fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephoneAndHourlyPay.getValue()));
+                    DAO.getInstance().storeClient(fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephoneAndHourlyPay.getConvertedValue().toString()));
                     close();
                     Page.getCurrent().reload();
                 } catch (SQLException e) {
