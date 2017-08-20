@@ -25,6 +25,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
     Button buttonAddMechanic = new Button("Add");
     Button buttonStatistics = new Button("Statistics");
     Mechanic mechanic;
+    boolean enable = false;
 
     public VerticalLayoutGridButtonsM(){
 
@@ -57,29 +58,35 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
         //Selection listener
         gridMechanics.addSelectionListener(event -> {
             mechanic =(Mechanic)gridMechanics.getSelectedRow();
+            enable = true;
         });
 
         // Delete Mechanic
         buttonDeleteMechanic.addClickListener(eventButton -> {
-            try {
-                DAO.getInstance().deleteMechanic(mechanic.getID());
-                Page.getCurrent().reload();
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
+            if(enable == true) {
+                try {
+                    DAO.getInstance().deleteMechanic(mechanic.getID());
+                    Page.getCurrent().reload();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         //Edit Mechanic
         buttonEditMechanic.addClickListener(eventButton -> {
-            WindowEditAddClientMechanic window = new WindowEditAddClientMechanic(mechanic.getID(),"Edit","Mechanic");
-            UI.getCurrent().addWindow(window);
+            if(enable == true) {
+                WindowEditAddClientMechanic window = new WindowEditAddClientMechanic(mechanic.getID(), "Edit", "Mechanic");
+                UI.getCurrent().addWindow(window);
+            }
         });
 
         //Statistics
         buttonStatistics.addClickListener(eventButton -> {
-            WindowStatistics window = new WindowStatistics(mechanic);
-            UI.getCurrent().addWindow(window);
+            if(enable == true) {
+                WindowStatistics window = new WindowStatistics(mechanic);
+                UI.getCurrent().addWindow(window);
+            }
         });
 
 

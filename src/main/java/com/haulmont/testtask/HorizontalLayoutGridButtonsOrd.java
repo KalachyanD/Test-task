@@ -24,6 +24,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
     Button buttonEditOrder = new Button("Edit");
     Button buttonDeleteOrder = new Button("Delete");
     Order order;
+    boolean enable = false;
 
     public HorizontalLayoutGridButtonsOrd(){
 
@@ -59,23 +60,27 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         //Selection Listener
         gridOrders.addSelectionListener(event -> {
             order =(Order)gridOrders.getSelectedRow();
+            enable = true;
         });
 
         // Delete Order
         buttonDeleteOrder.addClickListener(eventButton -> {
-            try {
-                DAO.getInstance().deleteOrder(order.getID());
-                Page.getCurrent().reload();
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
+            if(enable == true) {
+                try {
+                    DAO.getInstance().deleteOrder(order.getID());
+                    Page.getCurrent().reload();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         //Edit Order
         buttonEditOrder.addClickListener(eventButton -> {
-            WindowEditOrder window = new WindowEditOrder(order.getID());
-            UI.getCurrent().addWindow(window);
+            if(enable == true) {
+                WindowEditOrder window = new WindowEditOrder(order.getID());
+                UI.getCurrent().addWindow(window);
+            }
         });
     }
 }

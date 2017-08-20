@@ -23,6 +23,7 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
     Button buttonEditClient = new Button("Edit");
     Button buttonAddClient = new Button("Add");
     Client client;
+    boolean enable = false;
 
     public VerticalLayoutGridButtonsC(){
 
@@ -55,22 +56,27 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
         //Selection listener
         gridClients.addSelectionListener(event -> {
             client =(Client)gridClients.getSelectedRow();
+            enable = true;
         });
 
         // Delete Client
         buttonDeleteClient.addClickListener(eventButton -> {
-            try {
-                DAO.getInstance().deleteClient(client.getID());
-                Page.getCurrent().reload();
-            } catch (SQLException e) {
-                e.printStackTrace();
+            if(enable == true) {
+                try {
+                    DAO.getInstance().deleteClient(client.getID());
+                    Page.getCurrent().reload();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
         });
 
         //Edit Client
         buttonEditClient.addClickListener(eventButton -> {
-            WindowEditAddClientMechanic window = new WindowEditAddClientMechanic(client.getID(),"Edit","Client");
-            UI.getCurrent().addWindow(window);
+            if(enable == true) {
+                WindowEditAddClientMechanic window = new WindowEditAddClientMechanic(client.getID(), "Edit", "Client");
+                UI.getCurrent().addWindow(window);
+            }
         });
 
 
