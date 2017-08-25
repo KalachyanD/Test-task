@@ -16,6 +16,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.vaadin.event.FieldEvents.*;
+
 
 /**
  * Created by User on 21.07.2017.
@@ -31,11 +33,7 @@ public class WindowEditAddClientMechanic extends Window {
     Button ok;
     Button cancel;
     int id;
-    boolean firstField = true;
-    boolean secondField = true;
-    boolean thirdField = true;
-    boolean fourthField = true;
-
+    StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.", 1, 50, false);
 
     public WindowEditAddClientMechanic(int id, String addOrEdit, String clientOrMechanic) {
 
@@ -97,9 +95,9 @@ public class WindowEditAddClientMechanic extends Window {
         fieldPatronymic.setMaxLength(50);
         fieldTelephoneAndHourlyPay.setMaxLength(19);
 
-        fieldName.addValidator(new StringLengthValidator("Prompt is empty.", 1, 50, false));
-        fieldSurname.addValidator(new StringLengthValidator("Prompt is empty.", 1, 50, false));
-        fieldPatronymic.addValidator(new StringLengthValidator("Prompt is empty.", 1, 50, false));
+        fieldName.addValidator(stringLengthValidator);
+        fieldSurname.addValidator(stringLengthValidator);
+        fieldPatronymic.addValidator(stringLengthValidator);
 
         fieldTelephoneAndHourlyPay.setRequired(true);
         fieldTelephoneAndHourlyPay.setRequiredError("Prompt is empty.");
@@ -121,114 +119,100 @@ public class WindowEditAddClientMechanic extends Window {
         fieldPatronymic.setImmediate(true);
         fieldTelephoneAndHourlyPay.setImmediate(true);
 
+        fieldName.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
+        fieldSurname.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
+        fieldPatronymic.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
+        fieldTelephoneAndHourlyPay.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
 
-        fieldTelephoneAndHourlyPay.addTextChangeListener(new FieldEvents.TextChangeListener() {
+        fieldTelephoneAndHourlyPay.addTextChangeListener(new TextChangeListener() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void textChange(FieldEvents.TextChangeEvent event) {
+            public void textChange(TextChangeEvent event) {
                 try {
+
                     fieldTelephoneAndHourlyPay.setValue(event.getText());
 
                     fieldTelephoneAndHourlyPay.setCursorPosition(event.getCursorPosition());
 
                     fieldTelephoneAndHourlyPay.validate();
+                    fieldName.validate();
+                    fieldSurname.validate();
+                    fieldPatronymic.validate();
 
-                    firstField = true;
-
-                } catch (Validator.InvalidValueException e) {
-                    firstField = false;
-
-                }
-                if(firstField == true && secondField == true && thirdField == true && fourthField == true){
                     ok.setEnabled(true);
-                }
-                else{
+                } catch (Validator.InvalidValueException e) {
                     ok.setEnabled(false);
                 }
+
             }
         });
 
-        fieldName.addTextChangeListener(new FieldEvents.TextChangeListener() {
+        fieldName.addTextChangeListener(new TextChangeListener() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void textChange(FieldEvents.TextChangeEvent event) {
+            public void textChange(TextChangeEvent event) {
                 try {
                     fieldName.setValue(event.getText());
 
                     fieldName.setCursorPosition(event.getCursorPosition());
 
                     fieldName.validate();
-
-                    secondField = true;
-
-                } catch (Validator.InvalidValueException e) {
-                    secondField = false;
-                }
-                if(firstField == true && secondField == true && thirdField == true && fourthField == true){
+                    fieldSurname.validate();
+                    fieldPatronymic.validate();
+                    fieldTelephoneAndHourlyPay.validate();
                     ok.setEnabled(true);
-                }
-                else{
+                } catch (Validator.InvalidValueException e) {
                     ok.setEnabled(false);
                 }
             }
         });
 
-        fieldSurname.addTextChangeListener(new FieldEvents.TextChangeListener() {
+        fieldSurname.addTextChangeListener(new TextChangeListener() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void textChange(FieldEvents.TextChangeEvent event) {
+            public void textChange(TextChangeEvent event) {
                 try {
                     fieldSurname.setValue(event.getText());
 
                     fieldSurname.setCursorPosition(event.getCursorPosition());
 
                     fieldSurname.validate();
+                    fieldName.validate();
+                    fieldPatronymic.validate();
+                    fieldTelephoneAndHourlyPay.validate();
 
-                    thirdField = true;
-
-                } catch (Validator.InvalidValueException e) {
-
-                    thirdField = false;
-
-                }
-                if(firstField == true && secondField == true && thirdField == true && fourthField == true){
                     ok.setEnabled(true);
-                }
-                else{
+                } catch (Validator.InvalidValueException e) {
                     ok.setEnabled(false);
                 }
-
             }
         });
 
-        fieldPatronymic.addTextChangeListener(new FieldEvents.TextChangeListener() {
+        fieldPatronymic.addTextChangeListener(new TextChangeListener() {
             private static final long serialVersionUID = 1L;
 
             @Override
-            public void textChange(FieldEvents.TextChangeEvent event) {
+            public void textChange(TextChangeEvent event) {
                 try {
                     fieldPatronymic.setValue(event.getText());
 
                     fieldPatronymic.setCursorPosition(event.getCursorPosition());
 
                     fieldPatronymic.validate();
+                    fieldName.validate();
+                    fieldSurname.validate();
+                    fieldTelephoneAndHourlyPay.validate();
 
-                    fourthField = true;
-
-                } catch (Validator.InvalidValueException e) {
-                    fourthField = false;
-                }
-                if(firstField == true && secondField == true && thirdField == true && fourthField == true){
                     ok.setEnabled(true);
-                }
-                else{
+                } catch (Validator.InvalidValueException e) {
                     ok.setEnabled(false);
                 }
             }
         });
+
 
         if(addOrEdit == "Edit" && clientOrMechanic == "Client") {
             ok = new Button("OK", event -> {
