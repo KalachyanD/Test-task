@@ -23,7 +23,6 @@ public class DAO {
         }
         return instance;
     }
-
     public Connection getDBConnection() {
         Connection dbConnection = null;
         try {

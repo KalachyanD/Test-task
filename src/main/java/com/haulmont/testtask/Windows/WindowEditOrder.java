@@ -1,4 +1,4 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.Windows;
 
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;

@@ -1,4 +1,4 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.Windows;
 
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
@@ -15,12 +15,12 @@ import java.util.List;
  * Created by User on 08.08.2017.
  */
 
-public class WindowStatistics extends Window {
+public class WindowStatisticsMechanic extends Window {
 
     Label label;
     int count;
 
-    public WindowStatistics(Mechanic mechanic){
+    public WindowStatisticsMechanic(Mechanic mechanic){
 
         super(mechanic.getName());
         center(); //Position of window

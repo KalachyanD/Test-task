@@ -1,17 +1,16 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.Grids;
 
+import com.haulmont.testtask.Windows.WindowEditAddClientMechanic;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
-import com.vaadin.ui.renderers.NumberRenderer;
 import dao.DAO;
 import models.Client;
 
 import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,14 +26,7 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
     Client client;
     boolean enable = false;
 
-    public VerticalLayoutGridButtonsC(){
-
-        gridClients.setHeight("300");
-        addComponent(gridClients);
-        addComponent(buttonDeleteClient);
-        addComponent(buttonEditClient);
-        addComponent(buttonAddClient);
-
+    public void FillTable() {
         List<Client> clients = new ArrayList<>();
         try {
             clients = DAO.getInstance().LoadAllClients();
@@ -44,10 +36,21 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
 
         // Have firstField containerGridClients of some type to contain the data
         BeanItemContainer<Client> containerGridClients = new BeanItemContainer<>(Client.class, clients);
+
         // Create firstField gridClients bound to the containerGridClients
         gridClients.removeAllColumns();
         gridClients.setContainerDataSource(containerGridClients);
+    }
+
+    public VerticalLayoutGridButtonsC(){
+        gridClients.setHeight("300");
         gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
+        addComponent(gridClients);
+        addComponent(buttonDeleteClient);
+        addComponent(buttonEditClient);
+        addComponent(buttonAddClient);
+
+        FillTable();
 
         // Add Client
         buttonAddClient.addClickListener(event -> {
@@ -66,7 +69,7 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
             if(enable == true) {
                 try {
                     DAO.getInstance().deleteClient(client.getID());
-                    Page.getCurrent().reload();
+                    FillTable();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

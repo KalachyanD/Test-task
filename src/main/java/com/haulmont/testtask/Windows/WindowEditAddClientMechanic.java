@@ -1,11 +1,10 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.Windows;
 
 
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.converter.StringToIntegerConverter;
 import com.vaadin.data.validator.*;
-import com.vaadin.event.FieldEvents;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import dao.DAO;
@@ -219,7 +218,6 @@ public class WindowEditAddClientMechanic extends Window {
                 try {
                     DAO.getInstance().updateClient(id, fieldName.getValue(), fieldSurname.getValue(), fieldPatronymic.getValue(), Integer.parseInt(fieldTelephoneAndHourlyPay.getConvertedValue().toString()));
                     close();
-                    Page.getCurrent().reload();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

@@ -1,9 +1,10 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.Windows;
 
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import dao.DAO;
 import models.Order;
+import com.haulmont.testtask.Grids.*;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -16,22 +17,16 @@ import java.util.List;
  */
 public class WindowAddOrder extends Window  {
 
-    TextField fieldDescription;
-    TextField fieldClientID;
-    TextField fieldMechanicID;
-    TextField fieldDateStart;
-    TextField fieldDateFinish;
-    TextField fieldCost;
+    TextField fieldDescription = new TextField("Description");
+    TextField fieldClientID = new TextField("Client ID");
+    TextField fieldMechanicID = new TextField("Mechanic ID");
+    TextField fieldDateStart = new TextField("Date start");
+    TextField fieldDateFinish = new TextField("Date finish");
+    TextField fieldCost = new TextField("Cost");
 
     public WindowAddOrder() {
 
         super("Add Order"); // Set window caption
-        fieldDescription = new TextField("Description");
-        fieldClientID  = new TextField("Client ID");
-        fieldMechanicID = new TextField("Mechanic ID");
-        fieldDateStart = new TextField("Date start");
-        fieldDateFinish = new TextField("Date finish");
-        fieldCost = new TextField("Cost");
 
         List<Order> orders = new ArrayList<>();
         try {
@@ -68,21 +63,22 @@ public class WindowAddOrder extends Window  {
         horizontButtons.setSpacing(false);
         horizontButtons.setMargin(false);
 
-
-
         horizontButtons.addComponent(new Button("OK",event -> {
 
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
             LocalDateTime dateStart =  LocalDateTime.parse(fieldDateStart.getValue(), formatter);
             LocalDateTime dateFinish = LocalDateTime.parse(fieldDateFinish.getValue(), formatter);
             try {
-                DAO.getInstance().storeOrder(fieldDescription.getValue(), Integer.parseInt(fieldClientID.getValue()), Integer.parseInt(fieldMechanicID.getValue()), dateStart, dateFinish, Double.parseDouble(fieldCost.getValue()), Order.Status.Start);
+                DAO.getInstance().storeOrder(fieldDescription.getValue(), Integer.parseInt(fieldClientID.getValue()),
+                        Integer.parseInt(fieldMechanicID.getValue()), dateStart, dateFinish,
+                        Double.parseDouble(fieldCost.getValue()), Order.Status.Start);
                 close();
-                Page.getCurrent().reload();
+
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }));
+
         horizontButtons.addComponent(new Button("Cancel",event -> close()));
 
         VerticalLayout verticalMain = new VerticalLayout ();

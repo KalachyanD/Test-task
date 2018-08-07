@@ -1,13 +1,14 @@
-package com.haulmont.testtask;
+package com.haulmont.testtask.Grids;
 
+import com.haulmont.testtask.Windows.WindowAddOrder;
+import com.haulmont.testtask.Windows.WindowEditOrder;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.data.validator.StringLengthValidator;
-import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
 import dao.DAO;
+import models.Client;
 import models.Order;
 
 import java.sql.SQLException;
@@ -17,6 +18,8 @@ import java.util.List;
 /**
  * Created by User on 04.08.2017.
  */
+
+
 public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
 
     Grid gridOrders = new Grid("Orders");
@@ -26,17 +29,8 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
     Order order;
     boolean enable = false;
 
-    public HorizontalLayoutGridButtonsOrd(){
 
-
-
-        gridOrders.setWidth("1000");
-        gridOrders.setHeight("300");
-
-        addComponent(gridOrders);
-        addComponent(buttonAddOrder);
-        addComponent(buttonEditOrder);
-        addComponent(buttonDeleteOrder);
+    public void FillTable() {
 
         List<Order> orders = new ArrayList<>();
         try {
@@ -49,7 +43,20 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         // Create firstField gridOrders bound to the containerOrders
         gridOrders.removeAllColumns();
         gridOrders.setContainerDataSource(containerGridOrders);
+    }
+
+    public HorizontalLayoutGridButtonsOrd() {
+
+        gridOrders.setWidth("1000");
+        gridOrders.setHeight("300");
         gridOrders.setSelectionMode(Grid.SelectionMode.SINGLE);
+
+        addComponent(gridOrders);
+        addComponent(buttonAddOrder);
+        addComponent(buttonEditOrder);
+        addComponent(buttonDeleteOrder);
+
+        FillTable();
 
         // Add Order
         buttonAddOrder.addClickListener(event -> {
@@ -68,7 +75,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
             if(enable == true) {
                 try {
                     DAO.getInstance().deleteOrder(order.getID());
-                    Page.getCurrent().reload();
+                    FillTable();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
