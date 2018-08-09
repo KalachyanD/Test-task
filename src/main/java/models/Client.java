@@ -1,16 +1,17 @@
 package models;
 
+import java.lang.Object;
 
 public class Client {
 
     private int id;
 
     private String name;
-    //Фамилия
+    //Surname
     private String surname;
-    //Отчество
+    //Patronymic
     private String patronymic;
-    //Номер телефона
+    //Telephone number
     private int telephone;
 
     public Client(int id, String name, String surname, String patronymic, int telephoneNumber) {
@@ -19,7 +20,10 @@ public class Client {
         this.surname = surname;
         this.patronymic = patronymic;
         this.telephone = telephoneNumber;
+    }
 
+    public Client(Client client) {
+        this(client.getID(), client.getName(), client.getSurname(), client.getPatronymic(), client.getTelephone());
     }
 
     public String getName() {
@@ -69,5 +73,4 @@ public class Client {
         builder.append( getPatronymic() );
         return builder.toString();
     }
-
 }

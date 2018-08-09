@@ -1,6 +1,7 @@
 package models;
 
 
+import java.io.*;
 import java.time.LocalDateTime;
 
 
@@ -17,7 +18,8 @@ public class Order {
     private double cost;
     private Status status;
 
-    public Order(int id, String description, Client client, Mechanic mechanic, LocalDateTime startDate, LocalDateTime endDate, double cost, Status status) {
+    public Order(int id, String description, Client client, Mechanic mechanic, LocalDateTime startDate,
+                 LocalDateTime endDate, double cost, Status status) {
         this.id = id;
         this.description = description;
         this.client = client;
@@ -26,6 +28,11 @@ public class Order {
         this.endDate = endDate;
         this.cost = cost;
         this.status = status;
+    }
+
+    public Order(Order order) {
+        this(order.getID(), order.getDescription(), order.getClient(), order.getMechanic(), order.getStartDate(),
+                order.getEndDate(), order.getCost(), order.getStatus());
     }
 
     public int getID() {
@@ -87,8 +94,4 @@ public class Order {
     public void setStatus(Status status) {
         this.status = status;
     }
-
-
-
-
 }

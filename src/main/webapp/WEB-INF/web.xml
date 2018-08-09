@@ -15,7 +15,7 @@
         <init-param>
             <description>Vaadin UI to display</description>
             <param-name>UI</param-name>
-            <param-value>com.haulmont.testtask.MainUI</param-value>
+            <param-value>com.haulmont.testtask.UI.MainUI</param-value>
         </init-param>
     </servlet>
     <servlet-mapping>

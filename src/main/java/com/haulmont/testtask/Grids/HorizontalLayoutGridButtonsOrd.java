@@ -8,7 +8,6 @@ import com.vaadin.ui.Grid;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.UI;
 import dao.DAO;
-import models.Client;
 import models.Order;
 
 import java.sql.SQLException;
@@ -22,15 +21,15 @@ import java.util.List;
 
 public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
 
-    Grid gridOrders = new Grid("Orders");
-    Button buttonAddOrder = new Button("Add");
-    Button buttonEditOrder = new Button("Edit");
-    Button buttonDeleteOrder = new Button("Delete");
-    Order order;
-    boolean enable = false;
+    private Grid gridOrders = new Grid("Orders");
+    private Button buttonAddOrder = new Button("Add");
+    private Button buttonEditOrder = new Button("Edit");
+    private Button buttonDeleteOrder = new Button("Delete");
+    private Order order;
+    private boolean enable = false;
 
 
-    public void FillTable() {
+    public void FillGrid() {
 
         List<Order> orders = new ArrayList<>();
         try {
@@ -56,7 +55,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         addComponent(buttonEditOrder);
         addComponent(buttonDeleteOrder);
 
-        FillTable();
+        FillGrid();
 
         // Add Order
         buttonAddOrder.addClickListener(event -> {
@@ -75,7 +74,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
             if(enable == true) {
                 try {
                     DAO.getInstance().deleteOrder(order.getID());
-                    FillTable();
+                    FillGrid();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

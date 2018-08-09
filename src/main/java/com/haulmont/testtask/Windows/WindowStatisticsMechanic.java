@@ -17,8 +17,8 @@ import java.util.List;
 
 public class WindowStatisticsMechanic extends Window {
 
-    Label label;
-    int count;
+    private Label label;
+    private int count;
 
     public WindowStatisticsMechanic(Mechanic mechanic){
 

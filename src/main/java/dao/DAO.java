@@ -1,6 +1,5 @@
 package dao;
 
-
 import models.Client;
 import models.Mechanic;
 import models.Order;
@@ -314,7 +313,7 @@ public class DAO {
         preparedStatement.setTimestamp(4, Timestamp.valueOf(startDate));
         preparedStatement.setTimestamp(5, Timestamp.valueOf(endDate));
         preparedStatement.setDouble(6, cost);
-        preparedStatement.setInt(7, status.ordinal());
+        preparedStatement.setString(7, status.toString());
         preparedStatement.executeUpdate();
         if (preparedStatement != null) {
             preparedStatement.close();

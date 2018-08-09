@@ -1,5 +1,6 @@
 package com.haulmont.testtask.Windows;
 
+import com.haulmont.testtask.UI.MainUI;
 import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import dao.DAO;
@@ -16,15 +17,14 @@ import java.util.List;
  */
 public class WindowEditOrder extends Window  {
 
-
-    TextField fieldDescription = new TextField("Description");
-    TextField fieldClientID  = new TextField("Client ID");
-    TextField fieldMechanicID = new TextField("Mechanic ID");
-    TextField fieldDateStart = new TextField("Date start");
-    TextField fieldDateFinish = new TextField("Date finish");
-    TextField fieldCost = new TextField("Cost");
-    NativeSelect selectStatus = new NativeSelect("Status");
-    int orderID;
+    private TextField fieldDescription = new TextField("Description");
+    private TextField fieldClientID  = new TextField("Client ID");
+    private TextField fieldMechanicID = new TextField("Mechanic ID");
+    private TextField fieldDateStart = new TextField("Date start");
+    private TextField fieldDateFinish = new TextField("Date finish");
+    private TextField fieldCost = new TextField("Cost");
+    private NativeSelect selectStatus = new NativeSelect("Status");
+    private int orderID;
 
     public WindowEditOrder(int orderID) {
 
@@ -50,8 +50,10 @@ public class WindowEditOrder extends Window  {
         fieldDescription.setValue(orders.get(this.orderID).getDescription());
         fieldClientID.setValue(Integer.toString(orders.get(this.orderID).getClient().getID()));
         fieldMechanicID.setValue(Integer.toString(orders.get(this.orderID).getMechanic().getID()));
-        fieldDateStart.setValue(LocalDateTime.now().plusMinutes(2).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
-        fieldDateFinish.setValue(LocalDateTime.now().plusMinutes(500).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
+        fieldDateStart.setValue(LocalDateTime.now().plusMinutes(2).format(DateTimeFormatter.ofPattern(
+                "dd.MM.yyyy HH:mm:ss")));
+        fieldDateFinish.setValue(LocalDateTime.now().plusMinutes(500).format(DateTimeFormatter.ofPattern(
+                "dd.MM.yyyy HH:mm:ss")));
         fieldCost.setValue(Double.toString(orders.get(this.orderID).getCost()));
         selectStatus.addItem(Order.Status.Start);
         selectStatus.addItem(Order.Status.Process);
@@ -82,9 +84,11 @@ public class WindowEditOrder extends Window  {
             LocalDateTime dateFinish = LocalDateTime.parse(fieldDateFinish.getValue(), formatter);
             try {
                 Order.Status status = Order.Status.valueOf(selectStatus.getValue().toString());
-                DAO.getInstance().updateOrder(orderID, fieldDescription.getValue(), Integer.parseInt(fieldClientID.getValue()), Integer.parseInt(fieldMechanicID.getValue()), dateStart, dateFinish, Double.parseDouble(fieldCost.getValue()), status);
+                DAO.getInstance().updateOrder(orderID, fieldDescription.getValue(), Integer.parseInt(
+                        fieldClientID.getValue()), Integer.parseInt(fieldMechanicID.getValue()),
+                        dateStart, dateFinish, Double.parseDouble(fieldCost.getValue()), status);
+                getUI().design.horizontalLayoutGridButtonsOrd.FillGrid();
                 close();
-                Page.getCurrent().reload();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -99,8 +103,11 @@ public class WindowEditOrder extends Window  {
         verticalMain.addComponent(horizontButtons);
 
         setContent(verticalMain);
+    }
 
-
+    @Override
+    public MainUI getUI() {
+        return (MainUI) super.getUI();
     }
 
 }

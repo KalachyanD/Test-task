@@ -6,9 +6,9 @@ public class Mechanic {
     private int id;
 
     private String name;
-    //Фамилия
+    //Surname
     private String surname;
-    //Отчество
+    //Patronymic
     private String patronymic;
 
     private int hourlyPay;
@@ -20,6 +20,10 @@ public class Mechanic {
         this.patronymic = patronymic;
         this.hourlyPay= telephoneNumber;
 
+    }
+
+    public Mechanic(Mechanic mechanic) {
+        this(mechanic.getID(), mechanic.getName(), mechanic.getSurname(), mechanic.getPatronymic(), mechanic.getHourlyPay());
     }
 
     public String getName() {
@@ -69,5 +73,4 @@ public class Mechanic {
         builder.append( getPatronymic() );
         return builder.toString();
     }
-
 }

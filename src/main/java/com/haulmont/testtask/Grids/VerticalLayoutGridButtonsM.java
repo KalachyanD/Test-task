@@ -1,16 +1,14 @@
 package com.haulmont.testtask.Grids;
 
-import com.haulmont.testtask.Windows.WindowEditAddClientMechanic;
-import com.haulmont.testtask.Windows.WindowStatisticsMechanic;
+import com.haulmont.testtask.Windows.*;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.UI;
 import com.vaadin.ui.VerticalLayout;
 import dao.DAO;
-import models.Client;
 import models.Mechanic;
+
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -21,16 +19,15 @@ import java.util.List;
  */
 public class VerticalLayoutGridButtonsM extends VerticalLayout {
 
-    Grid gridMechanics = new Grid("Mechanics");
+    private Grid gridMechanics = new Grid("Mechanics");
+    private Button buttonDeleteMechanic = new Button("Delete");
+    private Button buttonEditMechanic = new Button("Edit");
+    private Button buttonAddMechanic = new Button("Add");
+    private Button buttonStatistics = new Button("Statistics");
+    private Mechanic mechanic;
+    private boolean enable = false;
 
-    Button buttonDeleteMechanic = new Button("Delete");
-    Button buttonEditMechanic = new Button("Edit");
-    Button buttonAddMechanic = new Button("Add");
-    Button buttonStatistics = new Button("Statistics");
-    Mechanic mechanic;
-    boolean enable = false;
-
-    public void FillTable() {
+    public void FillGrid() {
         List<Mechanic> mechanics = new ArrayList<>();
         try {
             mechanics = DAO.getInstance().LoadAllMechanics();
@@ -53,11 +50,11 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
         addComponent(buttonAddMechanic);
         addComponent(buttonStatistics);
 
-        FillTable();
+        FillGrid();
 
         // Add Mechanic
         buttonAddMechanic.addClickListener(event -> {
-            WindowEditAddClientMechanic window = new WindowEditAddClientMechanic(0,"Add","Mechanic");
+            WindowAddMechanic window = new WindowAddMechanic();
             UI.getCurrent().addWindow(window);
         });
 
@@ -72,7 +69,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
             if(enable == true) {
                 try {
                     DAO.getInstance().deleteMechanic(mechanic.getID());
-                    FillTable();
+                    FillGrid();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -82,7 +79,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
         //Edit Mechanic
         buttonEditMechanic.addClickListener(eventButton -> {
             if(enable == true) {
-                WindowEditAddClientMechanic window = new WindowEditAddClientMechanic(mechanic.getID(), "Edit", "Mechanic");
+                WindowEditMechanic window = new WindowEditMechanic(mechanic.getID());
                 UI.getCurrent().addWindow(window);
             }
         });

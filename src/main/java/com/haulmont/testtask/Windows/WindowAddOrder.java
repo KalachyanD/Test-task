@@ -5,24 +5,29 @@ import com.vaadin.ui.*;
 import dao.DAO;
 import models.Order;
 import com.haulmont.testtask.Grids.*;
-
+import com.haulmont.testtask.UI.*;
+import com.vaadin.ui.UI;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.vaadin.ui.UI.getCurrent;
+
 /**
  * Created by User on 21.07.2017.
  */
+
 public class WindowAddOrder extends Window  {
 
-    TextField fieldDescription = new TextField("Description");
-    TextField fieldClientID = new TextField("Client ID");
-    TextField fieldMechanicID = new TextField("Mechanic ID");
-    TextField fieldDateStart = new TextField("Date start");
-    TextField fieldDateFinish = new TextField("Date finish");
-    TextField fieldCost = new TextField("Cost");
+    private TextField fieldDescription = new TextField("Description");
+    private TextField fieldClientID = new TextField("Client ID");
+    private TextField fieldMechanicID = new TextField("Mechanic ID");
+    private TextField fieldDateStart = new TextField("Date start");
+    private TextField fieldDateFinish = new TextField("Date finish");
+    private TextField fieldCost = new TextField("Cost");
+    private NativeSelect selectStatus = new NativeSelect("Status");
 
     public WindowAddOrder() {
 
@@ -38,11 +43,16 @@ public class WindowAddOrder extends Window  {
         fieldDescription.setValue(orders.get(1).getDescription());
         fieldClientID.setValue(Integer.toString(orders.get(1).getClient().getID()));
         fieldMechanicID.setValue(Integer.toString(orders.get(1).getMechanic().getID()));
-        fieldDateStart.setValue(LocalDateTime.now().plusMinutes(2).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
-        fieldDateFinish.setValue(LocalDateTime.now().plusMinutes(500).format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss")));
-        //fieldDateStart.setValue(orders.get(1).getStartDate().toString());
-        //fieldDateFinish.setValue(orders.get(1).getEndDate().toString());
+        fieldDateStart.setValue(LocalDateTime.now().plusMinutes(2).format(DateTimeFormatter.ofPattern(
+                "dd.MM.yyyy HH:mm:ss")));
+        fieldDateFinish.setValue(LocalDateTime.now().plusMinutes(500).format(DateTimeFormatter.ofPattern(
+                "dd.MM.yyyy HH:mm:ss")));
         fieldCost.setValue(Double.toString(orders.get(1).getCost()));
+        selectStatus.addItem(Order.Status.Start);
+        selectStatus.addItem(Order.Status.Process);
+        selectStatus.addItem(Order.Status.Finish);
+        selectStatus.setValue(Order.Status.Start);
+        selectStatus.setNullSelectionAllowed(false);
 
         center(); //Position of window
         setClosable(true); // Disable the close button
@@ -58,39 +68,45 @@ public class WindowAddOrder extends Window  {
         verticalFields.addComponent(fieldDateStart);
         verticalFields.addComponent(fieldDateFinish);
         verticalFields.addComponent(fieldCost);
+        verticalFields.addComponent(selectStatus);
 
-        HorizontalLayout horizontButtons = new HorizontalLayout();
-        horizontButtons.setSpacing(false);
-        horizontButtons.setMargin(false);
+        HorizontalLayout horizonButtons = new HorizontalLayout();
+        horizonButtons.setSpacing(false);
+        horizonButtons.setMargin(false);
 
-        horizontButtons.addComponent(new Button("OK",event -> {
-
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-            LocalDateTime dateStart =  LocalDateTime.parse(fieldDateStart.getValue(), formatter);
-            LocalDateTime dateFinish = LocalDateTime.parse(fieldDateFinish.getValue(), formatter);
-            try {
-                DAO.getInstance().storeOrder(fieldDescription.getValue(), Integer.parseInt(fieldClientID.getValue()),
-                        Integer.parseInt(fieldMechanicID.getValue()), dateStart, dateFinish,
-                        Double.parseDouble(fieldCost.getValue()), Order.Status.Start);
-                close();
-
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }));
-
-        horizontButtons.addComponent(new Button("Cancel",event -> close()));
+        horizonButtons.addComponent(new Button("OK", this::buttonClick));
+        horizonButtons.addComponent(new Button("Cancel",event -> close()));
 
         VerticalLayout verticalMain = new VerticalLayout ();
         verticalMain.setSpacing(true);
         verticalMain.setMargin(true);
 
         verticalMain.addComponent(verticalFields);
-        verticalMain.addComponent(horizontButtons);
+        verticalMain.addComponent(horizonButtons);
 
         setContent(verticalMain);
 
 
     }
 
+    private void buttonClick(Button.ClickEvent event) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        LocalDateTime dateStart = LocalDateTime.parse(fieldDateStart.getValue(), formatter);
+        LocalDateTime dateFinish = LocalDateTime.parse(fieldDateFinish.getValue(), formatter);
+        try {
+            Order.Status status = Order.Status.valueOf(selectStatus.getValue().toString());
+            DAO.getInstance().storeOrder(fieldDescription.getValue(), Integer.parseInt(fieldClientID.getValue()),
+                    Integer.parseInt(fieldMechanicID.getValue()), dateStart, dateFinish,
+                    Double.parseDouble(fieldCost.getValue()), status);
+            getUI().design.horizontalLayoutGridButtonsOrd.FillGrid();
+            close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public MainUI getUI() {
+        return (MainUI) super.getUI();
+    }
 }

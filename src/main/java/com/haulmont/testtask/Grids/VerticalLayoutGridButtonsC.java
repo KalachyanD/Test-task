@@ -1,8 +1,7 @@
 package com.haulmont.testtask.Grids;
 
-import com.haulmont.testtask.Windows.WindowEditAddClientMechanic;
+import com.haulmont.testtask.Windows.*;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.server.Page;
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Grid;
 import com.vaadin.ui.UI;
@@ -19,14 +18,14 @@ import java.util.List;
  */
 public class VerticalLayoutGridButtonsC extends VerticalLayout {
 
-    Grid gridClients = new Grid("Clients");
-    Button buttonDeleteClient = new Button("Delete");
-    Button buttonEditClient = new Button("Edit");
-    Button buttonAddClient = new Button("Add");
-    Client client;
-    boolean enable = false;
+    private Grid gridClients = new Grid("Clients");
+    private Button buttonDeleteClient = new Button("Delete");
+    private Button buttonEditClient = new Button("Edit");
+    private Button buttonAddClient = new Button("Add");
+    private Client client;
+    private boolean enable = false;
 
-    public void FillTable() {
+    public void FillGrid() {
         List<Client> clients = new ArrayList<>();
         try {
             clients = DAO.getInstance().LoadAllClients();
@@ -50,11 +49,11 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
         addComponent(buttonEditClient);
         addComponent(buttonAddClient);
 
-        FillTable();
+        FillGrid();
 
         // Add Client
         buttonAddClient.addClickListener(event -> {
-            WindowEditAddClientMechanic window = new WindowEditAddClientMechanic(0,"Add","Client");
+            WindowAddClient window = new WindowAddClient();
             UI.getCurrent().addWindow(window);
         });
 
@@ -69,7 +68,7 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
             if(enable == true) {
                 try {
                     DAO.getInstance().deleteClient(client.getID());
-                    FillTable();
+                    FillGrid();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
@@ -79,7 +78,7 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
         //Edit Client
         buttonEditClient.addClickListener(eventButton -> {
             if(enable == true) {
-                WindowEditAddClientMechanic window = new WindowEditAddClientMechanic(client.getID(), "Edit", "Client");
+                WindowEditClient window = new WindowEditClient(client.getID());
                 UI.getCurrent().addWindow(window);
             }
         });
