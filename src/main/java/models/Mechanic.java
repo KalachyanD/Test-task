@@ -65,11 +65,10 @@ public class Mechanic {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append( " Name: " );
         builder.append( getName() );
-        builder.append( " Surname: ");
+        builder.append( " ");
         builder.append( getSurname() );
-        builder.append( " Patronymic: ");
+        builder.append( " ");
         builder.append( getPatronymic() );
         return builder.toString();
     }
