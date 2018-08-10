@@ -19,6 +19,7 @@ public class MainUI extends UI {
     protected void init(VaadinRequest request) {
         design.setMargin(true);
         design.setSpacing(true);
+
         setContent(design);
     }
 

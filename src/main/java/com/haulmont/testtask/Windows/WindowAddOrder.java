@@ -24,10 +24,33 @@ public class WindowAddOrder extends Window  {
     private TextField fieldDateFinish = new TextField("Date finish");
     private TextField fieldCost = new TextField("Cost");
     private NativeSelect selectStatus = new NativeSelect("Status");
+    private Button ok = new Button("OK", this::ok);
+    private Button cancel = new Button("Cancel",event -> close());
 
     public WindowAddOrder() {
-
         super("Add Order"); // Set window caption
+
+        preload();
+        buildLayout();
+    }
+
+    private void ok(Button.ClickEvent event) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        LocalDateTime dateStart = LocalDateTime.parse(fieldDateStart.getValue(), formatter);
+        LocalDateTime dateFinish = LocalDateTime.parse(fieldDateFinish.getValue(), formatter);
+        try {
+            Order.Status status = Order.Status.valueOf(selectStatus.getValue().toString());
+            DAO.getInstance().storeOrder(fieldDescription.getValue(), Integer.parseInt(fieldClientID.getValue()),
+                    Integer.parseInt(fieldMechanicID.getValue()), dateStart, dateFinish,
+                    Double.parseDouble(fieldCost.getValue()), status);
+            getUI().design.horizontalLayoutGridButtonsOrd.FillGrid();
+            close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void preload(){
 
         List<Order> orders = new ArrayList<>();
         try {
@@ -48,58 +71,27 @@ public class WindowAddOrder extends Window  {
         selectStatus.addItem(Order.Status.Completed);
         selectStatus.addItem(Order.Status.Accepted);
         selectStatus.setValue(Order.Status.Planned);
-        selectStatus.setNullSelectionAllowed(false);
+        selectStatus.setNullSelectionAllowed(false);}
 
+    private void buildLayout(){
         center(); //Position of window
         setClosable(true); // Disable the close button
         setModal(true); // Enable modal window mode
 
-        VerticalLayout verticalFields = new VerticalLayout ();
+        VerticalLayout verticalFields = new VerticalLayout (fieldDescription,fieldClientID,fieldMechanicID,
+                fieldDateStart,fieldDateFinish,fieldCost,selectStatus);
         verticalFields.setSpacing(true);
         verticalFields.setMargin(true);
 
-        verticalFields.addComponent(fieldDescription);
-        verticalFields.addComponent(fieldClientID);
-        verticalFields.addComponent(fieldMechanicID);
-        verticalFields.addComponent(fieldDateStart);
-        verticalFields.addComponent(fieldDateFinish);
-        verticalFields.addComponent(fieldCost);
-        verticalFields.addComponent(selectStatus);
-
-        HorizontalLayout horizonButtons = new HorizontalLayout();
+        HorizontalLayout horizonButtons = new HorizontalLayout(ok, cancel);
         horizonButtons.setSpacing(false);
         horizonButtons.setMargin(false);
 
-        horizonButtons.addComponent(new Button("OK", this::buttonClick));
-        horizonButtons.addComponent(new Button("Cancel",event -> close()));
-
-        VerticalLayout verticalMain = new VerticalLayout ();
+        VerticalLayout verticalMain = new VerticalLayout (verticalFields,horizonButtons);
         verticalMain.setSpacing(true);
         verticalMain.setMargin(true);
 
-        verticalMain.addComponent(verticalFields);
-        verticalMain.addComponent(horizonButtons);
-
-        setContent(verticalMain);
-
-
-    }
-
-    private void buttonClick(Button.ClickEvent event) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-        LocalDateTime dateStart = LocalDateTime.parse(fieldDateStart.getValue(), formatter);
-        LocalDateTime dateFinish = LocalDateTime.parse(fieldDateFinish.getValue(), formatter);
-        try {
-            Order.Status status = Order.Status.valueOf(selectStatus.getValue().toString());
-            DAO.getInstance().storeOrder(fieldDescription.getValue(), Integer.parseInt(fieldClientID.getValue()),
-                    Integer.parseInt(fieldMechanicID.getValue()), dateStart, dateFinish,
-                    Double.parseDouble(fieldCost.getValue()), status);
-            getUI().design.horizontalLayoutGridButtonsOrd.FillGrid();
-            close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+        setContent(verticalMain);}
 
     @Override
     public MainUI getUI() {

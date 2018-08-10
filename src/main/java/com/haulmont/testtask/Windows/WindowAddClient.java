@@ -24,6 +24,7 @@ public class WindowAddClient extends Window {
             1, 50, false);
 
     public WindowAddClient(){
+
         super("Add Client"); // Set window caption
         center(); //Position of window
         setClosable(true); // Enable the close button
@@ -34,7 +35,7 @@ public class WindowAddClient extends Window {
         fieldPatronymic.setMaxLength(50);
         fieldTelephone.setMaxLength(19);
 
-        //validation
+        //VALIDATION
         fieldName.addValidator(stringLengthValidator);
         fieldSurname.addValidator(stringLengthValidator);
         fieldPatronymic.addValidator(stringLengthValidator);
@@ -49,7 +50,6 @@ public class WindowAddClient extends Window {
 
         //What if text field is empty - integer will be null in that case, so show blank when null
         fieldTelephone.setNullRepresentation("");
-
         fieldName.setValidationVisible(true);
         fieldSurname.setValidationVisible(true);
         fieldPatronymic.setValidationVisible(true);
