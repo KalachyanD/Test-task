@@ -28,7 +28,6 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
     private Order order;
     private boolean enable = false;
 
-
     public void FillGrid() {
 
         List<Order> orders = new ArrayList<>();

@@ -1,19 +1,15 @@
 package com.haulmont.testtask.Windows;
 
-import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import dao.DAO;
 import models.Order;
-import com.haulmont.testtask.Grids.*;
 import com.haulmont.testtask.UI.*;
-import com.vaadin.ui.UI;
+
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.vaadin.ui.UI.getCurrent;
 
 /**
  * Created by User on 21.07.2017.
@@ -48,10 +44,10 @@ public class WindowAddOrder extends Window  {
         fieldDateFinish.setValue(LocalDateTime.now().plusMinutes(500).format(DateTimeFormatter.ofPattern(
                 "dd.MM.yyyy HH:mm:ss")));
         fieldCost.setValue(Double.toString(orders.get(1).getCost()));
-        selectStatus.addItem(Order.Status.Start);
-        selectStatus.addItem(Order.Status.Process);
-        selectStatus.addItem(Order.Status.Finish);
-        selectStatus.setValue(Order.Status.Start);
+        selectStatus.addItem(Order.Status.Planned);
+        selectStatus.addItem(Order.Status.Completed);
+        selectStatus.addItem(Order.Status.Accepted);
+        selectStatus.setValue(Order.Status.Planned);
         selectStatus.setNullSelectionAllowed(false);
 
         center(); //Position of window

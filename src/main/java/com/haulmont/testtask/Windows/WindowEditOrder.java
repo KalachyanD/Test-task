@@ -1,7 +1,6 @@
 package com.haulmont.testtask.Windows;
 
 import com.haulmont.testtask.UI.MainUI;
-import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import dao.DAO;
 import models.Order;
@@ -55,9 +54,9 @@ public class WindowEditOrder extends Window  {
         fieldDateFinish.setValue(LocalDateTime.now().plusMinutes(500).format(DateTimeFormatter.ofPattern(
                 "dd.MM.yyyy HH:mm:ss")));
         fieldCost.setValue(Double.toString(orders.get(this.orderID).getCost()));
-        selectStatus.addItem(Order.Status.Start);
-        selectStatus.addItem(Order.Status.Process);
-        selectStatus.addItem(Order.Status.Finish);
+        selectStatus.addItem(Order.Status.Planned);
+        selectStatus.addItem(Order.Status.Completed);
+        selectStatus.addItem(Order.Status.Accepted);
         selectStatus.setValue(orders.get(this.orderID).getStatus());
         selectStatus.setNullSelectionAllowed(false);
 
