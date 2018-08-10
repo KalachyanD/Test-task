@@ -2,6 +2,8 @@ package com.haulmont.testtask.Windows;
 
 import com.vaadin.ui.*;
 import dao.DAO;
+import models.Client;
+import models.Mechanic;
 import models.Order;
 import com.haulmont.testtask.UI.*;
 
@@ -18,8 +20,8 @@ import java.util.List;
 public class WindowAddOrder extends Window  {
 
     private TextField fieldDescription = new TextField("Description");
-    private TextField fieldClientID = new TextField("Client ID");
-    private TextField fieldMechanicID = new TextField("Mechanic ID");
+    private NativeSelect selectClient = new NativeSelect("Client");
+    private NativeSelect selectMechanic = new NativeSelect("Mechanic");
     private TextField fieldDateStart = new TextField("Date start");
     private TextField fieldDateFinish = new TextField("Date finish");
     private TextField fieldCost = new TextField("Cost");
@@ -40,8 +42,8 @@ public class WindowAddOrder extends Window  {
         LocalDateTime dateFinish = LocalDateTime.parse(fieldDateFinish.getValue(), formatter);
         try {
             Order.Status status = Order.Status.valueOf(selectStatus.getValue().toString());
-            DAO.getInstance().storeOrder(fieldDescription.getValue(), Integer.parseInt(fieldClientID.getValue()),
-                    Integer.parseInt(fieldMechanicID.getValue()), dateStart, dateFinish,
+            DAO.getInstance().storeOrder(fieldDescription.getValue(),selectMechanic.getTabIndex(),
+                    selectMechanic.getTabIndex(), dateStart, dateFinish,
                     Double.parseDouble(fieldCost.getValue()), status);
             getUI().design.horizontalLayoutGridButtonsOrd.FillGrid();
             close();
@@ -50,35 +52,46 @@ public class WindowAddOrder extends Window  {
         }
     }
 
-    private void preload(){
+    private void preload() {
 
-        List<Order> orders = new ArrayList<>();
+        List<Client> clients = new ArrayList<>();
         try {
-            orders = DAO.getInstance().LoadAllOrders();
+            clients = DAO.getInstance().LoadAllClients();
         } catch (SQLException e) {
 
         }
 
-        fieldDescription.setValue(orders.get(1).getDescription());
-        fieldClientID.setValue(Integer.toString(orders.get(1).getClient().getID()));
-        fieldMechanicID.setValue(Integer.toString(orders.get(1).getMechanic().getID()));
+        List<Mechanic> mechanics = new ArrayList<>();
+        try {
+            mechanics = DAO.getInstance().LoadAllMechanics();
+        } catch (SQLException e) {
+
+        }
+
+        selectClient.addItems(clients);
+        selectClient.setValue(clients.get(0));
+        selectClient.setNullSelectionAllowed(false);
+
+        selectMechanic.addItems(mechanics);
+        selectMechanic.setValue(mechanics.get(0));
+        selectMechanic.setNullSelectionAllowed(false);
+
         fieldDateStart.setValue(LocalDateTime.now().plusMinutes(2).format(DateTimeFormatter.ofPattern(
                 "dd.MM.yyyy HH:mm:ss")));
         fieldDateFinish.setValue(LocalDateTime.now().plusMinutes(500).format(DateTimeFormatter.ofPattern(
                 "dd.MM.yyyy HH:mm:ss")));
-        fieldCost.setValue(Double.toString(orders.get(1).getCost()));
-        selectStatus.addItem(Order.Status.Planned);
-        selectStatus.addItem(Order.Status.Completed);
-        selectStatus.addItem(Order.Status.Accepted);
+
+        selectStatus.addItems(Order.Status.Planned, Order.Status.Completed, Order.Status.Accepted);
         selectStatus.setValue(Order.Status.Planned);
-        selectStatus.setNullSelectionAllowed(false);}
+        selectStatus.setNullSelectionAllowed(false);
+    }
 
     private void buildLayout(){
         center(); //Position of window
         setClosable(true); // Disable the close button
         setModal(true); // Enable modal window mode
 
-        VerticalLayout verticalFields = new VerticalLayout (fieldDescription,fieldClientID,fieldMechanicID,
+        VerticalLayout verticalFields = new VerticalLayout (fieldDescription,selectClient,selectMechanic,
                 fieldDateStart,fieldDateFinish,fieldCost,selectStatus);
         verticalFields.setSpacing(true);
         verticalFields.setMargin(true);
@@ -91,7 +104,8 @@ public class WindowAddOrder extends Window  {
         verticalMain.setSpacing(true);
         verticalMain.setMargin(true);
 
-        setContent(verticalMain);}
+        setContent(verticalMain);
+    }
 
     @Override
     public MainUI getUI() {
