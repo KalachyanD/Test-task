@@ -2,14 +2,9 @@ package com.haulmont.testtask.Windows;
 
 import com.haulmont.testtask.UI.MainUI;
 import com.vaadin.data.Validator;
-import com.vaadin.data.util.converter.Converter;
-import com.vaadin.data.util.converter.StringToDoubleConverter;
-import com.vaadin.data.util.converter.StringToIntegerConverter;
 import com.vaadin.data.validator.DoubleRangeValidator;
-import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
-import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import dao.DAO;
 import models.Mechanic;
@@ -17,26 +12,45 @@ import models.Mechanic;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 public class WindowEditMechanic extends Window {
     private TextField fieldName = new TextField("Name");
     private TextField fieldSurname = new TextField("Surname");
     private TextField fieldPatronymic = new TextField("Patronymic");
-    private TextField fieldHourlyPay = new TextField("Hourly Pay");;
-    private Button ok;
-    private Button cancel;
+    private TextField fieldHourlyPay = new TextField("Hourly Pay");
+    private Button ok = new Button("OK", this::ok);
+    private Button cancel = new Button("Cancel",event -> close());
     private int id;
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
 
     public WindowEditMechanic(int id){
         super("Edit Client"); // Set window caption
+        preload();
+        buildLayout();
+        validation();
+    }
+    private void buildLayout(){
         center(); //Position of window
         setClosable(true); // Enable the close button
         setModal(true); // Enable modal window mode
 
-        //preload
+        VerticalLayout verticalFields = new VerticalLayout (fieldName,fieldSurname,fieldPatronymic,fieldHourlyPay);
+        verticalFields.setSpacing(true);
+        verticalFields.setMargin(true);
+
+        HorizontalLayout horizontalButtons = new HorizontalLayout(ok,cancel);
+        horizontalButtons.setSpacing(false);
+        horizontalButtons.setMargin(false);
+
+        VerticalLayout verticalMain = new VerticalLayout (verticalFields,horizontalButtons);
+        verticalMain.setSpacing(true);
+        verticalMain.setMargin(true);
+
+        setContent(verticalMain);
+    }
+
+    private void preload(){
         List<Mechanic> mechanics = new ArrayList<>();
         try {
             mechanics = DAO.getInstance().LoadAllMechanics();
@@ -55,14 +69,9 @@ public class WindowEditMechanic extends Window {
         fieldSurname.setValue(mechanics.get(this.id).getSurname());
         fieldPatronymic.setValue(mechanics.get(this.id).getPatronymic());
         fieldHourlyPay.setValue(Double.toString(mechanics.get(this.id).getHourlyPay()));
+    }
 
-        fieldName.setMaxLength(50);
-        fieldSurname.setMaxLength(50);
-        fieldPatronymic.setMaxLength(50);
-        fieldHourlyPay.setMaxLength(19);
-
-        //validation
-
+    private void validation(){
         fieldName.addValidator(stringLengthValidator);
         fieldSurname.addValidator(stringLengthValidator);
         fieldPatronymic.addValidator(stringLengthValidator);
@@ -181,49 +190,18 @@ public class WindowEditMechanic extends Window {
                 }
             }
         });
+    }
 
-        ok = new Button("OK", event -> {
-            try {
-                DAO.getInstance().updateMechanic(id, fieldName.getValue(), fieldSurname.getValue(),
-                        fieldPatronymic.getValue(),
-                        Double.parseDouble(fieldHourlyPay.getConvertedValue().toString()));
-                getUI().design.horizontalLayoutTopGrids.verticalGridM.FillGrid();
-                close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-
-        cancel = new Button("Cancel",event -> close());
-
-        VerticalLayout verticalFields = new VerticalLayout ();
-
-        verticalFields.addComponent(fieldName);
-        verticalFields.addComponent(fieldSurname);
-        verticalFields.addComponent(fieldPatronymic);
-        verticalFields.addComponent(fieldHourlyPay);
-
-
-        verticalFields.setSpacing(true);
-        verticalFields.setMargin(true);
-
-        HorizontalLayout horizontalButtons = new HorizontalLayout();
-
-        horizontalButtons.setSpacing(false);
-        horizontalButtons.setMargin(false);
-
-        VerticalLayout verticalMain = new VerticalLayout ();
-
-        verticalMain.setSpacing(true);
-        verticalMain.setMargin(true);
-
-        horizontalButtons.addComponent(ok);
-        horizontalButtons.addComponent(cancel);
-
-        verticalMain.addComponent(verticalFields);
-        verticalMain.addComponent(horizontalButtons);
-
-        setContent(verticalMain);
+    private void ok(Button.ClickEvent event){
+        try {
+            DAO.getInstance().updateMechanic(id, fieldName.getValue(), fieldSurname.getValue(),
+                    fieldPatronymic.getValue(),
+                    Double.parseDouble(fieldHourlyPay.getConvertedValue().toString()));
+            getUI().design.horizontalLayoutTopGrids.verticalGridM.UpdateGrid();
+            close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
