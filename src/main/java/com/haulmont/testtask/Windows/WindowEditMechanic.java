@@ -2,7 +2,10 @@ package com.haulmont.testtask.Windows;
 
 import com.haulmont.testtask.UI.MainUI;
 import com.vaadin.data.Validator;
+import com.vaadin.data.util.converter.Converter;
+import com.vaadin.data.util.converter.StringToDoubleConverter;
 import com.vaadin.data.util.converter.StringToIntegerConverter;
+import com.vaadin.data.validator.DoubleRangeValidator;
 import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
@@ -14,6 +17,7 @@ import models.Mechanic;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class WindowEditMechanic extends Window {
     private TextField fieldName = new TextField("Name");
@@ -50,7 +54,7 @@ public class WindowEditMechanic extends Window {
         fieldName.setValue(mechanics.get(this.id).getName());
         fieldSurname.setValue(mechanics.get(this.id).getSurname());
         fieldPatronymic.setValue(mechanics.get(this.id).getPatronymic());
-        fieldHourlyPay.setValue(Integer.toString(mechanics.get(this.id).getHourlyPay()));
+        fieldHourlyPay.setValue(Double.toString(mechanics.get(this.id).getHourlyPay()));
 
         fieldName.setMaxLength(50);
         fieldSurname.setMaxLength(50);
@@ -67,9 +71,9 @@ public class WindowEditMechanic extends Window {
         fieldHourlyPay.setRequiredError("Prompt is empty.");
 
         //To convert string value to integer before validation
-        fieldHourlyPay.setConverter(new StringToIntegerConverter());
-        fieldHourlyPay.addValidator(new IntegerRangeValidator("Value is negative",0,
-                Integer.MAX_VALUE));
+        fieldHourlyPay.setConverter(new toDoubleConverter());
+        fieldHourlyPay.addValidator(new DoubleRangeValidator("Value is negative",0.0,
+                Double.MAX_VALUE));
 
         //What if text field is empty - integer will be null in that case, so show blank when null
         fieldHourlyPay.setNullRepresentation("");
@@ -182,7 +186,7 @@ public class WindowEditMechanic extends Window {
             try {
                 DAO.getInstance().updateMechanic(id, fieldName.getValue(), fieldSurname.getValue(),
                         fieldPatronymic.getValue(),
-                        Integer.parseInt(fieldHourlyPay.getConvertedValue().toString()));
+                        Double.parseDouble(fieldHourlyPay.getConvertedValue().toString()));
                 getUI().design.horizontalLayoutTopGrids.verticalGridM.FillGrid();
                 close();
             } catch (SQLException e) {

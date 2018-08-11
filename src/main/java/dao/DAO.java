@@ -86,7 +86,8 @@ public class DAO {
         return currentClient;
     }
 
-    public void storeClient(String name, String surname, String patronymic, int telephoneNumber) throws SQLException {
+    public void storeClient(String name, String surname, String patronymic, int telephoneNumber)
+            throws SQLException {
         String insertTableSQL = "INSERT INTO CLIENT"
                 + "(NAME, SURNAME, PATRONYMIC, TELEPHONENUMBER) VALUES"
                 + "(?,?,?,?)";
@@ -121,7 +122,8 @@ public class DAO {
         }
     }
 
-    public void updateClient(int clientID, String name, String surname, String patronymic, int telephoneNumber) throws SQLException {
+    public void updateClient(int clientID, String name, String surname, String patronymic, int telephoneNumber)
+            throws SQLException {
         String updateTableSQL = "UPDATE CLIENT SET NAME= ?,SURNAME= ?,PATRONYMIC= ?,TELEPHONENUMBER= ? WHERE id = ?";
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(updateTableSQL);
@@ -187,14 +189,15 @@ public class DAO {
         return currentMechanic;
     }
 
-    public void updateMechanic(int mechanicID, String name, String surname, String patronymic, int hourlypay) throws SQLException {
+    public void updateMechanic(int mechanicID, String name, String surname, String patronymic, double hourlypay)
+            throws SQLException {
         String updateTableSQL = "UPDATE MECHANIC SET NAME= ?,SURNAME= ?,PATRONYMIC= ?,HOURLYPAY= ? WHERE id = ?";
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(updateTableSQL);
         preparedStatement.setString(1, name);
         preparedStatement.setString(2, surname);
         preparedStatement.setString(3, patronymic);
-        preparedStatement.setInt(4, hourlypay);
+        preparedStatement.setDouble(4, hourlypay);
         preparedStatement.setInt(5, mechanicID);
         preparedStatement.executeUpdate();
         if (preparedStatement != null) {
@@ -205,7 +208,8 @@ public class DAO {
         }
     }
 
-    public void storeMechanic(String name, String surname, String patronymic, int hourlypay) throws SQLException {
+    public void storeMechanic(String name, String surname, String patronymic, double hourlypay)
+            throws SQLException {
         String insertTableSQL = "INSERT INTO MECHANIC"
                 + "(NAME, SURNAME, PATRONYMIC, HOURLYPAY) VALUES"
                 + "(?,?,?,?)";
@@ -301,7 +305,8 @@ public class DAO {
         return currentOrder;
     }
 
-    public void storeOrder(String description, int clientID, int mechanicID, LocalDateTime startDate, LocalDateTime endDate, double cost, Order.Status status) throws SQLException {
+    public void storeOrder(String description, int clientID, int mechanicID, LocalDateTime startDate,
+                           LocalDateTime endDate, double cost, Order.Status status) throws SQLException {
         String insertTableSQL = "INSERT INTO ORDERS"
                 + "(DESCRIPTION, CLIENT_ID, MECHANIC_ID, DATESTART, DATEFINISH, COST, STATUS) VALUES"
                 + "(?,?,?,?,?,?,?)";
@@ -323,7 +328,8 @@ public class DAO {
         }
     }
 
-    public void updateOrder(int orderID, String description, int clientID, int mechanicID, LocalDateTime startDate, LocalDateTime endDate, double cost, Order.Status status) throws SQLException {
+    public void updateOrder(int orderID, String description, int clientID, int mechanicID, LocalDateTime startDate,
+                            LocalDateTime endDate, double cost, Order.Status status) throws SQLException {
         String updateTableSQL = "UPDATE ORDERS SET DESCRIPTION= ?, CLIENT_ID= ?, MECHANIC_ID= ?, DATESTART= ?, DATEFINISH= ?, COST= ?, STATUS = ? WHERE id = ?";
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(updateTableSQL);

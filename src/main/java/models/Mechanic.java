@@ -11,14 +11,14 @@ public class Mechanic {
     //Patronymic
     private String patronymic;
 
-    private int hourlyPay;
+    private double hourlyPay;
 
-    public Mechanic(int id, String name, String surname, String patronymic, int telephoneNumber) {
+    public Mechanic(int id, String name, String surname, String patronymic, double hourlyPay) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
-        this.hourlyPay= telephoneNumber;
+        this.hourlyPay= hourlyPay;
 
     }
 
@@ -50,7 +50,7 @@ public class Mechanic {
         this.patronymic = patronymic;
     }
 
-    public int getHourlyPay() {
+    public double getHourlyPay() {
         return hourlyPay;
     }
 

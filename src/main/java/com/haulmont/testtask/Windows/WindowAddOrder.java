@@ -1,5 +1,13 @@
 package com.haulmont.testtask.Windows;
 
+import com.vaadin.data.Validator;
+import com.vaadin.data.util.converter.Converter;
+import com.vaadin.data.util.converter.StringToDoubleConverter;
+import com.vaadin.data.util.converter.StringToIntegerConverter;
+import com.vaadin.data.validator.DoubleRangeValidator;
+import com.vaadin.data.validator.IntegerRangeValidator;
+import com.vaadin.data.validator.StringLengthValidator;
+import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
 import dao.DAO;
 import models.Client;
@@ -12,6 +20,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by User on 21.07.2017.
@@ -28,28 +37,14 @@ public class WindowAddOrder extends Window  {
     private NativeSelect selectStatus = new NativeSelect("Status");
     private Button ok = new Button("OK", this::ok);
     private Button cancel = new Button("Cancel",event -> close());
+    private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
+            1, 50, false);
 
     public WindowAddOrder() {
         super("Add Order"); // Set window caption
-
         preload();
         buildLayout();
-    }
-
-    private void ok(Button.ClickEvent event) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-        LocalDateTime dateStart = LocalDateTime.parse(fieldDateStart.getValue(), formatter);
-        LocalDateTime dateFinish = LocalDateTime.parse(fieldDateFinish.getValue(), formatter);
-        try {
-            Order.Status status = Order.Status.valueOf(selectStatus.getValue().toString());
-            DAO.getInstance().storeOrder(fieldDescription.getValue(),selectMechanic.getTabIndex(),
-                    selectMechanic.getTabIndex(), dateStart, dateFinish,
-                    Double.parseDouble(fieldCost.getValue()), status);
-            getUI().design.horizontalLayoutGridButtonsOrd.FillGrid();
-            close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        validation();
     }
 
     private void preload() {
@@ -105,6 +100,87 @@ public class WindowAddOrder extends Window  {
         verticalMain.setMargin(true);
 
         setContent(verticalMain);
+    }
+
+    private void validation(){
+        //VALIDATION
+        fieldDescription.addValidator(stringLengthValidator);
+
+        fieldCost.setRequired(true);
+        fieldCost.setRequiredError("Prompt is empty.");
+
+        //To convert string value to integer before validation
+        fieldCost.setConverter(new toDoubleConverter());
+        fieldCost.addValidator(new DoubleRangeValidator("Value is negative",0.0,
+                Double.MAX_VALUE));
+
+        //What if text field is empty - integer will be null in that case, so show blank when null
+        fieldCost.setNullRepresentation("");
+
+        fieldDescription.setValidationVisible(true);
+        fieldCost.setValidationVisible(true);
+
+        fieldDescription.setImmediate(true);
+        fieldCost.setImmediate(true);
+
+        fieldDescription.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
+        fieldCost.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
+
+        fieldCost.addTextChangeListener(new FieldEvents.TextChangeListener() {
+            //private static final long serialVersionUID = 1L;
+
+            @Override
+            public void textChange(FieldEvents.TextChangeEvent event) {
+                try {
+
+                    fieldCost.setValue(event.getText());
+
+                    fieldCost.setCursorPosition(event.getCursorPosition());
+
+                    fieldCost.validate();
+                    fieldDescription.validate();
+
+                    ok.setEnabled(true);
+                } catch (Validator.InvalidValueException e) {
+                    ok.setEnabled(false);
+                }
+
+            }
+        });
+        fieldDescription.addTextChangeListener(new FieldEvents.TextChangeListener() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void textChange(FieldEvents.TextChangeEvent event) {
+                try {
+                    fieldDescription.setValue(event.getText());
+
+                    fieldDescription.setCursorPosition(event.getCursorPosition());
+
+                    fieldDescription.validate();
+                    fieldCost.validate();
+                    ok.setEnabled(true);
+                } catch (Validator.InvalidValueException e) {
+                    ok.setEnabled(false);
+                }
+            }
+        });
+    }
+
+    private void ok(Button.ClickEvent event) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+        LocalDateTime dateStart = LocalDateTime.parse(fieldDateStart.getValue(), formatter);
+        LocalDateTime dateFinish = LocalDateTime.parse(fieldDateFinish.getValue(), formatter);
+        try {
+            Order.Status status = Order.Status.valueOf(selectStatus.getValue().toString());
+            DAO.getInstance().storeOrder(fieldDescription.getValue(),((Client)selectClient.getValue()).getID(),
+                    ((Mechanic)selectMechanic.getValue()).getID(), dateStart, dateFinish,
+                    Double.parseDouble(fieldCost.getValue()), status);
+            getUI().design.horizontalLayoutGridButtonsOrd.FillGrid();
+            close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
