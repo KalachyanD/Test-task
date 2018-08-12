@@ -16,11 +16,10 @@ public class VerticalLayoutUI extends VerticalLayout {
     public VerticalLayoutUI() {
         horizontalLayoutTopGrids.setMargin(true);
         horizontalLayoutTopGrids.setSpacing(true);
-        addComponent(horizontalLayoutTopGrids);
 
         horizontalLayoutGridButtonsOrd.setMargin(true);
         horizontalLayoutGridButtonsOrd.setSpacing(true);
-        addComponent(horizontalLayoutGridButtonsOrd);
 
+        addComponents(horizontalLayoutTopGrids,horizontalLayoutGridButtonsOrd);
     }
 }

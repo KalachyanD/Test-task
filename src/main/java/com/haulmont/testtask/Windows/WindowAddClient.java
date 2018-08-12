@@ -7,7 +7,6 @@ import com.vaadin.data.util.converter.StringToIntegerConverter;
 import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
-import com.vaadin.server.Page;
 import com.vaadin.ui.*;
 import dao.DAO;
 
@@ -25,11 +24,11 @@ public class WindowAddClient extends Window {
 
     public WindowAddClient(){
         super("Add Client"); // Set window caption
-        buildLayout();
+        buildWindow();
         validation();
     }
 
-    private void buildLayout(){
+    private void buildWindow(){
         center(); //Position of window
         setClosable(true); // Enable the close button
         setModal(true); // Enable modal window mode
@@ -175,7 +174,7 @@ public class WindowAddClient extends Window {
             DAO.getInstance().storeClient(fieldName.getValue(), fieldSurname.getValue(),
                     fieldPatronymic.getValue(),
                     Integer.parseInt(fieldTelephone.getConvertedValue().toString()));
-            getUI().design.horizontalLayoutTopGrids.verticalGridC.FillGrid();
+            getUI().design.horizontalLayoutTopGrids.verticalGridC.UpdateGrid();
             close();
 
         } catch (SQLException e) {

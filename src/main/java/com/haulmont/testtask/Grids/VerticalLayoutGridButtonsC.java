@@ -19,13 +19,17 @@ import java.util.List;
 public class VerticalLayoutGridButtonsC extends VerticalLayout {
 
     private Grid gridClients = new Grid("Clients");
-    private Button buttonDeleteClient = new Button("Delete");
-    private Button buttonEditClient = new Button("Edit");
-    private Button buttonAddClient = new Button("Add");
+    private Button buttonDeleteClient = new Button("Delete",this::deleteClient);
+    private Button buttonEditClient = new Button("Edit",this::editClient);
+    private Button buttonAddClient = new Button("Add",this::addClient);
     private Client client;
     private boolean enable = false;
 
-    public void FillGrid() {
+    public VerticalLayoutGridButtonsC(){
+        buildLayout();
+    }
+
+    public void UpdateGrid() {
         List<Client> clients = new ArrayList<>();
         try {
             clients = DAO.getInstance().LoadAllClients();
@@ -41,49 +45,40 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
         gridClients.setContainerDataSource(containerGridClients);
     }
 
-    public VerticalLayoutGridButtonsC(){
+    private void buildLayout(){
         gridClients.setHeight("300");
         gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
-        addComponent(gridClients);
-        addComponent(buttonDeleteClient);
-        addComponent(buttonEditClient);
-        addComponent(buttonAddClient);
+        gridClients.addSelectionListener(event -> selectionOrder());
 
-        FillGrid();
+        addComponents(gridClients,buttonDeleteClient,buttonEditClient,buttonAddClient);
+        UpdateGrid();
+    }
 
-        // Add Client
-        buttonAddClient.addClickListener(event -> {
-            WindowAddClient window = new WindowAddClient();
+    private void addClient(Button.ClickEvent event){
+        WindowAddClient window = new WindowAddClient();
+        UI.getCurrent().addWindow(window);
+    }
+
+    private void deleteClient(Button.ClickEvent event){
+        if(enable == true) {
+            try {
+                DAO.getInstance().deleteClient(client.getID());
+                UpdateGrid();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void editClient(Button.ClickEvent event){
+        if(enable == true) {
+            WindowEditClient window = new WindowEditClient(client.getID());
             UI.getCurrent().addWindow(window);
-        });
+        }
+    }
 
-        //Selection listener
-        gridClients.addSelectionListener(event -> {
-            client =(Client)gridClients.getSelectedRow();
-            enable = true;
-        });
-
-        // Delete Client
-        buttonDeleteClient.addClickListener(eventButton -> {
-            if(enable == true) {
-                try {
-                    DAO.getInstance().deleteClient(client.getID());
-                    FillGrid();
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        //Edit Client
-        buttonEditClient.addClickListener(eventButton -> {
-            if(enable == true) {
-                WindowEditClient window = new WindowEditClient(client.getID());
-                UI.getCurrent().addWindow(window);
-            }
-        });
-
-
-
+    private void selectionOrder(){
+        client =(Client)gridClients.getSelectedRow();
+        enable = true;
     }
 }

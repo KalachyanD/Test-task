@@ -26,11 +26,12 @@ public class WindowEditMechanic extends Window {
 
     public WindowEditMechanic(int id){
         super("Edit Client"); // Set window caption
-        preload();
-        buildLayout();
+        preload(id);
+        buildWindow();
         validation();
     }
-    private void buildLayout(){
+
+    private void buildWindow(){
         center(); //Position of window
         setClosable(true); // Enable the close button
         setModal(true); // Enable modal window mode
@@ -50,7 +51,7 @@ public class WindowEditMechanic extends Window {
         setContent(verticalMain);
     }
 
-    private void preload(){
+    private void preload(int id){
         List<Mechanic> mechanics = new ArrayList<>();
         try {
             mechanics = DAO.getInstance().LoadAllMechanics();

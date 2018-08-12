@@ -24,11 +24,11 @@ public class WindowAddMechanic extends Window {
 
     public WindowAddMechanic(){
         super("Add Mechanic"); // Set window caption
-        buildLayout();
+        buildWindow();
         validation();
     }
 
-    private void buildLayout(){
+    private void buildWindow(){
         center(); //Position of window
         setClosable(true); // Enable the close button
         setModal(true); // Enable modal window mode

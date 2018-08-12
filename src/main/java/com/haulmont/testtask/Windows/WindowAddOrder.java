@@ -1,11 +1,7 @@
 package com.haulmont.testtask.Windows;
 
 import com.vaadin.data.Validator;
-import com.vaadin.data.util.converter.Converter;
-import com.vaadin.data.util.converter.StringToDoubleConverter;
-import com.vaadin.data.util.converter.StringToIntegerConverter;
 import com.vaadin.data.validator.DoubleRangeValidator;
-import com.vaadin.data.validator.IntegerRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
@@ -20,7 +16,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by User on 21.07.2017.
@@ -43,7 +38,7 @@ public class WindowAddOrder extends Window  {
     public WindowAddOrder() {
         super("Add Order"); // Set window caption
         preload();
-        buildLayout();
+        buildWindow();
         validation();
     }
 
@@ -81,7 +76,7 @@ public class WindowAddOrder extends Window  {
         selectStatus.setNullSelectionAllowed(false);
     }
 
-    private void buildLayout(){
+    private void buildWindow(){
         center(); //Position of window
         setClosable(true); // Disable the close button
         setModal(true); // Enable modal window mode
@@ -176,7 +171,7 @@ public class WindowAddOrder extends Window  {
             DAO.getInstance().storeOrder(fieldDescription.getValue(),((Client)selectClient.getValue()).getID(),
                     ((Mechanic)selectMechanic.getValue()).getID(), dateStart, dateFinish,
                     Double.parseDouble(fieldCost.getValue()), status);
-            getUI().design.horizontalLayoutGridButtonsOrd.FillGrid();
+            getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
             close();
         } catch (SQLException e) {
             e.printStackTrace();

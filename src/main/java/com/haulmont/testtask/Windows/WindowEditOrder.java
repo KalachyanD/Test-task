@@ -37,12 +37,12 @@ public class WindowEditOrder extends Window  {
 
     public WindowEditOrder(int orderID) {
         super("Edit Order"); // Set window caption
-        buildLayout();
+        buildWindow();
         preload(orderID);
         validation();
     }
 
-    private void buildLayout(){
+    private void buildWindow(){
 
         center(); //Position of window
         setClosable(true); // Disable the close button
@@ -184,7 +184,7 @@ public class WindowEditOrder extends Window  {
             DAO.getInstance().updateOrder(orderID+1, fieldDescription.getValue(),((Client)selectClient.getValue()).getID(),
                     ((Mechanic)selectMechanic.getValue()).getID(),
                     dateStart, dateFinish, Double.parseDouble(fieldCost.getValue()), status);
-            getUI().design.horizontalLayoutGridButtonsOrd.FillGrid();
+            getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
             close();
         } catch (SQLException e) {
             e.printStackTrace();

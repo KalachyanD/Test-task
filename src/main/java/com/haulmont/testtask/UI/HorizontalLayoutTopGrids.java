@@ -12,16 +12,12 @@ public class HorizontalLayoutTopGrids extends HorizontalLayout {
     public VerticalLayoutGridButtonsC verticalGridC = new VerticalLayoutGridButtonsC();
     public VerticalLayoutGridButtonsM verticalGridM = new VerticalLayoutGridButtonsM();
 
-
-
     public HorizontalLayoutTopGrids(){
         verticalGridC.setMargin(true);
         verticalGridC.setSpacing(true);
         verticalGridM.setMargin(true);
         verticalGridM.setSpacing(true);
 
-        addComponent(verticalGridC);
-        addComponent(verticalGridM);
-
+        addComponents(verticalGridC,verticalGridM);
     }
 }
