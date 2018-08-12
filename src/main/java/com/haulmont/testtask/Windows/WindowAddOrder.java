@@ -118,8 +118,8 @@ public class WindowAddOrder extends Window  {
         fieldDescription.setImmediate(true);
         fieldCost.setImmediate(true);
 
-        fieldDescription.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
-        fieldCost.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
+        fieldDescription.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        fieldCost.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
 
         fieldCost.addTextChangeListener(new FieldEvents.TextChangeListener() {
             //private static final long serialVersionUID = 1L;

@@ -100,10 +100,10 @@ public class WindowEditClient extends Window {
         fieldPatronymic.setImmediate(true);
         fieldTelephone.setImmediate(true);
 
-        fieldName.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
-        fieldSurname.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
-        fieldPatronymic.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
-        fieldTelephone.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
+        fieldName.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        fieldSurname.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        fieldPatronymic.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        fieldTelephone.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
 
         fieldTelephone.addTextChangeListener(new FieldEvents.TextChangeListener() {
             private static final long serialVersionUID = 1L;

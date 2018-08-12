@@ -80,10 +80,10 @@ public class WindowAddMechanic extends Window {
         fieldPatronymic.setImmediate(true);
         fieldHourlyPay.setImmediate(true);
 
-        fieldName.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
-        fieldSurname.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
-        fieldPatronymic.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
-        fieldHourlyPay.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.LAZY);
+        fieldName.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        fieldSurname.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        fieldPatronymic.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        fieldHourlyPay.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
 
         fieldHourlyPay.addTextChangeListener(new FieldEvents.TextChangeListener() {
             private static final long serialVersionUID = 1L;
