@@ -121,45 +121,23 @@ public class WindowAddOrder extends Window  {
         fieldDescription.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
         fieldCost.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
 
-        fieldCost.addTextChangeListener(new FieldEvents.TextChangeListener() {
-            //private static final long serialVersionUID = 1L;
+        fieldCost.addTextChangeListener(event -> textChange(event, fieldCost));
+        fieldDescription.addTextChangeListener(event -> textChange(event, fieldDescription));
+    }
 
-            @Override
-            public void textChange(FieldEvents.TextChangeEvent event) {
-                try {
+    private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
+        try {
+            textField.setValue(event.getText());
 
-                    fieldCost.setValue(event.getText());
+            textField.setCursorPosition(event.getCursorPosition());
 
-                    fieldCost.setCursorPosition(event.getCursorPosition());
+            fieldCost.validate();
+            fieldDescription.validate();
 
-                    fieldCost.validate();
-                    fieldDescription.validate();
-
-                    ok.setEnabled(true);
-                } catch (Validator.InvalidValueException e) {
-                    ok.setEnabled(false);
-                }
-
-            }
-        });
-        fieldDescription.addTextChangeListener(new FieldEvents.TextChangeListener() {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void textChange(FieldEvents.TextChangeEvent event) {
-                try {
-                    fieldDescription.setValue(event.getText());
-
-                    fieldDescription.setCursorPosition(event.getCursorPosition());
-
-                    fieldDescription.validate();
-                    fieldCost.validate();
-                    ok.setEnabled(true);
-                } catch (Validator.InvalidValueException e) {
-                    ok.setEnabled(false);
-                }
-            }
-        });
+            ok.setEnabled(true);
+        } catch (Validator.InvalidValueException e) {
+            ok.setEnabled(false);
+        }
     }
 
     private void ok(Button.ClickEvent event) {
