@@ -23,6 +23,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
     private Button buttonAddMechanic = new Button("Add",this::addMechanic);
     private Button buttonStatistics = new Button("Statistics",this::statisticsMechanic);
     private Mechanic mechanic;
+    private Label label = new Label();
     private boolean enable = false;
 
     public VerticalLayoutGridButtonsM(){
@@ -33,7 +34,8 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
         gridMechanics.setHeight("300");
         gridMechanics.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridMechanics.addSelectionListener(event -> selectionOrder());
-        addComponents(gridMechanics,buttonDeleteMechanic,buttonEditMechanic,buttonAddMechanic,buttonStatistics);
+        //gridMechanics.sort();
+        addComponents(gridMechanics,buttonDeleteMechanic,buttonEditMechanic,buttonAddMechanic,buttonStatistics,label);
         UpdateGrid();
     }
 
@@ -46,9 +48,8 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
         }
 
         BeanItemContainer<Mechanic> containerGridMechanics = new BeanItemContainer<>(Mechanic.class, mechanics);
-        // Create firstField gridMechanics bound to the containerMechanics
-        gridMechanics.removeAllColumns();
         gridMechanics.setContainerDataSource(containerGridMechanics);
+        gridMechanics.setColumnOrder("ID","name","surname","patronymic","hourlyPay");
     }
 
     private void addMechanic(Button.ClickEvent event){

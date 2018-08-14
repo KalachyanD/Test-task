@@ -50,7 +50,7 @@ public class WindowEditClient extends Window {
         fieldName.setValue(clients.get(this.id).getName());
         fieldSurname.setValue(clients.get(this.id).getSurname());
         fieldPatronymic.setValue(clients.get(this.id).getPatronymic());
-        fieldTelephone.setValue(Integer.toString(clients.get(this.id).getTelephone()));
+        fieldTelephone.setValue(Integer.toString(clients.get(this.id).getPhoneNumber()));
     }
 
     private void buildWindow(){

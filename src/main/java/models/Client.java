@@ -1,7 +1,5 @@
 package models;
 
-import java.lang.Object;
-
 public class Client {
 
     private int id;
@@ -12,18 +10,18 @@ public class Client {
     //Patronymic
     private String patronymic;
     //Telephone number
-    private int telephone;
+    private int phoneNumber;
 
     public Client(int id, String name, String surname, String patronymic, int telephoneNumber) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
-        this.telephone = telephoneNumber;
+        this.phoneNumber = telephoneNumber;
     }
 
     public Client(Client client) {
-        this(client.getID(), client.getName(), client.getSurname(), client.getPatronymic(), client.getTelephone());
+        this(client.getID(), client.getName(), client.getSurname(), client.getPatronymic(), client.getPhoneNumber());
     }
 
     public String getName() {
@@ -50,12 +48,12 @@ public class Client {
         this.patronymic = patronymic;
     }
 
-    public int getTelephone() {
-        return telephone;
+    public int getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setTelephone(int telephone) {
-        this.telephone = telephone;
+    public void setPhoneNumber(int phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public int getID() {

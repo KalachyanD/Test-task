@@ -36,4 +36,3 @@ public class toDoubleConverter  implements Converter<String, Double> {
         }
 
     }
-

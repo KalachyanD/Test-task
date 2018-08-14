@@ -35,7 +35,7 @@ public class ClientTest {
     @Test
     public void checkTelephoneNumber() throws Exception {
         int expected = 543634;
-        int actual = client.getTelephone();
+        int actual = client.getPhoneNumber();
         assertEquals("Unexpected int value", expected, actual);
     }
 

@@ -40,11 +40,10 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         } catch (SQLException e) {
 
         }
-
-        BeanItemContainer<Order> containerGridOrders = new BeanItemContainer<>(Order.class, orders);
         // Create firstField gridOrders bound to the containerOrders
-        gridOrders.removeAllColumns();
+        BeanItemContainer<Order> containerGridOrders = new BeanItemContainer<>(Order.class, orders);
         gridOrders.setContainerDataSource(containerGridOrders);
+        gridOrders.setColumnOrder("ID","description","client","mechanic","startDate","endDate","cost","status");
     }
 
     private void buildLayout(){
@@ -52,7 +51,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         gridOrders.setHeight("300");
         gridOrders.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridOrders.addSelectionListener(event -> selectionOrder());
-
+        //gridOrders.clearSortOrder();
         addComponents(gridOrders,buttonAddOrder,buttonEditOrder,buttonDeleteOrder);
 
         UpdateGrid();

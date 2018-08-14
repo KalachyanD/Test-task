@@ -41,8 +41,8 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
         BeanItemContainer<Client> containerGridClients = new BeanItemContainer<>(Client.class, clients);
 
         // Create firstField gridClients bound to the containerGridClients
-        gridClients.removeAllColumns();
         gridClients.setContainerDataSource(containerGridClients);
+        gridClients.setColumnOrder("ID","name","surname","patronymic","phoneNumber");
     }
 
     private void buildLayout(){
