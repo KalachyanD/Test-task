@@ -5,10 +5,11 @@ import models.Mechanic;
 import models.Order;
 
 import java.sql.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date.*;
 
 public class DAO {
     private static DAO instance;
@@ -256,10 +257,16 @@ public class DAO {
             Client client = loadClient(clientID);
             int mechanicID = rsOrders.getInt("mechanic_id");
             Mechanic mechanic = loadMechanic(mechanicID);
-            String format = rsOrders.getTimestamp("dateStart").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
-            LocalDateTime startDate = LocalDateTime.parse(format, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
-            format = rsOrders.getTimestamp("dateFinish").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
-            LocalDateTime endDate = LocalDateTime.parse(format, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+
+            LocalDate startDate = rsOrders.getDate("dateStart").toLocalDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String text = startDate.format(formatter);
+            startDate = LocalDate.parse(text, formatter);
+
+            LocalDate endDate = rsOrders.getDate("dateFinish").toLocalDate();
+            text = endDate.format(formatter);
+            endDate = LocalDate.parse(text, formatter);
+
             double cost = rsOrders.getDouble("cost");
             Order.Status status = Order.Status.valueOf(rsOrders.getString("status"));
             currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, status);
@@ -288,13 +295,19 @@ public class DAO {
             Client client = loadClient(clientID);
             int mechanicID = rsOrders.getInt("mechanic_id");
             Mechanic mechanic = loadMechanic(mechanicID);
-            String format = rsOrders.getTimestamp("startDate").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
-            LocalDateTime startDate = LocalDateTime.parse(format, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
-            format = rsOrders.getTimestamp("endDate").toLocalDateTime().format(DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
-            LocalDateTime endDate = LocalDateTime.parse(format, DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss"));
+
+            LocalDate startDate = rsOrders.getDate("dateStart").toLocalDate();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            String text = startDate.format(formatter);
+            startDate = LocalDate.parse(text, formatter);
+
+            LocalDate endDate = rsOrders.getDate("dateFinish").toLocalDate();
+            text = endDate.format(formatter);
+            endDate = LocalDate.parse(text, formatter);
+
             double cost = rsOrders.getDouble("cost");
             Order.Status status = Order.Status.valueOf(rsOrders.getString("status"));
-            currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, status);
+           // currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, status);
         }
         if (preparedStatement != null) {
             preparedStatement.close();
@@ -305,8 +318,8 @@ public class DAO {
         return currentOrder;
     }
 
-    public void storeOrder(String description, int clientID, int mechanicID, LocalDateTime startDate,
-                           LocalDateTime endDate, double cost, Order.Status status) throws SQLException {
+    public void storeOrder(String description, int clientID, int mechanicID, LocalDate startDate,
+                           LocalDate endDate, double cost, Order.Status status) throws SQLException {
         String insertTableSQL = "INSERT INTO ORDERS"
                 + "(DESCRIPTION, CLIENT_ID, MECHANIC_ID, DATESTART, DATEFINISH, COST, STATUS) VALUES"
                 + "(?,?,?,?,?,?,?)";
@@ -315,8 +328,8 @@ public class DAO {
         preparedStatement.setString(1, description);
         preparedStatement.setInt(2, clientID);
         preparedStatement.setInt(3, mechanicID);
-        preparedStatement.setTimestamp(4, Timestamp.valueOf(startDate));
-        preparedStatement.setTimestamp(5, Timestamp.valueOf(endDate));
+        preparedStatement.setDate(4, Date.valueOf(startDate));
+        preparedStatement.setDate(5, Date.valueOf(endDate));
         preparedStatement.setDouble(6, cost);
         preparedStatement.setString(7, status.toString());
         preparedStatement.executeUpdate();
@@ -328,16 +341,16 @@ public class DAO {
         }
     }
 
-    public void updateOrder(int orderID, String description, int clientID, int mechanicID, LocalDateTime startDate,
-                            LocalDateTime endDate, double cost, Order.Status status) throws SQLException {
+    public void updateOrder(int orderID, String description, int clientID, int mechanicID, LocalDate startDate,
+                            LocalDate endDate, double cost, Order.Status status) throws SQLException {
         String updateTableSQL = "UPDATE ORDERS SET DESCRIPTION= ?, CLIENT_ID= ?, MECHANIC_ID= ?, DATESTART= ?, DATEFINISH= ?, COST= ?, STATUS = ? WHERE id = ?";
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(updateTableSQL);
         preparedStatement.setString(1, description);
         preparedStatement.setInt(2, clientID);
         preparedStatement.setInt(3, mechanicID);
-        preparedStatement.setTimestamp(4, Timestamp.valueOf(startDate));
-        preparedStatement.setTimestamp(5, Timestamp.valueOf(endDate));
+        preparedStatement.setDate(4, Date.valueOf(startDate));
+        preparedStatement.setDate(5, Date.valueOf(endDate));
         preparedStatement.setDouble(6, cost);
         preparedStatement.setString(7, status.toString());
         preparedStatement.setInt(8, orderID);

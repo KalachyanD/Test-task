@@ -12,9 +12,12 @@ import models.Mechanic;
 import models.Order;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -25,8 +28,8 @@ public class WindowEditOrder extends Window  {
     private TextField fieldDescription = new TextField("Description");
     private NativeSelect selectClient = new NativeSelect("Client");
     private NativeSelect selectMechanic = new NativeSelect("Mechanic");
-    private TextField fieldDateStart = new TextField("Date start");
-    private TextField fieldDateFinish = new TextField("Date finish");
+    private DateField fieldDateStart = new DateField("Date start");
+    private DateField fieldDateFinish = new DateField("Date finish");
     private TextField fieldCost = new TextField("Cost");
     private NativeSelect selectStatus = new NativeSelect("Status");
     private Button ok = new Button("OK", this::ok);
@@ -104,10 +107,16 @@ public class WindowEditOrder extends Window  {
         selectMechanic.setNullSelectionAllowed(false);
 
         fieldDescription.setValue(orders.get(this.orderID).getDescription());
-        fieldDateStart.setValue(LocalDateTime.now().plusMinutes(2).format(DateTimeFormatter.ofPattern(
-                "dd.MM.yyyy HH:mm:ss")));
-        fieldDateFinish.setValue(LocalDateTime.now().plusMinutes(500).format(DateTimeFormatter.ofPattern(
-                "dd.MM.yyyy HH:mm:ss")));
+
+        fieldDateStart.setValue(new Date());
+        fieldDateFinish.setValue(new Date());
+
+        fieldDateFinish.validate();
+        fieldDateStart.validate();
+
+        fieldDateFinish.setValidationVisible(true);
+        fieldDateStart.setValidationVisible(true);
+
 
         fieldCost.setValue(Double.toString(orders.get(this.orderID).getCost()));
         selectStatus.addItems(Order.Status.Planned, Order.Status.Completed, Order.Status.Accepted);
@@ -159,8 +168,8 @@ public class WindowEditOrder extends Window  {
     }
 
     private void ok(Button.ClickEvent event) {DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-        LocalDateTime dateStart =  LocalDateTime.parse(fieldDateStart.getValue(), formatter);
-        LocalDateTime dateFinish = LocalDateTime.parse(fieldDateFinish.getValue(), formatter);
+        LocalDate dateStart = fieldDateStart.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dateFinish = fieldDateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         try {
             Order.Status status = Order.Status.valueOf(selectStatus.getValue().toString());
             DAO.getInstance().updateOrder(orderID+1, fieldDescription.getValue(),((Client)selectClient.getValue()).getID(),

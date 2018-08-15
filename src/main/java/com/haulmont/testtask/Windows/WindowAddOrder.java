@@ -12,9 +12,10 @@ import models.Order;
 import com.haulmont.testtask.UI.*;
 
 import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,8 +27,8 @@ public class WindowAddOrder extends Window  {
     private TextField fieldDescription = new TextField("Description");
     private NativeSelect selectClient = new NativeSelect("Client");
     private NativeSelect selectMechanic = new NativeSelect("Mechanic");
-    private TextField fieldDateStart = new TextField("Date start");
-    private TextField fieldDateFinish = new TextField("Date finish");
+    private DateField fieldDateStart = new DateField("Date start");
+    private DateField fieldDateFinish = new DateField("Date finish");
     private TextField fieldCost = new TextField("Cost");
     private NativeSelect selectStatus = new NativeSelect("Status");
     private Button ok = new Button("OK", this::ok);
@@ -66,10 +67,14 @@ public class WindowAddOrder extends Window  {
         selectMechanic.setValue(mechanics.get(0));
         selectMechanic.setNullSelectionAllowed(false);
 
-        fieldDateStart.setValue(LocalDateTime.now().plusMinutes(2).format(DateTimeFormatter.ofPattern(
-                "dd.MM.yyyy HH:mm:ss")));
-        fieldDateFinish.setValue(LocalDateTime.now().plusMinutes(500).format(DateTimeFormatter.ofPattern(
-                "dd.MM.yyyy HH:mm:ss")));
+        fieldDateStart.setValue(new Date());
+        fieldDateFinish.setValue(new Date());
+
+        fieldDateFinish.validate();
+        fieldDateStart.validate();
+
+        fieldDateFinish.setValidationVisible(true);
+        fieldDateStart.setValidationVisible(true);
 
         selectStatus.addItems(Order.Status.Planned, Order.Status.Completed, Order.Status.Accepted);
         selectStatus.setValue(Order.Status.Planned);
@@ -141,14 +146,13 @@ public class WindowAddOrder extends Window  {
     }
 
     private void ok(Button.ClickEvent event) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-        LocalDateTime dateStart = LocalDateTime.parse(fieldDateStart.getValue(), formatter);
-        LocalDateTime dateFinish = LocalDateTime.parse(fieldDateFinish.getValue(), formatter);
-        try {
-            Order.Status status = Order.Status.valueOf(selectStatus.getValue().toString());
+        LocalDate dateStart = fieldDateStart.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dateFinish = fieldDateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+       try {
             DAO.getInstance().storeOrder(fieldDescription.getValue(),((Client)selectClient.getValue()).getID(),
-                    ((Mechanic)selectMechanic.getValue()).getID(), dateStart, dateFinish,
-                    Double.parseDouble(fieldCost.getValue()), status);
+                    ((Mechanic)selectMechanic.getValue()).getID(),
+                    dateStart, dateFinish, Double.parseDouble(fieldCost.getValue()),
+                    Order.Status.valueOf(selectStatus.getValue().toString()));
             getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
             close();
         } catch (SQLException e) {
