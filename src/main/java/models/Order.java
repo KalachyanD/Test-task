@@ -11,7 +11,7 @@ public class Order {
     public static enum Status {
         Planned, Completed, Accepted
     }
-    private int id;
+    private long id;
     private String description;
     private Client client;
     private Mechanic mechanic;
@@ -20,7 +20,7 @@ public class Order {
     private double cost;
     private Status status;
 
-    public Order(int id, String description, Client client, Mechanic mechanic, LocalDate startDate,
+    public Order(long id, String description, Client client, Mechanic mechanic, LocalDate startDate,
                  LocalDate endDate, double cost, Status status) {
         this.id = id;
         this.description = description;
@@ -37,7 +37,7 @@ public class Order {
                 order.getEndDate(), order.getCost(), order.getStatus());
     }
 
-    public int getID() {
+    public long getID() {
         return id;
     }
 

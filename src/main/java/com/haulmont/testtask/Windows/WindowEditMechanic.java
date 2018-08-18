@@ -20,11 +20,11 @@ public class WindowEditMechanic extends Window {
     private TextField fieldHourlyPay = new TextField("Hourly Pay");
     private Button ok = new Button("OK", this::ok);
     private Button cancel = new Button("Cancel",event -> close());
-    private int id;
+    private long id;
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
 
-    public WindowEditMechanic(int id){
+    public WindowEditMechanic(long id){
         super("Edit Client"); // Set window caption
         preload(id);
         buildWindow();
@@ -51,7 +51,7 @@ public class WindowEditMechanic extends Window {
         setContent(verticalMain);
     }
 
-    private void preload(int id){
+    private void preload(long id){
         List<Mechanic> mechanics = new ArrayList<>();
         try {
             mechanics = DAO.getInstance().LoadAllMechanics();
@@ -66,10 +66,10 @@ public class WindowEditMechanic extends Window {
 
         }
 
-        fieldName.setValue(mechanics.get(this.id).getName());
-        fieldSurname.setValue(mechanics.get(this.id).getSurname());
-        fieldPatronymic.setValue(mechanics.get(this.id).getPatronymic());
-        fieldHourlyPay.setValue(Double.toString(mechanics.get(this.id).getHourlyPay()));
+        fieldName.setValue(mechanics.get((int) this.id).getName());
+        fieldSurname.setValue(mechanics.get((int) this.id).getSurname());
+        fieldPatronymic.setValue(mechanics.get((int) this.id).getPatronymic());
+        fieldHourlyPay.setValue(Double.toString(mechanics.get((int) this.id).getHourlyPay()));
     }
 
     private void validation(){
@@ -128,10 +128,11 @@ public class WindowEditMechanic extends Window {
 
     private void ok(Button.ClickEvent event){
         try {
-            DAO.getInstance().updateMechanic(id, fieldName.getValue(), fieldSurname.getValue(),
+            DAO.getInstance().updateMechanic(id+1, fieldName.getValue(), fieldSurname.getValue(),
                     fieldPatronymic.getValue(),
                     Double.parseDouble(fieldHourlyPay.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridM.UpdateGrid();
+            getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
             close();
         } catch (SQLException e) {
             e.printStackTrace();

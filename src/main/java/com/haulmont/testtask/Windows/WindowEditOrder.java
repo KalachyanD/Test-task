@@ -34,11 +34,11 @@ public class WindowEditOrder extends Window  {
     private NativeSelect selectStatus = new NativeSelect("Status");
     private Button ok = new Button("OK", this::ok);
     private Button cancel = new Button("Cancel",event -> close());
-    private int orderID;
+    private long orderID;
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
 
-    public WindowEditOrder(int orderID) {
+    public WindowEditOrder(long orderID) {
         super("Edit Order"); // Set window caption
         buildWindow();
         preload(orderID);
@@ -67,7 +67,7 @@ public class WindowEditOrder extends Window  {
         setContent(verticalMain);
     }
 
-    private void preload(int orderID) {
+    private void preload(long orderID) {
 
         List<Order> orders = new ArrayList<>();
         try {
@@ -96,17 +96,15 @@ public class WindowEditOrder extends Window  {
             }
         }
 
-
-
         selectClient.addItems(clients);
-        selectClient.setValue(clients.get(orders.get(this.orderID).getClient().getID()-1));
+        selectClient.setValue(clients.get((int) orders.get((int)this.orderID).getClient().getID()-1));
         selectClient.setNullSelectionAllowed(false);
 
         selectMechanic.addItems(mechanics);
-        selectMechanic.setValue(mechanics.get(orders.get(this.orderID).getMechanic().getID()-1));
+        selectMechanic.setValue(mechanics.get((int) orders.get((int) this.orderID).getMechanic().getID()-1));
         selectMechanic.setNullSelectionAllowed(false);
 
-        fieldDescription.setValue(orders.get(this.orderID).getDescription());
+        fieldDescription.setValue(orders.get((int) this.orderID).getDescription());
 
         fieldDateStart.setValue(new Date());
         fieldDateFinish.setValue(new Date());
@@ -117,10 +115,9 @@ public class WindowEditOrder extends Window  {
         fieldDateFinish.setValidationVisible(true);
         fieldDateStart.setValidationVisible(true);
 
-
-        fieldCost.setValue(Double.toString(orders.get(this.orderID).getCost()));
+        fieldCost.setValue(Double.toString(orders.get((int) this.orderID).getCost()));
         selectStatus.addItems(Order.Status.Planned, Order.Status.Completed, Order.Status.Accepted);
-        selectStatus.setValue(orders.get(this.orderID).getStatus());
+        selectStatus.setValue(orders.get((int) this.orderID).getStatus());
         selectStatus.setNullSelectionAllowed(false);
     }
 

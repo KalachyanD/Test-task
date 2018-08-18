@@ -2,7 +2,7 @@ package models;
 
 public class Client {
 
-    private int id;
+    private long id;
 
     private String name;
     //Surname
@@ -12,7 +12,7 @@ public class Client {
     //Telephone number
     private int phoneNumber;
 
-    public Client(int id, String name, String surname, String patronymic, int telephoneNumber) {
+    public Client(long id, String name, String surname, String patronymic, int telephoneNumber) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -56,7 +56,7 @@ public class Client {
         this.phoneNumber = phoneNumber;
     }
 
-    public int getID() {
+    public long getID() {
         return id;
     }
 

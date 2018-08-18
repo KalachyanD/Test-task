@@ -21,17 +21,17 @@ public class WindowEditClient extends Window {
     private TextField fieldTelephone = new TextField("Telephone");
     private Button ok = new Button("OK",this::ok);
     private Button cancel = new Button("Cancel",event -> close());
-    private int id;
+    private long id;
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
-    public WindowEditClient(int id){
+    public WindowEditClient(long id){
         super("Edit Client"); // Set window caption
         preload(id);
         buildWindow();
         validation();
     }
 
-    private void preload(int id){
+    private void preload(long id){
         //Preload data into fields
         List<Client> clients = new ArrayList<>();
         try {
@@ -47,10 +47,10 @@ public class WindowEditClient extends Window {
 
         }
 
-        fieldName.setValue(clients.get(this.id).getName());
-        fieldSurname.setValue(clients.get(this.id).getSurname());
-        fieldPatronymic.setValue(clients.get(this.id).getPatronymic());
-        fieldTelephone.setValue(Integer.toString(clients.get(this.id).getPhoneNumber()));
+        fieldName.setValue(clients.get((int)this.id).getName());
+        fieldSurname.setValue(clients.get((int)this.id).getSurname());
+        fieldPatronymic.setValue(clients.get((int)this.id).getPatronymic());
+        fieldTelephone.setValue(Integer.toString(clients.get((int)this.id).getPhoneNumber()));
     }
 
     private void buildWindow(){
@@ -130,10 +130,11 @@ public class WindowEditClient extends Window {
 
     private void ok(Button.ClickEvent event){
         try {
-            DAO.getInstance().updateClient(id, fieldName.getValue(), fieldSurname.getValue(),
+            DAO.getInstance().updateClient(id+1, fieldName.getValue(), fieldSurname.getValue(),
                     fieldPatronymic.getValue(),
                     Integer.parseInt(fieldTelephone.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridC.UpdateGrid();
+            getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
             close();
         } catch (SQLException e) {
             e.printStackTrace();

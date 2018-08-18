@@ -64,11 +64,11 @@ public class DAO {
         return data;
     }
 
-    public Client loadClient(int clientID) throws SQLException {
+    public Client loadClient(long clientID) throws SQLException {
         String selectSQL = "SELECT * FROM CLIENT WHERE ID = ?";
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
-        preparedStatement.setInt(1, clientID);
+        preparedStatement.setLong(1, clientID);
         ResultSet rsClients = preparedStatement.executeQuery();
         Client currentClient = null;
         if (rsClients.next()) {
@@ -108,11 +108,11 @@ public class DAO {
         }
     }
 
-    public void deleteClient(int clientID) throws SQLException {
+    public void deleteClient(long clientID) throws SQLException {
         Connection dbConnection = getDBConnection();
         String deleteSQL = "DELETE FROM CLIENT WHERE ID = ?";
         PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteSQL);
-        preparedStatement.setInt(1, clientID);
+        preparedStatement.setLong(1, clientID);
 
         preparedStatement.executeUpdate();
         if (preparedStatement != null) {
@@ -123,7 +123,7 @@ public class DAO {
         }
     }
 
-    public void updateClient(int clientID, String name, String surname, String patronymic, int telephoneNumber)
+    public void updateClient(long clientID, String name, String surname, String patronymic, int telephoneNumber)
             throws SQLException {
         String updateTableSQL = "UPDATE CLIENT SET NAME= ?,SURNAME= ?,PATRONYMIC= ?,TELEPHONENUMBER= ? WHERE id = ?";
         Connection dbConnection = getDBConnection();
@@ -132,7 +132,7 @@ public class DAO {
         preparedStatement.setString(2, surname);
         preparedStatement.setString(3, patronymic);
         preparedStatement.setInt(4, telephoneNumber);
-        preparedStatement.setInt(5, clientID);
+        preparedStatement.setLong(5, clientID);
         preparedStatement.executeUpdate();
         if (preparedStatement != null) {
             preparedStatement.close();
@@ -167,11 +167,11 @@ public class DAO {
         return data;
     }
 
-    public Mechanic loadMechanic(int mechanicID) throws SQLException {
+    public Mechanic loadMechanic(long mechanicID) throws SQLException {
         String selectSQL = "SELECT * FROM MECHANIC WHERE ID = ?";
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
-        preparedStatement.setInt(1, mechanicID);
+        preparedStatement.setLong(1, mechanicID);
         ResultSet rsMechanic = preparedStatement.executeQuery();
         Mechanic currentMechanic = null;
         if (rsMechanic.next()) {
@@ -190,7 +190,7 @@ public class DAO {
         return currentMechanic;
     }
 
-    public void updateMechanic(int mechanicID, String name, String surname, String patronymic, double hourlypay)
+    public void updateMechanic(long mechanicID, String name, String surname, String patronymic, double hourlypay)
             throws SQLException {
         String updateTableSQL = "UPDATE MECHANIC SET NAME= ?,SURNAME= ?,PATRONYMIC= ?,HOURLYPAY= ? WHERE id = ?";
         Connection dbConnection = getDBConnection();
@@ -199,7 +199,7 @@ public class DAO {
         preparedStatement.setString(2, surname);
         preparedStatement.setString(3, patronymic);
         preparedStatement.setDouble(4, hourlypay);
-        preparedStatement.setInt(5, mechanicID);
+        preparedStatement.setLong(5, mechanicID);
         preparedStatement.executeUpdate();
         if (preparedStatement != null) {
             preparedStatement.close();
@@ -229,11 +229,11 @@ public class DAO {
         }
     }
 
-    public void deleteMechanic(int mechanicID) throws SQLException {
+    public void deleteMechanic(long mechanicID) throws SQLException {
         Connection dbConnection = getDBConnection();
         String deleteSQL = "DELETE FROM MECHANIC WHERE ID = ?";
         PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteSQL);
-        preparedStatement.setInt(1, mechanicID);
+        preparedStatement.setLong(1, mechanicID);
         preparedStatement.executeUpdate();
         if (preparedStatement != null) {
             preparedStatement.close();
@@ -281,19 +281,19 @@ public class DAO {
         return data;
     }
 
-    public Order loadOrder(int id) throws SQLException {
+    public Order loadOrder(long id) throws SQLException {
         String selectSQL = "SELECT * FROM ORDERS WHERE ID = ?";
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
-        preparedStatement.setInt(1, id);
+        preparedStatement.setLong(1, id);
         ResultSet rsOrders = preparedStatement.executeQuery();
         Order currentOrder = null;
         if (rsOrders.next()) {
-            int orderID = rsOrders.getInt("id");
+            long orderID = rsOrders.getLong("id");
             String description = rsOrders.getString("description");
-            int clientID = rsOrders.getInt("client_id");
+            long clientID = rsOrders.getLong("client_id");
             Client client = loadClient(clientID);
-            int mechanicID = rsOrders.getInt("mechanic_id");
+            long mechanicID = rsOrders.getLong("mechanic_id");
             Mechanic mechanic = loadMechanic(mechanicID);
 
             LocalDate startDate = rsOrders.getDate("dateStart").toLocalDate();
@@ -318,7 +318,7 @@ public class DAO {
         return currentOrder;
     }
 
-    public void storeOrder(String description, int clientID, int mechanicID, LocalDate startDate,
+    public void storeOrder(String description, long clientID, long mechanicID, LocalDate startDate,
                            LocalDate endDate, double cost, Order.Status status) throws SQLException {
         String insertTableSQL = "INSERT INTO ORDERS"
                 + "(DESCRIPTION, CLIENT_ID, MECHANIC_ID, DATESTART, DATEFINISH, COST, STATUS) VALUES"
@@ -326,8 +326,8 @@ public class DAO {
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(insertTableSQL);
         preparedStatement.setString(1, description);
-        preparedStatement.setInt(2, clientID);
-        preparedStatement.setInt(3, mechanicID);
+        preparedStatement.setLong(2, clientID);
+        preparedStatement.setLong(3, mechanicID);
         preparedStatement.setDate(4, Date.valueOf(startDate));
         preparedStatement.setDate(5, Date.valueOf(endDate));
         preparedStatement.setDouble(6, cost);
@@ -341,19 +341,19 @@ public class DAO {
         }
     }
 
-    public void updateOrder(int orderID, String description, int clientID, int mechanicID, LocalDate startDate,
+    public void updateOrder(long orderID, String description, long clientID, long mechanicID, LocalDate startDate,
                             LocalDate endDate, double cost, Order.Status status) throws SQLException {
         String updateTableSQL = "UPDATE ORDERS SET DESCRIPTION= ?, CLIENT_ID= ?, MECHANIC_ID= ?, DATESTART= ?, DATEFINISH= ?, COST= ?, STATUS = ? WHERE id = ?";
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(updateTableSQL);
         preparedStatement.setString(1, description);
-        preparedStatement.setInt(2, clientID);
-        preparedStatement.setInt(3, mechanicID);
+        preparedStatement.setLong(2, clientID);
+        preparedStatement.setLong(3, mechanicID);
         preparedStatement.setDate(4, Date.valueOf(startDate));
         preparedStatement.setDate(5, Date.valueOf(endDate));
         preparedStatement.setDouble(6, cost);
         preparedStatement.setString(7, status.toString());
-        preparedStatement.setInt(8, orderID);
+        preparedStatement.setLong(8, orderID);
         preparedStatement.executeUpdate();
         if (preparedStatement != null) {
             preparedStatement.close();
@@ -363,11 +363,11 @@ public class DAO {
         }
     }
 
-    public void deleteOrder(int orderID) throws SQLException {
+    public void deleteOrder(long orderID) throws SQLException {
         Connection dbConnection = getDBConnection();
         String deleteSQL = "DELETE FROM ORDERS WHERE ID = ?";
         PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteSQL);
-        preparedStatement.setInt(1, orderID);
+        preparedStatement.setLong(1, orderID);
         preparedStatement.executeUpdate();
         preparedStatement.executeUpdate();
         if (preparedStatement != null) {

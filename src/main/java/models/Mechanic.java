@@ -3,7 +3,7 @@ package models;
 
 public class Mechanic {
 
-    private int id;
+    private long id;
 
     private String name;
     //Surname
@@ -13,7 +13,7 @@ public class Mechanic {
 
     private double hourlyPay;
 
-    public Mechanic(int id, String name, String surname, String patronymic, double hourlyPay) {
+    public Mechanic(long id, String name, String surname, String patronymic, double hourlyPay) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -58,7 +58,7 @@ public class Mechanic {
         this.hourlyPay = hourlyPay;
     }
 
-    public int getID() {
+    public long getID() {
         return id;
     }
 
