@@ -36,6 +36,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
         gridMechanics.addSelectionListener(event -> selectionOrder());
         addComponents(gridMechanics,buttonDeleteMechanic,buttonEditMechanic,buttonAddMechanic,buttonStatistics,label);
         UpdateGrid();
+        gridMechanics.removeColumn("ID");
     }
 
     public void UpdateGrid() {
@@ -48,7 +49,6 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
 
         BeanItemContainer<Mechanic> containerGridMechanics = new BeanItemContainer<>(Mechanic.class, mechanics);
         gridMechanics.setContainerDataSource(containerGridMechanics);
-        gridMechanics.removeColumn("ID");
         gridMechanics.setColumnOrder("name","surname","patronymic","hourlyPay");
     }
 
@@ -62,7 +62,11 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
             try {
                 DAO.getInstance().deleteMechanic(mechanic.getID());
                 UpdateGrid();
-            } catch (SQLException e) {
+            }catch (java.sql.SQLIntegrityConstraintViolationException e) {
+                Notification.show("Deleting is impossible", "This mechanic locate in Order Table.",
+                        Notification.Type.WARNING_MESSAGE);
+            }
+            catch (SQLException e) {
                 e.printStackTrace();
             }
         }

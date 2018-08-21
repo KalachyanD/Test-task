@@ -2,10 +2,7 @@ package com.haulmont.testtask.Grids;
 
 import com.haulmont.testtask.Windows.*;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.UI;
-import com.vaadin.ui.VerticalLayout;
+import com.vaadin.ui.*;
 import dao.DAO;
 import models.Client;
 
@@ -42,7 +39,6 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
 
         // Create firstField gridClients bound to the containerGridClients
         gridClients.setContainerDataSource(containerGridClients);
-        gridClients.removeColumn("ID");
         gridClients.setColumnOrder("name","surname","patronymic","phoneNumber");
     }
 
@@ -50,9 +46,9 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
         gridClients.setHeight("300");
         gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridClients.addSelectionListener(event -> selectionOrder());
-
         addComponents(gridClients,buttonDeleteClient,buttonEditClient,buttonAddClient);
         UpdateGrid();
+        gridClients.removeColumn("ID");
     }
 
     private void addClient(Button.ClickEvent event){
@@ -65,7 +61,11 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
             try {
                 DAO.getInstance().deleteClient(client.getID());
                 UpdateGrid();
-            } catch (SQLException e) {
+            }catch (java.sql.SQLIntegrityConstraintViolationException e) {
+                Notification.show("Deleting is impossible", "This client locate in Order Table.",
+                        Notification.Type.WARNING_MESSAGE);
+            }
+            catch (SQLException e) {
                 e.printStackTrace();
             }
         }
