@@ -40,7 +40,6 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         // Create firstField gridOrders bound to the containerOrders
         BeanItemContainer<Order> containerGridOrders = new BeanItemContainer<>(Order.class, orders);
         gridOrders.setContainerDataSource(containerGridOrders);
-        gridOrders.removeColumn("ID");
         gridOrders.setColumnOrder("description","client","mechanic","startDate","endDate","cost","status");
     }
 
@@ -52,8 +51,8 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         //gridOrders.addRow(filter);
 
         addComponents(gridOrders,buttonAddOrder,buttonEditOrder,buttonDeleteOrder);
-
         UpdateGrid();
+        gridOrders.removeColumn("ID");
     }
 
     private void addOrder(Button.ClickEvent event){

@@ -33,14 +33,14 @@ public class WindowEditOrder extends Window  {
     private NativeSelect selectStatus = new NativeSelect("Status");
     private Button ok = new Button("OK", this::ok);
     private Button cancel = new Button("Cancel",event -> close());
-    private long orderID;
+    private long id;
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
 
-    public WindowEditOrder(long orderID) {
+    public WindowEditOrder(long id) {
         super("Edit Order"); // Set window caption
         buildWindow();
-        preload(orderID);
+        preload(id);
         validation();
     }
 
@@ -69,58 +69,48 @@ public class WindowEditOrder extends Window  {
         setContent(verticalMain);
     }
 
-    private void preload(long orderID) {
-
-        List<Order> orders = new ArrayList<>();
+    private void preload(long id) {
+        this.id =id;
         try {
-            orders = DAO.getInstance().LoadAllOrders();
-        } catch (SQLException e) {
+            Order order = DAO.getInstance().loadOrder(id);
 
-        }
-
-        List<Client> clients = new ArrayList<>();
-        try {
+            List<Client> clients = new ArrayList<>();
             clients = DAO.getInstance().LoadAllClients();
-        } catch (SQLException e) {
 
-        }
-
-        List<Mechanic> mechanics = new ArrayList<>();
-        try {
+            List<Mechanic> mechanics = new ArrayList<>();
             mechanics = DAO.getInstance().LoadAllMechanics();
-        } catch (SQLException e) {
 
+            selectClient.addItems(clients);
+            selectClient.setValue(clients.get((int) order.getClient().getID()-1));
+            selectClient.setNullSelectionAllowed(false);
+
+            selectMechanic.addItems(mechanics);
+            selectMechanic.setValue(mechanics.get((int) order.getMechanic().getID()-1));
+            selectMechanic.setNullSelectionAllowed(false);
+
+            description.setValue(order.getDescription());
+
+            cost.setValue(Double.toString(order.getCost()));
+
+            selectStatus.addItems(Order.Status.Planned, Order.Status.Completed, Order.Status.Accepted);
+            selectStatus.setValue(order.getStatus());
+            selectStatus.setNullSelectionAllowed(false);
+
+            LocalDate localDateStart = order.getStartDate();
+            LocalDate localDateEnd = order.getEndDate();
+
+            dateStart.setValue(Date.from(localDateStart.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+            dateFinish.setValue(Date.from(localDateEnd.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-
-        for(int i = 0;i < orders.size();++i){
-            if(orderID == orders.get(i).getID()){
-                this.orderID = i;
-            }
-        }
-
-        selectClient.addItems(clients);
-        selectClient.setValue(clients.get((int) orders.get((int)this.orderID).getClient().getID()-1));
-        selectClient.setNullSelectionAllowed(false);
-
-        selectMechanic.addItems(mechanics);
-        selectMechanic.setValue(mechanics.get((int) orders.get((int) this.orderID).getMechanic().getID()-1));
-        selectMechanic.setNullSelectionAllowed(false);
-
-        description.setValue(orders.get((int) this.orderID).getDescription());
-
-        dateStart.setValue(new Date());
-        dateFinish.setValue(new Date());
 
         dateFinish.validate();
         dateStart.validate();
 
         dateFinish.setValidationVisible(true);
         dateStart.setValidationVisible(true);
-
-        cost.setValue(Double.toString(orders.get((int) this.orderID).getCost()));
-        selectStatus.addItems(Order.Status.Planned, Order.Status.Completed, Order.Status.Accepted);
-        selectStatus.setValue(orders.get((int) this.orderID).getStatus());
-        selectStatus.setNullSelectionAllowed(false);
     }
 
     private void validation(){
@@ -166,12 +156,12 @@ public class WindowEditOrder extends Window  {
         }
     }
 
-    private void ok(Button.ClickEvent event) {DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+    private void ok(Button.ClickEvent event) {
         LocalDate dateStart = this.dateStart.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate dateFinish = this.dateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         try {
             Order.Status status = Order.Status.valueOf(selectStatus.getValue().toString());
-            DAO.getInstance().updateOrder(orderID+1, description.getValue(),((Client)selectClient.getValue()).getID(),
+            DAO.getInstance().updateOrder(id, description.getValue(),((Client)selectClient.getValue()).getID(),
                     ((Mechanic)selectMechanic.getValue()).getID(),
                     dateStart, dateFinish, Double.parseDouble(cost.getValue()), status);
             getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();

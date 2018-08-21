@@ -32,25 +32,16 @@ public class WindowEditClient extends Window {
     }
 
     private void preload(long id){
-        //Preload data into fields
-        List<Client> clients = new ArrayList<>();
+        this.id = id;
         try {
-            clients = DAO.getInstance().LoadAllClients();
+            Client client = DAO.getInstance().loadClient(id);
+            name.setValue(client.getName());
+            surname.setValue(client.getSurname());
+            patronymic.setValue(client.getPatronymic());
+            phoneNumber.setValue(Long.toString(client.getPhoneNumber()));
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
-
-        for (int i = 0; i < clients.size(); ++i) {
-            if (id == clients.get(i).getID()) {
-                this.id = i;
-            }
-
-        }
-
-        name.setValue(clients.get((int)this.id).getName());
-        surname.setValue(clients.get((int)this.id).getSurname());
-        patronymic.setValue(clients.get((int)this.id).getPatronymic());
-        phoneNumber.setValue(Long.toString(clients.get((int)this.id).getPhoneNumber()));
     }
 
     private void buildWindow(){
@@ -135,7 +126,7 @@ public class WindowEditClient extends Window {
 
     private void ok(Button.ClickEvent event){
         try {
-            DAO.getInstance().updateClient(id+1, name.getValue(), surname.getValue(),
+            DAO.getInstance().updateClient(id, name.getValue(), surname.getValue(),
                     patronymic.getValue(),
                     Integer.parseInt(phoneNumber.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridC.UpdateGrid();

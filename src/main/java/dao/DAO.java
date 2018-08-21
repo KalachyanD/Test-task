@@ -307,7 +307,8 @@ public class DAO {
 
             double cost = rsOrders.getDouble("cost");
             Order.Status status = Order.Status.valueOf(rsOrders.getString("status"));
-           // currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, status);
+            currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, status);
+            return currentOrder;
         }
         if (preparedStatement != null) {
             preparedStatement.close();

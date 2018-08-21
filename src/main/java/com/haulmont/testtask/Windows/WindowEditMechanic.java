@@ -57,24 +57,16 @@ public class WindowEditMechanic extends Window {
     }
 
     private void preload(long id){
-        List<Mechanic> mechanics = new ArrayList<>();
+        this.id = id;
         try {
-            mechanics = DAO.getInstance().LoadAllMechanics();
+            Mechanic mechanic = DAO.getInstance().loadMechanic(id);
+            name.setValue(mechanic.getName());
+            surname.setValue(mechanic.getSurname());
+            patronymic.setValue(mechanic.getPatronymic());
+            hourlyPay.setValue(Double.toString(mechanic.getHourlyPay()));
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
-
-        for (int i = 0; i < mechanics.size(); ++i) {
-            if (id == mechanics.get(i).getID()) {
-                this.id = i;
-            }
-
-        }
-
-        name.setValue(mechanics.get((int) this.id).getName());
-        surname.setValue(mechanics.get((int) this.id).getSurname());
-        patronymic.setValue(mechanics.get((int) this.id).getPatronymic());
-        hourlyPay.setValue(Double.toString(mechanics.get((int) this.id).getHourlyPay()));
     }
 
     private void validation(){
@@ -133,7 +125,7 @@ public class WindowEditMechanic extends Window {
 
     private void ok(Button.ClickEvent event){
         try {
-            DAO.getInstance().updateMechanic(id+1, name.getValue(), surname.getValue(),
+            DAO.getInstance().updateMechanic(id, name.getValue(), surname.getValue(),
                     patronymic.getValue(),
                     Double.parseDouble(hourlyPay.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridM.UpdateGrid();

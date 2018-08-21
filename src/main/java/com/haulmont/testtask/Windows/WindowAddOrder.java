@@ -22,7 +22,7 @@ import java.util.List;
  * Created by User on 21.07.2017.
  */
 
-public class WindowAddOrder extends Window  {
+public class WindowAddOrder extends Window {
 
     private TextField description = new TextField("Description");
     private NativeSelect selectClient = new NativeSelect("Client");
@@ -32,7 +32,7 @@ public class WindowAddOrder extends Window  {
     private TextField cost = new TextField("Cost");
     private NativeSelect selectStatus = new NativeSelect("Status");
     private Button ok = new Button("OK", this::ok);
-    private Button cancel = new Button("Cancel",event -> close());
+    private Button cancel = new Button("Cancel", event -> close());
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
 
@@ -44,44 +44,39 @@ public class WindowAddOrder extends Window  {
     }
 
     private void preload() {
-
-        List<Client> clients = new ArrayList<>();
         try {
+            List<Client> clients = new ArrayList<>();
             clients = DAO.getInstance().LoadAllClients();
-        } catch (SQLException e) {
 
-        }
-
-        List<Mechanic> mechanics = new ArrayList<>();
-        try {
+            List<Mechanic> mechanics = new ArrayList<>();
             mechanics = DAO.getInstance().LoadAllMechanics();
+
+            selectClient.addItems(clients);
+            selectClient.setValue(clients.get(0));
+            selectClient.setNullSelectionAllowed(false);
+
+            selectMechanic.addItems(mechanics);
+            selectMechanic.setValue(mechanics.get(0));
+            selectMechanic.setNullSelectionAllowed(false);
+
+            dateStart.setValue(new Date());
+            dateFinish.setValue(new Date());
+
+            dateFinish.validate();
+            dateStart.validate();
+
+            dateFinish.setValidationVisible(true);
+            dateStart.setValidationVisible(true);
+
+            selectStatus.addItems(Order.Status.Planned, Order.Status.Completed, Order.Status.Accepted);
+            selectStatus.setValue(Order.Status.Planned);
+            selectStatus.setNullSelectionAllowed(false);
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
-
-        selectClient.addItems(clients);
-        selectClient.setValue(clients.get(0));
-        selectClient.setNullSelectionAllowed(false);
-
-        selectMechanic.addItems(mechanics);
-        selectMechanic.setValue(mechanics.get(0));
-        selectMechanic.setNullSelectionAllowed(false);
-
-        dateStart.setValue(new Date());
-        dateFinish.setValue(new Date());
-
-        dateFinish.validate();
-        dateStart.validate();
-
-        dateFinish.setValidationVisible(true);
-        dateStart.setValidationVisible(true);
-
-        selectStatus.addItems(Order.Status.Planned, Order.Status.Completed, Order.Status.Accepted);
-        selectStatus.setValue(Order.Status.Planned);
-        selectStatus.setNullSelectionAllowed(false);
     }
 
-    private void buildWindow(){
+    private void buildWindow() {
         center(); //Position of window
         setClosable(true); // Disable the close button
         setModal(true); // Enable modal window mode
@@ -89,8 +84,8 @@ public class WindowAddOrder extends Window  {
         description.setMaxLength(100);
         cost.setMaxLength(19);
 
-        VerticalLayout verticalFields = new VerticalLayout (description,selectClient,selectMechanic,
-                dateStart, dateFinish, cost,selectStatus);
+        VerticalLayout verticalFields = new VerticalLayout(description, selectClient, selectMechanic,
+                dateStart, dateFinish, cost, selectStatus);
         verticalFields.setSpacing(true);
         verticalFields.setMargin(true);
 
@@ -98,14 +93,14 @@ public class WindowAddOrder extends Window  {
         horizonButtons.setSpacing(false);
         horizonButtons.setMargin(false);
 
-        VerticalLayout verticalMain = new VerticalLayout (verticalFields,horizonButtons);
+        VerticalLayout verticalMain = new VerticalLayout(verticalFields, horizonButtons);
         verticalMain.setSpacing(true);
         verticalMain.setMargin(true);
 
         setContent(verticalMain);
     }
 
-    private void validation(){
+    private void validation() {
         //VALIDATION
         description.addValidator(stringLengthValidator);
 
@@ -114,7 +109,7 @@ public class WindowAddOrder extends Window  {
 
         //To convert string value to integer before validation
         cost.setConverter(new toDoubleConverter());
-        cost.addValidator(new DoubleRangeValidator("Value is negative",0.0,
+        cost.addValidator(new DoubleRangeValidator("Value is negative", 0.0,
                 Double.MAX_VALUE));
 
         //What if text field is empty - integer will be null in that case, so show blank when null
@@ -133,7 +128,7 @@ public class WindowAddOrder extends Window  {
         description.addTextChangeListener(event -> textChange(event, description));
     }
 
-    private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
+    private void textChange(FieldEvents.TextChangeEvent event, TextField textField) {
         try {
             textField.setValue(event.getText());
 
@@ -151,9 +146,9 @@ public class WindowAddOrder extends Window  {
     private void ok(Button.ClickEvent event) {
         LocalDate dateStart = this.dateStart.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate dateFinish = this.dateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-       try {
-            DAO.getInstance().storeOrder(description.getValue(),((Client)selectClient.getValue()).getID(),
-                    ((Mechanic)selectMechanic.getValue()).getID(),
+        try {
+            DAO.getInstance().storeOrder(description.getValue(), ((Client) selectClient.getValue()).getID(),
+                    ((Mechanic) selectMechanic.getValue()).getID(),
                     dateStart, dateFinish, Double.parseDouble(cost.getValue()),
                     Order.Status.valueOf(selectStatus.getValue().toString()));
             getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
