@@ -24,12 +24,12 @@ import java.util.List;
 
 public class WindowAddOrder extends Window  {
 
-    private TextField fieldDescription = new TextField("Description");
+    private TextField description = new TextField("Description");
     private NativeSelect selectClient = new NativeSelect("Client");
     private NativeSelect selectMechanic = new NativeSelect("Mechanic");
-    private DateField fieldDateStart = new DateField("Date start");
-    private DateField fieldDateFinish = new DateField("Date finish");
-    private TextField fieldCost = new TextField("Cost");
+    private DateField dateStart = new DateField("Date start");
+    private DateField dateFinish = new DateField("Date finish");
+    private TextField cost = new TextField("Cost");
     private NativeSelect selectStatus = new NativeSelect("Status");
     private Button ok = new Button("OK", this::ok);
     private Button cancel = new Button("Cancel",event -> close());
@@ -67,14 +67,14 @@ public class WindowAddOrder extends Window  {
         selectMechanic.setValue(mechanics.get(0));
         selectMechanic.setNullSelectionAllowed(false);
 
-        fieldDateStart.setValue(new Date());
-        fieldDateFinish.setValue(new Date());
+        dateStart.setValue(new Date());
+        dateFinish.setValue(new Date());
 
-        fieldDateFinish.validate();
-        fieldDateStart.validate();
+        dateFinish.validate();
+        dateStart.validate();
 
-        fieldDateFinish.setValidationVisible(true);
-        fieldDateStart.setValidationVisible(true);
+        dateFinish.setValidationVisible(true);
+        dateStart.setValidationVisible(true);
 
         selectStatus.addItems(Order.Status.Planned, Order.Status.Completed, Order.Status.Accepted);
         selectStatus.setValue(Order.Status.Planned);
@@ -86,8 +86,11 @@ public class WindowAddOrder extends Window  {
         setClosable(true); // Disable the close button
         setModal(true); // Enable modal window mode
 
-        VerticalLayout verticalFields = new VerticalLayout (fieldDescription,selectClient,selectMechanic,
-                fieldDateStart,fieldDateFinish,fieldCost,selectStatus);
+        description.setMaxLength(100);
+        cost.setMaxLength(19);
+
+        VerticalLayout verticalFields = new VerticalLayout (description,selectClient,selectMechanic,
+                dateStart, dateFinish, cost,selectStatus);
         verticalFields.setSpacing(true);
         verticalFields.setMargin(true);
 
@@ -104,30 +107,30 @@ public class WindowAddOrder extends Window  {
 
     private void validation(){
         //VALIDATION
-        fieldDescription.addValidator(stringLengthValidator);
+        description.addValidator(stringLengthValidator);
 
-        fieldCost.setRequired(true);
-        fieldCost.setRequiredError("Prompt is empty.");
+        cost.setRequired(true);
+        cost.setRequiredError("Prompt is empty.");
 
         //To convert string value to integer before validation
-        fieldCost.setConverter(new toDoubleConverter());
-        fieldCost.addValidator(new DoubleRangeValidator("Value is negative",0.0,
+        cost.setConverter(new toDoubleConverter());
+        cost.addValidator(new DoubleRangeValidator("Value is negative",0.0,
                 Double.MAX_VALUE));
 
         //What if text field is empty - integer will be null in that case, so show blank when null
-        fieldCost.setNullRepresentation("");
+        cost.setNullRepresentation("");
 
-        fieldDescription.setValidationVisible(true);
-        fieldCost.setValidationVisible(true);
+        description.setValidationVisible(true);
+        cost.setValidationVisible(true);
 
-        fieldDescription.setImmediate(true);
-        fieldCost.setImmediate(true);
+        description.setImmediate(true);
+        cost.setImmediate(true);
 
-        fieldDescription.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-        fieldCost.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        description.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        cost.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
 
-        fieldCost.addTextChangeListener(event -> textChange(event, fieldCost));
-        fieldDescription.addTextChangeListener(event -> textChange(event, fieldDescription));
+        cost.addTextChangeListener(event -> textChange(event, cost));
+        description.addTextChangeListener(event -> textChange(event, description));
     }
 
     private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
@@ -136,8 +139,8 @@ public class WindowAddOrder extends Window  {
 
             textField.setCursorPosition(event.getCursorPosition());
 
-            fieldCost.validate();
-            fieldDescription.validate();
+            cost.validate();
+            description.validate();
 
             ok.setEnabled(true);
         } catch (Validator.InvalidValueException e) {
@@ -146,12 +149,12 @@ public class WindowAddOrder extends Window  {
     }
 
     private void ok(Button.ClickEvent event) {
-        LocalDate dateStart = fieldDateStart.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate dateFinish = fieldDateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dateStart = this.dateStart.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dateFinish = this.dateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
        try {
-            DAO.getInstance().storeOrder(fieldDescription.getValue(),((Client)selectClient.getValue()).getID(),
+            DAO.getInstance().storeOrder(description.getValue(),((Client)selectClient.getValue()).getID(),
                     ((Mechanic)selectMechanic.getValue()).getID(),
-                    dateStart, dateFinish, Double.parseDouble(fieldCost.getValue()),
+                    dateStart, dateFinish, Double.parseDouble(cost.getValue()),
                     Order.Status.valueOf(selectStatus.getValue().toString()));
             getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
             close();

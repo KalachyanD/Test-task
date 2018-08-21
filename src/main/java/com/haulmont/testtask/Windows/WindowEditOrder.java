@@ -13,7 +13,6 @@ import models.Order;
 
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -25,12 +24,12 @@ import java.util.List;
  */
 public class WindowEditOrder extends Window  {
 
-    private TextField fieldDescription = new TextField("Description");
+    private TextField description = new TextField("Description");
     private NativeSelect selectClient = new NativeSelect("Client");
     private NativeSelect selectMechanic = new NativeSelect("Mechanic");
-    private DateField fieldDateStart = new DateField("Date start");
-    private DateField fieldDateFinish = new DateField("Date finish");
-    private TextField fieldCost = new TextField("Cost");
+    private DateField dateStart = new DateField("Date start");
+    private DateField dateFinish = new DateField("Date finish");
+    private TextField cost = new TextField("Cost");
     private NativeSelect selectStatus = new NativeSelect("Status");
     private Button ok = new Button("OK", this::ok);
     private Button cancel = new Button("Cancel",event -> close());
@@ -51,8 +50,11 @@ public class WindowEditOrder extends Window  {
         setClosable(true); // Disable the close button
         setModal(true); // Enable modal window mode
 
-        VerticalLayout verticalFields = new VerticalLayout (fieldDescription,selectClient,selectMechanic,fieldDateStart,fieldDateFinish,
-                fieldCost,selectStatus);
+        description.setMaxLength(100);
+        cost.setMaxLength(19);
+
+        VerticalLayout verticalFields = new VerticalLayout (description,selectClient,selectMechanic, dateStart, dateFinish,
+                cost,selectStatus);
         verticalFields.setSpacing(false);
         verticalFields.setMargin(false);
 
@@ -104,18 +106,18 @@ public class WindowEditOrder extends Window  {
         selectMechanic.setValue(mechanics.get((int) orders.get((int) this.orderID).getMechanic().getID()-1));
         selectMechanic.setNullSelectionAllowed(false);
 
-        fieldDescription.setValue(orders.get((int) this.orderID).getDescription());
+        description.setValue(orders.get((int) this.orderID).getDescription());
 
-        fieldDateStart.setValue(new Date());
-        fieldDateFinish.setValue(new Date());
+        dateStart.setValue(new Date());
+        dateFinish.setValue(new Date());
 
-        fieldDateFinish.validate();
-        fieldDateStart.validate();
+        dateFinish.validate();
+        dateStart.validate();
 
-        fieldDateFinish.setValidationVisible(true);
-        fieldDateStart.setValidationVisible(true);
+        dateFinish.setValidationVisible(true);
+        dateStart.setValidationVisible(true);
 
-        fieldCost.setValue(Double.toString(orders.get((int) this.orderID).getCost()));
+        cost.setValue(Double.toString(orders.get((int) this.orderID).getCost()));
         selectStatus.addItems(Order.Status.Planned, Order.Status.Completed, Order.Status.Accepted);
         selectStatus.setValue(orders.get((int) this.orderID).getStatus());
         selectStatus.setNullSelectionAllowed(false);
@@ -123,30 +125,30 @@ public class WindowEditOrder extends Window  {
 
     private void validation(){
         //VALIDATION
-        fieldDescription.addValidator(stringLengthValidator);
+        description.addValidator(stringLengthValidator);
 
-        fieldCost.setRequired(true);
-        fieldCost.setRequiredError("Prompt is empty.");
+        cost.setRequired(true);
+        cost.setRequiredError("Prompt is empty.");
 
         //To convert string value to integer before validation
-        fieldCost.setConverter(new toDoubleConverter());
-        fieldCost.addValidator(new DoubleRangeValidator("Value is negative",0.0,
+        cost.setConverter(new toDoubleConverter());
+        cost.addValidator(new DoubleRangeValidator("Value is negative",0.0,
                 Double.MAX_VALUE));
 
         //What if text field is empty - integer will be null in that case, so show blank when null
-        fieldCost.setNullRepresentation("");
+        cost.setNullRepresentation("");
 
-        fieldDescription.setValidationVisible(true);
-        fieldCost.setValidationVisible(true);
+        description.setValidationVisible(true);
+        cost.setValidationVisible(true);
 
-        fieldDescription.setImmediate(true);
-        fieldCost.setImmediate(true);
+        description.setImmediate(true);
+        cost.setImmediate(true);
 
-        fieldDescription.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-        fieldCost.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        description.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        cost.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
 
-        fieldCost.addTextChangeListener(event -> textChange(event, fieldCost));
-        fieldDescription.addTextChangeListener(event -> textChange(event, fieldDescription));
+        cost.addTextChangeListener(event -> textChange(event, cost));
+        description.addTextChangeListener(event -> textChange(event, description));
     }
 
     private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
@@ -155,8 +157,8 @@ public class WindowEditOrder extends Window  {
 
             textField.setCursorPosition(event.getCursorPosition());
 
-            fieldCost.validate();
-            fieldDescription.validate();
+            cost.validate();
+            description.validate();
 
             ok.setEnabled(true);
         } catch (Validator.InvalidValueException e) {
@@ -165,13 +167,13 @@ public class WindowEditOrder extends Window  {
     }
 
     private void ok(Button.ClickEvent event) {DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-        LocalDate dateStart = fieldDateStart.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate dateFinish = fieldDateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dateStart = this.dateStart.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate dateFinish = this.dateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         try {
             Order.Status status = Order.Status.valueOf(selectStatus.getValue().toString());
-            DAO.getInstance().updateOrder(orderID+1, fieldDescription.getValue(),((Client)selectClient.getValue()).getID(),
+            DAO.getInstance().updateOrder(orderID+1, description.getValue(),((Client)selectClient.getValue()).getID(),
                     ((Mechanic)selectMechanic.getValue()).getID(),
-                    dateStart, dateFinish, Double.parseDouble(fieldCost.getValue()), status);
+                    dateStart, dateFinish, Double.parseDouble(cost.getValue()), status);
             getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
             close();
         } catch (SQLException e) {

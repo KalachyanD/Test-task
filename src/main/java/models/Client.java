@@ -10,9 +10,9 @@ public class Client {
     //Patronymic
     private String patronymic;
     //Telephone number
-    private int phoneNumber;
+    private long phoneNumber;
 
-    public Client(long id, String name, String surname, String patronymic, int telephoneNumber) {
+    public Client(long id, String name, String surname, String patronymic, long telephoneNumber) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -48,7 +48,7 @@ public class Client {
         this.patronymic = patronymic;
     }
 
-    public int getPhoneNumber() {
+    public long getPhoneNumber() {
         return phoneNumber;
     }
 

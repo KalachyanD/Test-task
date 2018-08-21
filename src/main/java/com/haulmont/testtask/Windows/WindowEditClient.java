@@ -15,10 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WindowEditClient extends Window {
-    private TextField fieldName = new TextField("Name");
-    private TextField fieldSurname = new TextField("Surname");
-    private TextField fieldPatronymic = new TextField("Patronymic");
-    private TextField fieldTelephone = new TextField("Telephone");
+    private TextField name = new TextField("Name");
+    private TextField surname = new TextField("Surname");
+    private TextField patronymic = new TextField("Patronymic");
+    private TextField phoneNumber = new TextField("Telephone");
     private Button ok = new Button("OK",this::ok);
     private Button cancel = new Button("Cancel",event -> close());
     private long id;
@@ -47,10 +47,10 @@ public class WindowEditClient extends Window {
 
         }
 
-        fieldName.setValue(clients.get((int)this.id).getName());
-        fieldSurname.setValue(clients.get((int)this.id).getSurname());
-        fieldPatronymic.setValue(clients.get((int)this.id).getPatronymic());
-        fieldTelephone.setValue(Integer.toString(clients.get((int)this.id).getPhoneNumber()));
+        name.setValue(clients.get((int)this.id).getName());
+        surname.setValue(clients.get((int)this.id).getSurname());
+        patronymic.setValue(clients.get((int)this.id).getPatronymic());
+        phoneNumber.setValue(Long.toString(clients.get((int)this.id).getPhoneNumber()));
     }
 
     private void buildWindow(){
@@ -58,7 +58,12 @@ public class WindowEditClient extends Window {
         setClosable(true); // Enable the close button
         setModal(true); // Enable modal window mode
 
-        VerticalLayout verticalFields = new VerticalLayout (fieldName,fieldSurname,fieldPatronymic,fieldTelephone);
+        name.setMaxLength(50);
+        surname.setMaxLength(50);
+        patronymic.setMaxLength(50);
+        phoneNumber.setMaxLength(19);
+
+        VerticalLayout verticalFields = new VerticalLayout (name, surname, patronymic, phoneNumber);
         verticalFields.setSpacing(true);
         verticalFields.setMargin(true);
 
@@ -75,40 +80,40 @@ public class WindowEditClient extends Window {
 
     private void validation(){
         //validation
-        fieldName.addValidator(stringLengthValidator);
-        fieldSurname.addValidator(stringLengthValidator);
-        fieldPatronymic.addValidator(stringLengthValidator);
+        name.addValidator(stringLengthValidator);
+        surname.addValidator(stringLengthValidator);
+        patronymic.addValidator(stringLengthValidator);
 
-        fieldTelephone.setRequired(true);
-        fieldTelephone.setRequiredError("Prompt is empty.");
+        phoneNumber.setRequired(true);
+        phoneNumber.setRequiredError("Prompt is empty.");
 
         //To convert string value to integer before validation
-        fieldTelephone.setConverter(new StringToIntegerConverter());
-        fieldTelephone.addValidator(new IntegerRangeValidator("Value is negative",0,
+        phoneNumber.setConverter(new StringToIntegerConverter());
+        phoneNumber.addValidator(new IntegerRangeValidator("Value is negative",0,
                 Integer.MAX_VALUE));
 
         //What if text field is empty - integer will be null in that case, so show blank when null
-        fieldTelephone.setNullRepresentation("");
+        phoneNumber.setNullRepresentation("");
 
-        fieldName.setValidationVisible(true);
-        fieldSurname.setValidationVisible(true);
-        fieldPatronymic.setValidationVisible(true);
-        fieldTelephone.setValidationVisible(true);
+        name.setValidationVisible(true);
+        surname.setValidationVisible(true);
+        patronymic.setValidationVisible(true);
+        phoneNumber.setValidationVisible(true);
 
-        fieldName.setImmediate(true);
-        fieldSurname.setImmediate(true);
-        fieldPatronymic.setImmediate(true);
-        fieldTelephone.setImmediate(true);
+        name.setImmediate(true);
+        surname.setImmediate(true);
+        patronymic.setImmediate(true);
+        phoneNumber.setImmediate(true);
 
-        fieldName.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-        fieldSurname.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-        fieldPatronymic.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-        fieldTelephone.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        name.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        surname.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        patronymic.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        phoneNumber.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
 
-        fieldName.addTextChangeListener(event -> textChange(event, fieldName));
-        fieldSurname.addTextChangeListener(event -> textChange(event, fieldSurname));
-        fieldPatronymic.addTextChangeListener(event -> textChange(event, fieldPatronymic));
-        fieldTelephone.addTextChangeListener(event -> textChange(event, fieldTelephone));
+        name.addTextChangeListener(event -> textChange(event, name));
+        surname.addTextChangeListener(event -> textChange(event, surname));
+        patronymic.addTextChangeListener(event -> textChange(event, patronymic));
+        phoneNumber.addTextChangeListener(event -> textChange(event, phoneNumber));
     }
 
     private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
@@ -117,10 +122,10 @@ public class WindowEditClient extends Window {
 
             textField.setCursorPosition(event.getCursorPosition());
 
-            fieldSurname.validate();
-            fieldName.validate();
-            fieldPatronymic.validate();
-            fieldTelephone.validate();
+            surname.validate();
+            name.validate();
+            patronymic.validate();
+            phoneNumber.validate();
 
             ok.setEnabled(true);
         } catch (Validator.InvalidValueException e) {
@@ -130,9 +135,9 @@ public class WindowEditClient extends Window {
 
     private void ok(Button.ClickEvent event){
         try {
-            DAO.getInstance().updateClient(id+1, fieldName.getValue(), fieldSurname.getValue(),
-                    fieldPatronymic.getValue(),
-                    Integer.parseInt(fieldTelephone.getConvertedValue().toString()));
+            DAO.getInstance().updateClient(id+1, name.getValue(), surname.getValue(),
+                    patronymic.getValue(),
+                    Integer.parseInt(phoneNumber.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridC.UpdateGrid();
             getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
             close();

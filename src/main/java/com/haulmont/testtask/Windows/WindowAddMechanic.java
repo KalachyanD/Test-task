@@ -11,10 +11,10 @@ import dao.DAO;
 import java.sql.SQLException;
 
 public class WindowAddMechanic extends Window {
-    private TextField fieldName = new TextField("Name");
-    private TextField fieldSurname = new TextField("Surname");
-    private TextField fieldPatronymic = new TextField("Patronymic");
-    private TextField fieldHourlyPay = new TextField("Hourly Pay");
+    private TextField name = new TextField("Name");
+    private TextField surname = new TextField("Surname");
+    private TextField patronymic = new TextField("Patronymic");
+    private TextField hourlyPay = new TextField("Hourly Pay");
     private Button ok = new Button("OK",this::ok);
     private Button cancel = new Button("Cancel",event -> close());
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
@@ -33,7 +33,12 @@ public class WindowAddMechanic extends Window {
         setClosable(true); // Enable the close button
         setModal(true); // Enable modal window mode
 
-        VerticalLayout verticalFields = new VerticalLayout (fieldName,fieldSurname,fieldPatronymic,fieldHourlyPay);
+        name.setMaxLength(50);
+        surname.setMaxLength(50);
+        patronymic.setMaxLength(50);
+        hourlyPay.setMaxLength(19);
+
+        VerticalLayout verticalFields = new VerticalLayout (name, surname, patronymic, hourlyPay);
         verticalFields.setSpacing(true);
         verticalFields.setMargin(true);
 
@@ -53,42 +58,42 @@ public class WindowAddMechanic extends Window {
 
     private void validation(){
         //validation
-        fieldName.addValidator(stringLengthValidator);
-        fieldSurname.addValidator(stringLengthValidator);
-        fieldPatronymic.addValidator(stringLengthValidator);
+        name.addValidator(stringLengthValidator);
+        surname.addValidator(stringLengthValidator);
+        patronymic.addValidator(stringLengthValidator);
 
-        fieldHourlyPay.setRequired(true);
-        fieldHourlyPay.setRequiredError("Prompt is empty.");
+        hourlyPay.setRequired(true);
+        hourlyPay.setRequiredError("Prompt is empty.");
 
-        //fieldHourlyPay.setLocale(Locale.ENGLISH);
+        //hourlyPay.setLocale(Locale.ENGLISH);
 
         //To convert string value to integer before validation
-        //fieldHourlyPay.setConverter(new StringToDoubleConverter());
-        fieldHourlyPay.setConverter(new toDoubleConverter());
-        fieldHourlyPay.addValidator(doubleRangeValidator);
+        //hourlyPay.setConverter(new StringToDoubleConverter());
+        hourlyPay.setConverter(new toDoubleConverter());
+        hourlyPay.addValidator(doubleRangeValidator);
 
         //What if text field is empty - integer will be null in that case, so show blank when null
-        fieldHourlyPay.setNullRepresentation("");
+        hourlyPay.setNullRepresentation("");
 
-        fieldName.setValidationVisible(true);
-        fieldSurname.setValidationVisible(true);
-        fieldPatronymic.setValidationVisible(true);
-        fieldHourlyPay.setValidationVisible(true);
+        name.setValidationVisible(true);
+        surname.setValidationVisible(true);
+        patronymic.setValidationVisible(true);
+        hourlyPay.setValidationVisible(true);
 
-        fieldName.setImmediate(true);
-        fieldSurname.setImmediate(true);
-        fieldPatronymic.setImmediate(true);
-        fieldHourlyPay.setImmediate(true);
+        name.setImmediate(true);
+        surname.setImmediate(true);
+        patronymic.setImmediate(true);
+        hourlyPay.setImmediate(true);
 
-        fieldName.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-        fieldSurname.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-        fieldPatronymic.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-        fieldHourlyPay.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        name.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        surname.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        patronymic.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        hourlyPay.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
 
-        fieldName.addTextChangeListener(event -> textChange(event, fieldName));
-        fieldSurname.addTextChangeListener(event -> textChange(event, fieldSurname));
-        fieldPatronymic.addTextChangeListener(event -> textChange(event, fieldPatronymic));
-        fieldHourlyPay.addTextChangeListener(event -> textChange(event, fieldHourlyPay));
+        name.addTextChangeListener(event -> textChange(event, name));
+        surname.addTextChangeListener(event -> textChange(event, surname));
+        patronymic.addTextChangeListener(event -> textChange(event, patronymic));
+        hourlyPay.addTextChangeListener(event -> textChange(event, hourlyPay));
     }
 
     private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
@@ -97,10 +102,10 @@ public class WindowAddMechanic extends Window {
 
             textField.setCursorPosition(event.getCursorPosition());
 
-            fieldSurname.validate();
-            fieldName.validate();
-            fieldPatronymic.validate();
-            fieldHourlyPay.validate();
+            surname.validate();
+            name.validate();
+            patronymic.validate();
+            hourlyPay.validate();
 
             ok.setEnabled(true);
         } catch (Validator.InvalidValueException e) {
@@ -110,9 +115,9 @@ public class WindowAddMechanic extends Window {
 
     private void ok(Button.ClickEvent event){
         try {
-            DAO.getInstance().storeMechanic(fieldName.getValue(), fieldSurname.getValue(),
-                    fieldPatronymic.getValue(),
-                    Double.parseDouble(fieldHourlyPay.getConvertedValue().toString()));
+            DAO.getInstance().storeMechanic(name.getValue(), surname.getValue(),
+                    patronymic.getValue(),
+                    Double.parseDouble(hourlyPay.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridM.UpdateGrid();
             close();
         } catch (SQLException e) {

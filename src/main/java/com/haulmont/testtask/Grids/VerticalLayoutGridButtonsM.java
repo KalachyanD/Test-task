@@ -21,7 +21,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
     private Button buttonDeleteMechanic = new Button("Delete",this::deleteMechanic);
     private Button buttonEditMechanic = new Button("Edit",this::editMechanic);
     private Button buttonAddMechanic = new Button("Add",this::addMechanic);
-    private Button buttonStatistics = new Button("Statistics",this::statisticsMechanic);
+    private Button buttonStatistic = new Button("Statistic",this::statisticsMechanic);
     private Mechanic mechanic;
     private Label label = new Label();
     private boolean enable = false;
@@ -34,7 +34,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
         gridMechanics.setHeight("300");
         gridMechanics.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridMechanics.addSelectionListener(event -> selectionOrder());
-        addComponents(gridMechanics,buttonDeleteMechanic,buttonEditMechanic,buttonAddMechanic,buttonStatistics,label);
+        addComponents(gridMechanics,buttonDeleteMechanic,buttonEditMechanic,buttonAddMechanic, buttonStatistic,label);
         UpdateGrid();
         gridMechanics.removeColumn("ID");
     }
