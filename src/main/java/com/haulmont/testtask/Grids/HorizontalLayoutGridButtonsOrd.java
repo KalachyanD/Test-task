@@ -3,10 +3,7 @@ package com.haulmont.testtask.Grids;
 import com.haulmont.testtask.Windows.WindowAddOrder;
 import com.haulmont.testtask.Windows.WindowEditOrder;
 import com.vaadin.data.util.BeanItemContainer;
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Grid;
-import com.vaadin.ui.HorizontalLayout;
-import com.vaadin.ui.UI;
+import com.vaadin.ui.*;
 import dao.DAO;
 import models.Order;
 
@@ -26,6 +23,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
     private Button buttonDeleteOrder = new Button("Delete",this::deleteOrder);
     private Order order;
     private boolean enable = false;
+    private TextField filter = new TextField("Filter...");
 
     public HorizontalLayoutGridButtonsOrd() {
         buildLayout();
@@ -42,7 +40,8 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         // Create firstField gridOrders bound to the containerOrders
         BeanItemContainer<Order> containerGridOrders = new BeanItemContainer<>(Order.class, orders);
         gridOrders.setContainerDataSource(containerGridOrders);
-        gridOrders.setColumnOrder("ID","description","client","mechanic","startDate","endDate","cost","status");
+        gridOrders.removeColumn("ID");
+        gridOrders.setColumnOrder("description","client","mechanic","startDate","endDate","cost","status");
     }
 
     private void buildLayout(){
@@ -50,7 +49,8 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         gridOrders.setHeight("300");
         gridOrders.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridOrders.addSelectionListener(event -> selectionOrder());
-        //gridOrders.clearSortOrder();
+        //gridOrders.addRow(filter);
+
         addComponents(gridOrders,buttonAddOrder,buttonEditOrder,buttonDeleteOrder);
 
         UpdateGrid();
