@@ -1,18 +1,17 @@
 package com.haulmont.testtask.Windows;
 
-import com.haulmont.testtask.UI.MainUI;
 import com.vaadin.data.Validator;
-import com.vaadin.data.util.converter.StringToIntegerConverter;
-import com.vaadin.data.validator.IntegerRangeValidator;
+import com.vaadin.data.util.converter.StringToLongConverter;
+import com.vaadin.data.validator.LongRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
-import dao.DAO;
-import models.Client;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
+import com.haulmont.testtask.UI.MainUI;
+import dao.DAO;
+import models.Client;
 
 public class WindowEditClient extends Window {
     private TextField name = new TextField("Name");
@@ -70,7 +69,6 @@ public class WindowEditClient extends Window {
     }
 
     private void validation(){
-        //validation
         name.addValidator(stringLengthValidator);
         surname.addValidator(stringLengthValidator);
         patronymic.addValidator(stringLengthValidator);
@@ -79,9 +77,9 @@ public class WindowEditClient extends Window {
         phoneNumber.setRequiredError("Prompt is empty.");
 
         //To convert string value to integer before validation
-        phoneNumber.setConverter(new StringToIntegerConverter());
-        phoneNumber.addValidator(new IntegerRangeValidator("Value is negative",0,
-                Integer.MAX_VALUE));
+        phoneNumber.setConverter(new StringToLongConverter());
+        phoneNumber.addValidator(new LongRangeValidator("Value is negative",(long) 0,
+                Long.MAX_VALUE));
 
         //What if text field is empty - integer will be null in that case, so show blank when null
         phoneNumber.setNullRepresentation("");
@@ -131,6 +129,8 @@ public class WindowEditClient extends Window {
                     Integer.parseInt(phoneNumber.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridC.UpdateGrid();
             getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
+            getUI().design.horizontalLayoutTopGrids.verticalGridC.buttonEditClient.setEnabled(false);
+            getUI().design.horizontalLayoutTopGrids.verticalGridC.buttonDeleteClient.setEnabled(false);
             close();
         } catch (SQLException e) {
             e.printStackTrace();

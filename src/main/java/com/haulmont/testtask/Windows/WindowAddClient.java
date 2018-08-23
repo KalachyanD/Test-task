@@ -1,16 +1,17 @@
 package com.haulmont.testtask.Windows;
 
-
-import com.haulmont.testtask.UI.MainUI;
 import com.vaadin.data.Validator;
-import com.vaadin.data.util.converter.StringToIntegerConverter;
-import com.vaadin.data.validator.IntegerRangeValidator;
+import com.vaadin.data.util.converter.StringToLongConverter;
+import com.vaadin.data.validator.LongRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
-import dao.DAO;
 
 import java.sql.SQLException;
+
+import com.haulmont.testtask.UI.MainUI;
+import dao.DAO;
+
 
 public class WindowAddClient extends Window {
     private TextField name = new TextField("Name");
@@ -37,6 +38,7 @@ public class WindowAddClient extends Window {
         surname.setMaxLength(50);
         patronymic.setMaxLength(50);
         phoneNumber.setMaxLength(19);
+        ok.setEnabled(false);
 
         VerticalLayout verticalFields = new VerticalLayout (name, surname, patronymic, phoneNumber);
         verticalFields.setSpacing(true);
@@ -54,7 +56,6 @@ public class WindowAddClient extends Window {
     }
 
     private void validation(){
-        //VALIDATION
         name.addValidator(stringLengthValidator);
         surname.addValidator(stringLengthValidator);
         patronymic.addValidator(stringLengthValidator);
@@ -63,9 +64,9 @@ public class WindowAddClient extends Window {
         phoneNumber.setRequiredError("Prompt is empty.");
 
         //To convert string value to integer before validation
-        phoneNumber.setConverter(new StringToIntegerConverter());
-        phoneNumber.addValidator(new IntegerRangeValidator("Value is negative",0,
-                Integer.MAX_VALUE));
+        phoneNumber.setConverter(new StringToLongConverter());
+        phoneNumber.addValidator(new LongRangeValidator("Value is negative", (long) 0,
+                Long.MAX_VALUE));
 
         //What if text field is empty - integer will be null in that case, so show blank when null
         phoneNumber.setNullRepresentation("");
@@ -93,7 +94,6 @@ public class WindowAddClient extends Window {
     private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
         try {
             textField.setValue(event.getText());
-
             textField.setCursorPosition(event.getCursorPosition());
 
             surname.validate();

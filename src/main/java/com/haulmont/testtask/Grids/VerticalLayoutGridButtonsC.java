@@ -1,28 +1,26 @@
 package com.haulmont.testtask.Grids;
 
-import com.haulmont.testtask.Windows.*;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
-import dao.DAO;
-import models.Client;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by User on 04.08.2017.
- */
+import com.haulmont.testtask.UI.MainUI;
+import com.haulmont.testtask.Windows.*;
+import dao.DAO;
+import models.Client;
+
 public class VerticalLayoutGridButtonsC extends VerticalLayout {
 
     private Grid gridClients = new Grid("Clients");
-    private Button buttonDeleteClient = new Button("Delete",this::deleteClient);
-    private Button buttonEditClient = new Button("Edit",this::editClient);
-    private Button buttonAddClient = new Button("Add",this::addClient);
+    public Button buttonDeleteClient = new Button("Delete", this::deleteClient);
+    public Button buttonEditClient = new Button("Edit", this::editClient);
+    private Button buttonAddClient = new Button("Add", this::addClient);
     private Client client;
-    private boolean enable = false;
 
-    public VerticalLayoutGridButtonsC(){
+    public VerticalLayoutGridButtonsC() {
         buildLayout();
     }
 
@@ -31,7 +29,7 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
         try {
             clients = DAO.getInstance().LoadAllClients();
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
 
         // Have firstField containerGridClients of some type to contain the data
@@ -39,47 +37,52 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
 
         // Create firstField gridClients bound to the containerGridClients
         gridClients.setContainerDataSource(containerGridClients);
-        gridClients.setColumnOrder("name","surname","patronymic","phoneNumber");
+        gridClients.setColumnOrder("name", "surname", "patronymic", "phoneNumber");
     }
 
-    private void buildLayout(){
+    private void buildLayout() {
         gridClients.setHeight("300");
         gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
-        gridClients.addSelectionListener(event -> selectionOrder());
-        addComponents(gridClients,buttonDeleteClient,buttonEditClient,buttonAddClient);
+        gridClients.addSelectionListener(event -> selection());
+        addComponents(gridClients, buttonDeleteClient, buttonEditClient, buttonAddClient);
         UpdateGrid();
         gridClients.removeColumn("ID");
-    }
+        buttonDeleteClient.setEnabled(false);
+        buttonEditClient.setEnabled(false);
+}
 
-    private void addClient(Button.ClickEvent event){
+    private void addClient(Button.ClickEvent event) {
         WindowAddClient window = new WindowAddClient();
         UI.getCurrent().addWindow(window);
     }
 
-    private void deleteClient(Button.ClickEvent event){
-        if(enable == true) {
-            try {
-                DAO.getInstance().deleteClient(client.getID());
-                UpdateGrid();
-            }catch (java.sql.SQLIntegrityConstraintViolationException e) {
-                Notification.show("Deleting is impossible", "This client locate in Order Table.",
-                        Notification.Type.WARNING_MESSAGE);
-            }
-            catch (SQLException e) {
-                e.printStackTrace();
-            }
+    private void deleteClient(Button.ClickEvent event) {
+        try {
+            DAO.getInstance().deleteClient(client.getID());
+            UpdateGrid();
+            buttonDeleteClient.setEnabled(false);
+            buttonEditClient.setEnabled(false);
+        } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+            Notification.show("Deleting is impossible", "This client locate in Order Table.",
+                    Notification.Type.WARNING_MESSAGE);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 
-    private void editClient(Button.ClickEvent event){
-        if(enable == true) {
-            WindowEditClient window = new WindowEditClient(client.getID());
-            UI.getCurrent().addWindow(window);
-        }
+    private void editClient(Button.ClickEvent event) {
+        WindowEditClient window = new WindowEditClient(client.getID());
+        UI.getCurrent().addWindow(window);
     }
 
-    private void selectionOrder(){
-        client =(Client)gridClients.getSelectedRow();
-        enable = true;
+    private void selection() {
+        client = (Client) gridClients.getSelectedRow();
+        buttonDeleteClient.setEnabled(true);
+        buttonEditClient.setEnabled(true);
+    }
+
+    @Override
+    public MainUI getUI() {
+        return (MainUI) super.getUI();
     }
 }

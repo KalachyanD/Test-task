@@ -1,15 +1,16 @@
 package com.haulmont.testtask.Grids;
 
-import com.haulmont.testtask.Windows.WindowAddOrder;
-import com.haulmont.testtask.Windows.WindowEditOrder;
+
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
-import dao.DAO;
-import models.Order;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.haulmont.testtask.Windows.*;
+import dao.DAO;
+import models.Order;
 
 /**
  * Created by User on 04.08.2017.
@@ -19,11 +20,9 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
 
     private Grid gridOrders = new Grid("Orders");
     private Button buttonAddOrder = new Button("Add", this::addOrder);
-    private Button buttonEditOrder = new Button("Edit",this::editOrder);
-    private Button buttonDeleteOrder = new Button("Delete",this::deleteOrder);
+    public Button buttonEditOrder = new Button("Edit", this::editOrder);
+    public Button buttonDeleteOrder = new Button("Delete", this::deleteOrder);
     private Order order;
-    private boolean enable = false;
-    private TextField filter = new TextField("Filter...");
 
     public HorizontalLayoutGridButtonsOrd() {
         buildLayout();
@@ -40,46 +39,48 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         // Create firstField gridOrders bound to the containerOrders
         BeanItemContainer<Order> containerGridOrders = new BeanItemContainer<>(Order.class, orders);
         gridOrders.setContainerDataSource(containerGridOrders);
-        gridOrders.setColumnOrder("description","client","mechanic","startDate","endDate","cost","status");
+        gridOrders.setColumnOrder("description", "client", "mechanic", "startDate", "endDate", "cost", "status");
     }
 
-    private void buildLayout(){
+    private void buildLayout() {
         gridOrders.setWidth("1000");
         gridOrders.setHeight("300");
         gridOrders.setSelectionMode(Grid.SelectionMode.SINGLE);
-        gridOrders.addSelectionListener(event -> selectionOrder());
+        gridOrders.addSelectionListener(event -> selection());
         //gridOrders.addRow(filter);
 
-        addComponents(gridOrders,buttonAddOrder,buttonEditOrder,buttonDeleteOrder);
+        addComponents(gridOrders, buttonAddOrder, buttonEditOrder, buttonDeleteOrder);
         UpdateGrid();
         gridOrders.removeColumn("ID");
+        buttonDeleteOrder.setEnabled(false);
+        buttonEditOrder.setEnabled(false);
     }
 
-    private void addOrder(Button.ClickEvent event){
+    private void addOrder(Button.ClickEvent event) {
         WindowAddOrder window = new WindowAddOrder();
         UI.getCurrent().addWindow(window);
     }
 
-    private void selectionOrder(){
-        order =(Order)gridOrders.getSelectedRow();
-        enable = true;
+    private void selection() {
+        order = (Order) gridOrders.getSelectedRow();
+        buttonDeleteOrder.setEnabled(true);
+        buttonEditOrder.setEnabled(true);
     }
 
-    private void deleteOrder(Button.ClickEvent event){
-        if(enable == true) {
-            try {
-                DAO.getInstance().deleteOrder(order.getID());
-                UpdateGrid();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+    private void deleteOrder(Button.ClickEvent event) {
+        try {
+            DAO.getInstance().deleteOrder(order.getID());
+            UpdateGrid();
+            buttonDeleteOrder.setEnabled(false);
+            buttonEditOrder.setEnabled(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
     }
 
-    private void editOrder(Button.ClickEvent event){
-        if(enable == true) {
-            WindowEditOrder window = new WindowEditOrder(order.getID());
-            UI.getCurrent().addWindow(window);
-        }
+    private void editOrder(Button.ClickEvent event) {
+        WindowEditOrder window = new WindowEditOrder(order.getID());
+        UI.getCurrent().addWindow(window);
     }
 }

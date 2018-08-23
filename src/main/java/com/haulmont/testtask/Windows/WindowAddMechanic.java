@@ -1,14 +1,16 @@
 package com.haulmont.testtask.Windows;
 
-import com.haulmont.testtask.UI.MainUI;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.DoubleRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
+
 import dao.DAO;
+import com.haulmont.testtask.UI.MainUI;
 
 import java.sql.SQLException;
+
 
 public class WindowAddMechanic extends Window {
     private TextField name = new TextField("Name");
@@ -19,8 +21,6 @@ public class WindowAddMechanic extends Window {
     private Button cancel = new Button("Cancel",event -> close());
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
-    private DoubleRangeValidator doubleRangeValidator = new DoubleRangeValidator("Value is negative",
-            0.0,Double.MAX_VALUE);
 
     public WindowAddMechanic(){
         super("Add Mechanic"); // Set window caption
@@ -37,6 +37,7 @@ public class WindowAddMechanic extends Window {
         surname.setMaxLength(50);
         patronymic.setMaxLength(50);
         hourlyPay.setMaxLength(19);
+        ok.setEnabled(false);
 
         VerticalLayout verticalFields = new VerticalLayout (name, surname, patronymic, hourlyPay);
         verticalFields.setSpacing(true);
@@ -57,7 +58,6 @@ public class WindowAddMechanic extends Window {
     }
 
     private void validation(){
-        //validation
         name.addValidator(stringLengthValidator);
         surname.addValidator(stringLengthValidator);
         patronymic.addValidator(stringLengthValidator);
@@ -65,12 +65,12 @@ public class WindowAddMechanic extends Window {
         hourlyPay.setRequired(true);
         hourlyPay.setRequiredError("Prompt is empty.");
 
-        //hourlyPay.setLocale(Locale.ENGLISH);
-
         //To convert string value to integer before validation
         //hourlyPay.setConverter(new StringToDoubleConverter());
+
         hourlyPay.setConverter(new toDoubleConverter());
-        hourlyPay.addValidator(doubleRangeValidator);
+        hourlyPay.addValidator(new DoubleRangeValidator("Value is negative",
+                    0.0, Double.MAX_VALUE));
 
         //What if text field is empty - integer will be null in that case, so show blank when null
         hourlyPay.setNullRepresentation("");

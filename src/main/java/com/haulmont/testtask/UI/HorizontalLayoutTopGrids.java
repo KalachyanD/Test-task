@@ -1,8 +1,9 @@
 package com.haulmont.testtask.UI;
 
+import com.vaadin.ui.HorizontalLayout;
+
 import com.haulmont.testtask.Grids.VerticalLayoutGridButtonsC;
 import com.haulmont.testtask.Grids.VerticalLayoutGridButtonsM;
-import com.vaadin.ui.HorizontalLayout;
 
 /**
  * Created by User on 04.08.2017.

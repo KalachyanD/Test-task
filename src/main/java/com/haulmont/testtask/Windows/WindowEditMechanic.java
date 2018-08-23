@@ -1,17 +1,16 @@
 package com.haulmont.testtask.Windows;
 
-import com.haulmont.testtask.UI.MainUI;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.DoubleRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
-import dao.DAO;
-import models.Mechanic;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
+
+import com.haulmont.testtask.UI.MainUI;
+import dao.DAO;
+import models.Mechanic;
 
 public class WindowEditMechanic extends Window {
     private TextField name = new TextField("Name");
@@ -130,6 +129,9 @@ public class WindowEditMechanic extends Window {
                     Double.parseDouble(hourlyPay.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridM.UpdateGrid();
             getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
+            getUI().design.horizontalLayoutTopGrids.verticalGridM.buttonEditMechanic.setEnabled(false);
+            getUI().design.horizontalLayoutTopGrids.verticalGridM.buttonDeleteMechanic.setEnabled(false);
+            getUI().design.horizontalLayoutTopGrids.verticalGridM.buttonStatistic.setEnabled(false);
             close();
         } catch (SQLException e) {
             e.printStackTrace();
