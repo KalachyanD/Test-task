@@ -37,8 +37,6 @@ public class WindowAddOrder extends Window {
     private NativeSelect selectStatus = new NativeSelect("Status");
     private Button ok = new Button("OK", this::ok);
     private Button cancel = new Button("Cancel", event -> close());
-    private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
-            1, 50, false);
 
     public WindowAddOrder() {
         super("Add Order"); // Set window caption
@@ -104,8 +102,8 @@ public class WindowAddOrder extends Window {
 
     private void validation() {
         //VALIDATION
-        description.addValidator(stringLengthValidator);
-
+        description.addValidator(new StringLengthValidator("Prompt is empty.",
+                1, 50, false));
         cost.setRequired(true);
         cost.setRequiredError("Prompt is empty.");
 
