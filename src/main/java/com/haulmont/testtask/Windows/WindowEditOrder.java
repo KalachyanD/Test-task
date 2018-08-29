@@ -184,7 +184,7 @@ public class WindowEditOrder extends Window {
                     this.dateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                     Double.parseDouble(cost.getValue()),
                     Order.Status.valueOf(selectStatus.getValue().toString()));
-            getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
+            getUI().design.horizontalLayoutGridButtonsOrd.updateGrid();
             getUI().design.horizontalLayoutGridButtonsOrd.buttonDeleteOrder.setEnabled(false);
             getUI().design.horizontalLayoutGridButtonsOrd.buttonEditOrder.setEnabled(false);
             close();

@@ -14,7 +14,7 @@ import models.Client;
 
 public class VerticalLayoutGridButtonsC extends VerticalLayout {
 
-    private Grid gridClients = new Grid("Clients");
+    public Grid gridClients = new Grid("Clients");
     public Button buttonDeleteClient = new Button("Delete", this::deleteClient);
     public Button buttonEditClient = new Button("Edit", this::editClient);
     private Button buttonAddClient = new Button("Add", this::addClient);
@@ -24,7 +24,7 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
         buildLayout();
     }
 
-    public void UpdateGrid() {
+    public void updateGrid() {
         List<Client> clients = new ArrayList<>();
         try {
             clients = DAO.getInstance().LoadAllClients();
@@ -45,11 +45,11 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
         gridClients.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridClients.addSelectionListener(event -> selection());
         addComponents(gridClients, buttonDeleteClient, buttonEditClient, buttonAddClient);
-        UpdateGrid();
+        updateGrid();
         gridClients.removeColumn("ID");
         buttonDeleteClient.setEnabled(false);
         buttonEditClient.setEnabled(false);
-}
+    }
 
     private void addClient(Button.ClickEvent event) {
         WindowAddClient window = new WindowAddClient();
@@ -57,22 +57,32 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
     }
 
     private void deleteClient(Button.ClickEvent event) {
-        try {
-            DAO.getInstance().deleteClient(client.getID());
-            UpdateGrid();
+        if (gridClients.getSelectedRow() == null) {
             buttonDeleteClient.setEnabled(false);
             buttonEditClient.setEnabled(false);
-        } catch (java.sql.SQLIntegrityConstraintViolationException e) {
-            Notification.show("Deleting is impossible", "This client locate in Order Table.",
-                    Notification.Type.WARNING_MESSAGE);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } else {
+            try {
+                DAO.getInstance().deleteClient(client.getID());
+                updateGrid();
+                buttonDeleteClient.setEnabled(false);
+                buttonEditClient.setEnabled(false);
+            } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+                Notification.show("Deleting is impossible", "This client locate in Order Table.",
+                        Notification.Type.WARNING_MESSAGE);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void editClient(Button.ClickEvent event) {
-        WindowEditClient window = new WindowEditClient(client.getID());
-        UI.getCurrent().addWindow(window);
+        if (gridClients.getSelectedRow() == null) {
+            buttonDeleteClient.setEnabled(false);
+            buttonEditClient.setEnabled(false);
+        } else {
+            WindowEditClient window = new WindowEditClient(client.getID());
+            UI.getCurrent().addWindow(window);
+        }
     }
 
     private void selection() {

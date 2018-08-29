@@ -127,8 +127,8 @@ public class WindowEditClient extends Window {
             DAO.getInstance().updateClient(id, name.getValue(), surname.getValue(),
                     patronymic.getValue(),
                     Integer.parseInt(phoneNumber.getConvertedValue().toString()));
-            getUI().design.horizontalLayoutTopGrids.verticalGridC.UpdateGrid();
-            getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
+            getUI().design.horizontalLayoutTopGrids.verticalGridC.updateGrid();
+            getUI().design.horizontalLayoutGridButtonsOrd.updateGrid();
             getUI().design.horizontalLayoutTopGrids.verticalGridC.buttonEditClient.setEnabled(false);
             getUI().design.horizontalLayoutTopGrids.verticalGridC.buttonDeleteClient.setEnabled(false);
             close();

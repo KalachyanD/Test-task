@@ -1,5 +1,6 @@
 package com.haulmont.testtask.UI;
 
+import com.vaadin.event.LayoutEvents;
 import com.vaadin.ui.HorizontalLayout;
 
 import com.haulmont.testtask.Grids.VerticalLayoutGridButtonsC;
@@ -20,5 +21,6 @@ public class HorizontalLayoutTopGrids extends HorizontalLayout {
         verticalGridM.setSpacing(true);
 
         addComponents(verticalGridC,verticalGridM);
+
     }
 }

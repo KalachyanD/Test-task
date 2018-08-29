@@ -34,14 +34,15 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
         gridMechanics.setSelectionMode(Grid.SelectionMode.SINGLE);
         gridMechanics.addSelectionListener(event -> selection());
         addComponents(gridMechanics, buttonDeleteMechanic, buttonEditMechanic, buttonAddMechanic, buttonStatistic);
-        UpdateGrid();
+        updateGrid();
         gridMechanics.removeColumn("ID");
         buttonDeleteMechanic.setEnabled(false);
         buttonEditMechanic.setEnabled(false);
         buttonStatistic.setEnabled(false);
+
     }
 
-    public void UpdateGrid() {
+    public void updateGrid() {
         List<Mechanic> mechanics = new ArrayList<>();
         try {
             mechanics = DAO.getInstance().LoadAllMechanics();
@@ -60,73 +61,89 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
     }
 
     private void deleteMechanic(Button.ClickEvent event) {
-        try {
-            DAO.getInstance().deleteMechanic(mechanic.getID());
-            UpdateGrid();
+        if (gridMechanics.getSelectedRow() == null) {
+            buttonStatistic.setEnabled(false);
             buttonEditMechanic.setEnabled(false);
             buttonDeleteMechanic.setEnabled(false);
-            buttonStatistic.setEnabled(false);
-        } catch (java.sql.SQLIntegrityConstraintViolationException e) {
-            Notification.show("Deleting is impossible", "This mechanic locate in Order Table.",
-                    Notification.Type.WARNING_MESSAGE);
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } else {
+            try {
+                DAO.getInstance().deleteMechanic(mechanic.getID());
+                updateGrid();
+                buttonEditMechanic.setEnabled(false);
+                buttonDeleteMechanic.setEnabled(false);
+                buttonStatistic.setEnabled(false);
+            } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+                Notification.show("Deleting is impossible", "This mechanic locate in Order Table.",
+                        Notification.Type.WARNING_MESSAGE);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
-
     private void editMechanic(Button.ClickEvent event) {
-        WindowEditMechanic window = new WindowEditMechanic(mechanic.getID());
-        UI.getCurrent().addWindow(window);
+        if (gridMechanics.getSelectedRow() == null) {
+            buttonStatistic.setEnabled(false);
+            buttonEditMechanic.setEnabled(false);
+            buttonDeleteMechanic.setEnabled(false);
+        } else {
+            WindowEditMechanic window = new WindowEditMechanic(mechanic.getID());
+            UI.getCurrent().addWindow(window);
+        }
     }
 
     private void statisticsMechanic(Button.ClickEvent event) {
+        if (gridMechanics.getSelectedRow() == null) {
+            buttonStatistic.setEnabled(false);
+            buttonEditMechanic.setEnabled(false);
+            buttonDeleteMechanic.setEnabled(false);
+        } else {
 
-        class WindowStatisticsMechanic extends Window {
+            class WindowStatisticsMechanic extends Window {
 
-            private Label label;
-            private int count = 0;
+                private Label label;
+                private int count = 0;
 
-            public WindowStatisticsMechanic(Mechanic mechanic) {
-                super(mechanic.getName());
-                preload(mechanic);
-                buildLayout();
-            }
-
-            private void preload(Mechanic mechanic) {
-                List<Order> orders = new ArrayList<>();
-                try {
-                    orders = DAO.getInstance().LoadAllOrders();
-                } catch (SQLException e) {
-
+                public WindowStatisticsMechanic(Mechanic mechanic) {
+                    super(mechanic.getName());
+                    preload(mechanic);
+                    buildLayout();
                 }
 
-                for (int i = 0; i < orders.size(); ++i) {
-                    if (mechanic.getID() == orders.get(i).getMechanic().getID()) {
-                        ++count;
+                private void preload(Mechanic mechanic) {
+                    List<Order> orders = new ArrayList<>();
+                    try {
+                        orders = DAO.getInstance().LoadAllOrders();
+                    } catch (SQLException e) {
+
+                    }
+
+                    for (int i = 0; i < orders.size(); ++i) {
+                        if (mechanic.getID() == orders.get(i).getMechanic().getID()) {
+                            ++count;
+                        }
                     }
                 }
+
+                private void buildLayout() {
+                    center(); //Position of window
+                    setClosable(true); // Disable the close button
+                    setModal(true); // Enable modal window mode
+
+                    label = new Label("Orders: " + count + ".");
+
+                    VerticalLayout verticalMain = new VerticalLayout(label);
+                    verticalMain.setSpacing(false);
+                    verticalMain.setMargin(false);
+
+                    setContent(verticalMain);
+                }
             }
 
-            private void buildLayout() {
-                center(); //Position of window
-                setClosable(true); // Disable the close button
-                setModal(true); // Enable modal window mode
-
-                label = new Label("Orders: " + count + ".");
-
-                VerticalLayout verticalMain = new VerticalLayout(label);
-                verticalMain.setSpacing(false);
-                verticalMain.setMargin(false);
-
-                setContent(verticalMain);
-            }
+            WindowStatisticsMechanic window = new WindowStatisticsMechanic(mechanic);
+            UI.getCurrent().addWindow(window);
         }
-
-        WindowStatisticsMechanic window = new WindowStatisticsMechanic(mechanic);
-        UI.getCurrent().addWindow(window);
     }
-
 
     private void selection() {
         mechanic = (Mechanic) gridMechanics.getSelectedRow();

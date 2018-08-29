@@ -127,8 +127,8 @@ public class WindowEditMechanic extends Window {
             DAO.getInstance().updateMechanic(id, name.getValue(), surname.getValue(),
                     patronymic.getValue(),
                     Double.parseDouble(hourlyPay.getConvertedValue().toString()));
-            getUI().design.horizontalLayoutTopGrids.verticalGridM.UpdateGrid();
-            getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
+            getUI().design.horizontalLayoutTopGrids.verticalGridM.updateGrid();
+            getUI().design.horizontalLayoutGridButtonsOrd.updateGrid();
             getUI().design.horizontalLayoutTopGrids.verticalGridM.buttonEditMechanic.setEnabled(false);
             getUI().design.horizontalLayoutTopGrids.verticalGridM.buttonDeleteMechanic.setEnabled(false);
             getUI().design.horizontalLayoutTopGrids.verticalGridM.buttonStatistic.setEnabled(false);

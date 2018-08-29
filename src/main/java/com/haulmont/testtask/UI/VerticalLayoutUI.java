@@ -21,5 +21,6 @@ public class VerticalLayoutUI extends VerticalLayout {
         horizontalLayoutGridButtonsOrd.setSpacing(true);
 
         addComponents(horizontalLayoutTopGrids,horizontalLayoutGridButtonsOrd);
+
     }
 }

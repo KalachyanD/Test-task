@@ -118,7 +118,7 @@ public class WindowAddMechanic extends Window {
             DAO.getInstance().storeMechanic(name.getValue(), surname.getValue(),
                     patronymic.getValue(),
                     Double.parseDouble(hourlyPay.getConvertedValue().toString()));
-            getUI().design.horizontalLayoutTopGrids.verticalGridM.UpdateGrid();
+            getUI().design.horizontalLayoutTopGrids.verticalGridM.updateGrid();
             close();
         } catch (SQLException e) {
             e.printStackTrace();

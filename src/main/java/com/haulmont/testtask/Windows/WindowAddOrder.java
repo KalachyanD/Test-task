@@ -168,7 +168,7 @@ public class WindowAddOrder extends Window {
                     ((Mechanic) selectMechanic.getValue()).getID(),
                     dateStart, dateFinish, Double.parseDouble(cost.getValue()),
                     Order.Status.valueOf(selectStatus.getValue().toString()));
-            getUI().design.horizontalLayoutGridButtonsOrd.UpdateGrid();
+            getUI().design.horizontalLayoutGridButtonsOrd.updateGrid();
             close();
         } catch (SQLException e) {
             e.printStackTrace();

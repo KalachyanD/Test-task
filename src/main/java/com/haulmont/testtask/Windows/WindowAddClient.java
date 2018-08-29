@@ -112,7 +112,7 @@ public class WindowAddClient extends Window {
             DAO.getInstance().storeClient(name.getValue(), surname.getValue(),
                     patronymic.getValue(),
                     Integer.parseInt(phoneNumber.getConvertedValue().toString()));
-            getUI().design.horizontalLayoutTopGrids.verticalGridC.UpdateGrid();
+            getUI().design.horizontalLayoutTopGrids.verticalGridC.updateGrid();
             close();
 
         } catch (SQLException e) {
