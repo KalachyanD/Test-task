@@ -1,9 +1,9 @@
-package com.haulmont.testtask.Windows;
+package com.haulmont.testtask.windows;
 
 import com.vaadin.data.util.converter.Converter;
 import java.util.Locale;
 
-public class toDoubleConverter  implements Converter<String, Double> {
+public class ToDoubleConverter implements Converter<String, Double> {
 
         @Override
         public Double convertToModel(String value, Class<? extends Double> targetType, Locale locale)

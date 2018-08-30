@@ -1,4 +1,4 @@
-package com.haulmont.testtask.Windows;
+package com.haulmont.testtask.windows;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.DoubleRangeValidator;
@@ -6,24 +6,26 @@ import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
 
-import dao.DAO;
-import com.haulmont.testtask.UI.MainUI;
-
 import java.sql.SQLException;
 
+import com.haulmont.testtask.ui.MainUI;
+import dao.DAO;
+import models.Mechanic;
 
-public class WindowAddMechanic extends Window {
+public class WindowEditMechanic extends Window {
     private TextField name = new TextField("Name");
     private TextField surname = new TextField("Surname");
     private TextField patronymic = new TextField("Patronymic");
     private TextField hourlyPay = new TextField("Hourly Pay");
-    private Button ok = new Button("OK",this::ok);
+    private Button ok = new Button("OK", this::ok);
     private Button cancel = new Button("Cancel",event -> close());
+    private long id;
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
 
-    public WindowAddMechanic(){
-        super("Add Mechanic"); // Set window caption
+    public WindowEditMechanic(long id){
+        super("Edit Client"); // Set window caption
+        preload(id);
         buildWindow();
         validation();
     }
@@ -37,7 +39,6 @@ public class WindowAddMechanic extends Window {
         surname.setMaxLength(50);
         patronymic.setMaxLength(50);
         hourlyPay.setMaxLength(19);
-        ok.setEnabled(false);
 
         VerticalLayout verticalFields = new VerticalLayout (name, surname, patronymic, hourlyPay);
         verticalFields.setSpacing(true);
@@ -47,14 +48,24 @@ public class WindowAddMechanic extends Window {
         horizontalButtons.setSpacing(false);
         horizontalButtons.setMargin(false);
 
-        VerticalLayout verticalMain = new VerticalLayout ();
+        VerticalLayout verticalMain = new VerticalLayout (verticalFields,horizontalButtons);
         verticalMain.setSpacing(true);
         verticalMain.setMargin(true);
 
-        verticalMain.addComponent(verticalFields);
-        verticalMain.addComponent(horizontalButtons);
-
         setContent(verticalMain);
+    }
+
+    private void preload(long id){
+        this.id = id;
+        try {
+            Mechanic mechanic = DAO.getInstance().loadMechanic(id);
+            name.setValue(mechanic.getName());
+            surname.setValue(mechanic.getSurname());
+            patronymic.setValue(mechanic.getPatronymic());
+            hourlyPay.setValue(Double.toString(mechanic.getHourlyPay()));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     private void validation(){
@@ -66,11 +77,9 @@ public class WindowAddMechanic extends Window {
         hourlyPay.setRequiredError("Prompt is empty.");
 
         //To convert string value to integer before validation
-        //hourlyPay.setConverter(new StringToDoubleConverter());
-
-        hourlyPay.setConverter(new toDoubleConverter());
-        hourlyPay.addValidator(new DoubleRangeValidator("Value is negative",
-                    0.0, Double.MAX_VALUE));
+        hourlyPay.setConverter(new ToDoubleConverter());
+        hourlyPay.addValidator(new DoubleRangeValidator("Value is negative",0.0,
+                Double.MAX_VALUE));
 
         //What if text field is empty - integer will be null in that case, so show blank when null
         hourlyPay.setNullRepresentation("");
@@ -115,10 +124,14 @@ public class WindowAddMechanic extends Window {
 
     private void ok(Button.ClickEvent event){
         try {
-            DAO.getInstance().storeMechanic(name.getValue(), surname.getValue(),
+            DAO.getInstance().updateMechanic(id, name.getValue(), surname.getValue(),
                     patronymic.getValue(),
                     Double.parseDouble(hourlyPay.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridM.updateGrid();
+            getUI().design.horizontalLayoutGridButtonsOrd.updateGrid();
+            getUI().design.horizontalLayoutTopGrids.verticalGridM.buttonEditMechanic.setEnabled(false);
+            getUI().design.horizontalLayoutTopGrids.verticalGridM.buttonDeleteMechanic.setEnabled(false);
+            getUI().design.horizontalLayoutTopGrids.verticalGridM.buttonStatistic.setEnabled(false);
             close();
         } catch (SQLException e) {
             e.printStackTrace();

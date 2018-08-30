@@ -1,4 +1,4 @@
-package com.haulmont.testtask.Windows;
+package com.haulmont.testtask.windows;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.converter.StringToLongConverter;
@@ -9,7 +9,7 @@ import com.vaadin.ui.*;
 
 import java.sql.SQLException;
 
-import com.haulmont.testtask.UI.MainUI;
+import com.haulmont.testtask.ui.MainUI;
 import dao.DAO;
 import models.Client;
 

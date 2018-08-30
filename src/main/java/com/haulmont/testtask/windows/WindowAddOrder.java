@@ -1,4 +1,4 @@
-package com.haulmont.testtask.Windows;
+package com.haulmont.testtask.windows;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.DateRangeValidator;
@@ -19,7 +19,7 @@ import dao.DAO;
 import models.Client;
 import models.Mechanic;
 import models.Order;
-import com.haulmont.testtask.UI.*;
+import com.haulmont.testtask.ui.*;
 
 /**
  * Created by User on 21.07.2017.
@@ -108,7 +108,7 @@ public class WindowAddOrder extends Window {
         cost.setRequiredError("Prompt is empty.");
 
         //To convert string value to integer before validation
-        cost.setConverter(new toDoubleConverter());
+        cost.setConverter(new ToDoubleConverter());
         cost.addValidator(new DoubleRangeValidator("Value is negative", 0.0, Double.MAX_VALUE));
 
         dateStart.addValueChangeListener(event -> dateChange());

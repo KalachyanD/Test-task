@@ -1,4 +1,4 @@
-package com.haulmont.testtask.Grids;
+package com.haulmont.testtask.grids;
 
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.haulmont.testtask.Windows.*;
+import com.haulmont.testtask.windows.*;
 import dao.DAO;
 import models.Client;
 import models.Order;

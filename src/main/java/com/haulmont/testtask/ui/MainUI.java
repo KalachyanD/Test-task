@@ -1,4 +1,4 @@
-package com.haulmont.testtask.UI;
+package com.haulmont.testtask.ui;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
@@ -20,6 +20,4 @@ public class MainUI extends UI {
 
         setContent(design);
     }
-
-
 }
