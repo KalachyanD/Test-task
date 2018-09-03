@@ -1,23 +1,18 @@
 package models;
 
-
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
-
 public class Order {
-    public static enum Status {
-        Planned, Completed, Accepted
-    }
-    private long id;
+    private Long id;
     private String description;
     private Client client;
     private Mechanic mechanic;
     private LocalDate startDate;
     private LocalDate endDate;
-    private double cost;
+    private Double cost;
     private Status status;
 
     public Order(long id, String description, Client client, Mechanic mechanic, LocalDate startDate,

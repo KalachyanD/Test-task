@@ -1,6 +1,8 @@
 package com.haulmont.testtask.grids;
 
 
+import com.haulmont.testtask.windows.mechanic.WindowAddMechanic;
+import com.haulmont.testtask.windows.mechanic.WindowEditMechanic;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
 
@@ -8,7 +10,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.haulmont.testtask.windows.*;
 import dao.DAO;
 import models.Mechanic;
 import models.Order;

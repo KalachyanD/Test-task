@@ -1,5 +1,6 @@
-package com.haulmont.testtask.windows;
+package com.haulmont.testtask.windows.order;
 
+import com.haulmont.testtask.windows.ToDoubleConverter;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.DoubleRangeValidator;
@@ -20,6 +21,7 @@ import dao.DAO;
 import models.Client;
 import models.Mechanic;
 import models.Order;
+import models.Status;
 
 /**
  * Created by User on 21.07.2017.
@@ -28,7 +30,7 @@ import models.Order;
 public class WindowEditOrder extends Window {
 
     private TextField description = new TextField("Description");
-    private NativeSelect selectClient = new NativeSelect("Client");
+    private NativeSelect selectClient = new NativeSelect("client");
     private NativeSelect selectMechanic = new NativeSelect("Mechanic");
     private DateField dateStart = new DateField("Date start");
     private DateField dateFinish = new DateField("Date finish");
@@ -95,7 +97,7 @@ public class WindowEditOrder extends Window {
 
             cost.setValue(Double.toString(order.getCost()));
 
-            selectStatus.addItems(Order.Status.Planned, Order.Status.Completed, Order.Status.Accepted);
+            selectStatus.addItems(Status.Planned, Status.Completed, Status.Accepted);
             selectStatus.setValue(order.getStatus());
             selectStatus.setNullSelectionAllowed(false);
 
@@ -183,7 +185,7 @@ public class WindowEditOrder extends Window {
                     this.dateStart.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                     this.dateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                     Double.parseDouble(cost.getValue()),
-                    Order.Status.valueOf(selectStatus.getValue().toString()));
+                    Status.valueOf(selectStatus.getValue().toString()));
             getUI().design.horizontalLayoutGridButtonsOrd.updateGrid();
             getUI().design.horizontalLayoutGridButtonsOrd.buttonDeleteOrder.setEnabled(false);
             getUI().design.horizontalLayoutGridButtonsOrd.buttonEditOrder.setEnabled(false);

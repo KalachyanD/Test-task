@@ -1,5 +1,7 @@
 package com.haulmont.testtask.grids;
 
+import com.haulmont.testtask.windows.order.WindowAddOrder;
+import com.haulmont.testtask.windows.order.WindowEditOrder;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.FieldEvents;
@@ -10,10 +12,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.haulmont.testtask.windows.*;
 import dao.DAO;
 import models.Client;
 import models.Order;
+import models.Status;
 
 /**
  * Created by User on 04.08.2017.
@@ -89,7 +91,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         clientFilter.setComponent(filterFieldClient);
 
         HeaderCell statusFilter = filterRow.getCell("status");
-        filterFieldStatus.addItems(Order.Status.Planned, Order.Status.Completed, Order.Status.Accepted);
+        filterFieldStatus.addItems(Status.Planned, Status.Completed, Status.Accepted);
         filterFieldStatus.setNullSelectionAllowed(true);
         filterFieldStatus.setValue(null);
         filterFieldStatus.setNullSelectionItemId("");

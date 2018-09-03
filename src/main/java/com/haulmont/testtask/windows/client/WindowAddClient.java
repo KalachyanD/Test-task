@@ -1,4 +1,4 @@
-package com.haulmont.testtask.windows;
+package com.haulmont.testtask.windows.client;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.converter.StringToLongConverter;
@@ -24,7 +24,7 @@ public class WindowAddClient extends Window {
             1, 50, false);
 
     public WindowAddClient(){
-        super("Add Client"); // Set window caption
+        super("Add client"); // Set window caption
         buildWindow();
         validation();
     }

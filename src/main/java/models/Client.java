@@ -2,15 +2,11 @@ package models;
 
 public class Client {
 
-    private long id;
-
+    private Long id;
     private String name;
-    //Surname
     private String surname;
-    //Patronymic
     private String patronymic;
-    //Telephone number
-    private long phoneNumber;
+    private Long phoneNumber;
 
     public Client(long id, String name, String surname, String patronymic, long telephoneNumber) {
         this.id = id;
@@ -52,7 +48,7 @@ public class Client {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(long phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 
@@ -63,11 +59,11 @@ public class Client {
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append( getName() );
-        builder.append( " ");
-        builder.append( getSurname() );
-        builder.append( " ");
-        builder.append( getPatronymic() );
+        builder.append(getName());
+        builder.append(" ");
+        builder.append(getSurname());
+        builder.append(" ");
+        builder.append(getPatronymic());
         return builder.toString();
     }
 }

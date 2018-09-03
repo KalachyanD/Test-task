@@ -1,5 +1,7 @@
 package com.haulmont.testtask.grids;
 
+import com.haulmont.testtask.windows.client.WindowAddClient;
+import com.haulmont.testtask.windows.client.WindowEditClient;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
 
@@ -8,7 +10,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.haulmont.testtask.ui.MainUI;
-import com.haulmont.testtask.windows.*;
 import dao.DAO;
 import models.Client;
 

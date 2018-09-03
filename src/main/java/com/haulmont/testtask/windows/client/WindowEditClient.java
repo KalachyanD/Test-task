@@ -1,4 +1,4 @@
-package com.haulmont.testtask.windows;
+package com.haulmont.testtask.windows.client;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.converter.StringToLongConverter;
@@ -24,7 +24,7 @@ public class WindowEditClient extends Window {
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
     public WindowEditClient(long id){
-        super("Edit Client"); // Set window caption
+        super("Edit client"); // Set window caption
         preload(id);
         buildWindow();
         validation();

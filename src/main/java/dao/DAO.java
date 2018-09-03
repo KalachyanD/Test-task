@@ -3,15 +3,16 @@ package dao;
 import models.Client;
 import models.Mechanic;
 import models.Order;
+import models.Status;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Date.*;
 
 public class DAO {
+
     private static DAO instance;
 
     private DAO() {
@@ -23,6 +24,7 @@ public class DAO {
         }
         return instance;
     }
+
     public Connection getDBConnection() {
         Connection dbConnection = null;
         try {
@@ -40,28 +42,22 @@ public class DAO {
     }
 
     public List<Client> LoadAllClients() throws SQLException {
-        List<Client> data = new ArrayList<Client>();
+        List<Client> clients = new ArrayList<Client>();
         String selectSQL = "SELECT * FROM CLIENT";
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
         ResultSet rsClients = preparedStatement.executeQuery();
         Client currentClient = null;
         while (rsClients.next()) {
-            int clientID = rsClients.getInt("id");
+            Long clientID = rsClients.getLong("id");
             String name = rsClients.getString("NAME");
             String surname = rsClients.getString("SURNAME");
             String patronymic = rsClients.getString("PATRONYMIC");
-            int telephoneNumber = rsClients.getInt("TELEPHONENUMBER");
+            Long telephoneNumber = rsClients.getLong("TELEPHONENUMBER");
             currentClient = new Client(clientID, name, surname, patronymic, telephoneNumber);
-            data.add(currentClient);
+            clients.add(currentClient);
         }
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        if (dbConnection != null) {
-            dbConnection.close();
-        }
-        return data;
+        return clients;
     }
 
     public Client loadClient(long clientID) throws SQLException {
@@ -75,14 +71,8 @@ public class DAO {
             String name = rsClients.getString("NAME");
             String surname = rsClients.getString("SURNAME");
             String patronymic = rsClients.getString("PATRONYMIC");
-            int telephoneNumber = rsClients.getInt("telephoneNumber");
+            Long telephoneNumber = rsClients.getLong("telephoneNumber");
             currentClient = new Client(clientID, name, surname, patronymic, telephoneNumber);
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (dbConnection != null) {
-                dbConnection.close();
-            }
         }
         return currentClient;
     }
@@ -97,15 +87,9 @@ public class DAO {
         preparedStatement.setString(1, name);
         preparedStatement.setString(2, surname);
         preparedStatement.setString(3, patronymic);
-        preparedStatement.setInt(4, telephoneNumber);
+        preparedStatement.setLong(4, telephoneNumber);
         System.out.println(preparedStatement.toString());
         preparedStatement.executeUpdate();
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        if (dbConnection != null) {
-            dbConnection.close();
-        }
     }
 
     public void deleteClient(long clientID) throws SQLException {
@@ -115,12 +99,6 @@ public class DAO {
         preparedStatement.setLong(1, clientID);
 
         preparedStatement.executeUpdate();
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        if (dbConnection != null) {
-            dbConnection.close();
-        }
     }
 
     public void updateClient(long clientID, String name, String surname, String patronymic, int telephoneNumber)
@@ -131,15 +109,9 @@ public class DAO {
         preparedStatement.setString(1, name);
         preparedStatement.setString(2, surname);
         preparedStatement.setString(3, patronymic);
-        preparedStatement.setInt(4, telephoneNumber);
+        preparedStatement.setLong(4, telephoneNumber);
         preparedStatement.setLong(5, clientID);
         preparedStatement.executeUpdate();
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        if (dbConnection != null) {
-            dbConnection.close();
-        }
     }
 
     public List<Mechanic> LoadAllMechanics() throws SQLException {
@@ -150,19 +122,13 @@ public class DAO {
         ResultSet rsMechanic = preparedStatement.executeQuery();
         Mechanic currentMechanic = null;
         while (rsMechanic.next()) {
-            int mechanicID = rsMechanic.getInt("id");
+            Long mechanicID = rsMechanic.getLong("id");
             String name = rsMechanic.getString("NAME");
             String surname = rsMechanic.getString("SURNAME");
             String patronymic = rsMechanic.getString("PATRONYMIC");
-            int hourlypay = rsMechanic.getInt("HOURLYPAY");
+            Long hourlypay = rsMechanic.getLong("HOURLYPAY");
             currentMechanic = new Mechanic(mechanicID, name, surname, patronymic, hourlypay);
             data.add(currentMechanic);
-        }
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        if (dbConnection != null) {
-            dbConnection.close();
         }
         return data;
     }
@@ -178,14 +144,8 @@ public class DAO {
             String name = rsMechanic.getString("NAME");
             String surname = rsMechanic.getString("SURNAME");
             String patronymic = rsMechanic.getString("PATRONYMIC");
-            int hourlypay = rsMechanic.getInt("HOURLYPAY");
+            Long hourlypay = rsMechanic.getLong("HOURLYPAY");
             currentMechanic = new Mechanic(mechanicID, name, surname, patronymic, hourlypay);
-            if (preparedStatement != null) {
-                preparedStatement.close();
-            }
-            if (dbConnection != null) {
-                dbConnection.close();
-            }
         }
         return currentMechanic;
     }
@@ -201,12 +161,6 @@ public class DAO {
         preparedStatement.setDouble(4, hourlypay);
         preparedStatement.setLong(5, mechanicID);
         preparedStatement.executeUpdate();
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        if (dbConnection != null) {
-            dbConnection.close();
-        }
     }
 
     public void storeMechanic(String name, String surname, String patronymic, double hourlypay)
@@ -221,12 +175,6 @@ public class DAO {
         preparedStatement.setString(3, patronymic);
         preparedStatement.setDouble(4, hourlypay);
         preparedStatement.executeUpdate();
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        if (dbConnection != null) {
-            dbConnection.close();
-        }
     }
 
     public void deleteMechanic(long mechanicID) throws SQLException {
@@ -235,12 +183,6 @@ public class DAO {
         PreparedStatement preparedStatement = dbConnection.prepareStatement(deleteSQL);
         preparedStatement.setLong(1, mechanicID);
         preparedStatement.executeUpdate();
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        if (dbConnection != null) {
-            dbConnection.close();
-        }
     }
 
     public List<Order> LoadAllOrders() throws SQLException {
@@ -251,11 +193,11 @@ public class DAO {
         ResultSet rsOrders = preparedStatement.executeQuery();
         Order currentOrder = null;
         while (rsOrders.next()) {
-            int orderID = rsOrders.getInt("id");
+            Long orderID = rsOrders.getLong("id");
             String description = rsOrders.getString("description");
-            int clientID = rsOrders.getInt("client_id");
+            Long clientID = rsOrders.getLong("client_id");
             Client client = loadClient(clientID);
-            int mechanicID = rsOrders.getInt("mechanic_id");
+            Long mechanicID = rsOrders.getLong("mechanic_id");
             Mechanic mechanic = loadMechanic(mechanicID);
 
             LocalDate startDate = rsOrders.getDate("dateStart").toLocalDate();
@@ -267,16 +209,10 @@ public class DAO {
             text = endDate.format(formatter);
             endDate = LocalDate.parse(text, formatter);
 
-            double cost = rsOrders.getDouble("cost");
-            Order.Status status = Order.Status.valueOf(rsOrders.getString("status"));
+            Double cost = rsOrders.getDouble("cost");
+            Status status = Status.valueOf(rsOrders.getString("status"));
             currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, status);
             data.add(currentOrder);
-        }
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        if (dbConnection != null) {
-            dbConnection.close();
         }
         return data;
     }
@@ -289,11 +225,11 @@ public class DAO {
         ResultSet rsOrders = preparedStatement.executeQuery();
         Order currentOrder = null;
         if (rsOrders.next()) {
-            long orderID = rsOrders.getLong("id");
+            Long orderID = rsOrders.getLong("id");
             String description = rsOrders.getString("description");
-            long clientID = rsOrders.getLong("client_id");
+            Long clientID = rsOrders.getLong("client_id");
             Client client = loadClient(clientID);
-            long mechanicID = rsOrders.getLong("mechanic_id");
+            Long mechanicID = rsOrders.getLong("mechanic_id");
             Mechanic mechanic = loadMechanic(mechanicID);
 
             LocalDate startDate = rsOrders.getDate("dateStart").toLocalDate();
@@ -305,22 +241,16 @@ public class DAO {
             text = endDate.format(formatter);
             endDate = LocalDate.parse(text, formatter);
 
-            double cost = rsOrders.getDouble("cost");
-            Order.Status status = Order.Status.valueOf(rsOrders.getString("status"));
+            Double cost = rsOrders.getDouble("cost");
+            Status status = Status.valueOf(rsOrders.getString("status"));
             currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, status);
             return currentOrder;
-        }
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        if (dbConnection != null) {
-            dbConnection.close();
         }
         return currentOrder;
     }
 
     public void storeOrder(String description, long clientID, long mechanicID, LocalDate startDate,
-                           LocalDate endDate, double cost, Order.Status status) throws SQLException {
+                           LocalDate endDate, double cost, Status status) throws SQLException {
         String insertTableSQL = "INSERT INTO ORDERS"
                 + "(DESCRIPTION, CLIENT_ID, MECHANIC_ID, DATESTART, DATEFINISH, COST, STATUS) VALUES"
                 + "(?,?,?,?,?,?,?)";
@@ -334,16 +264,10 @@ public class DAO {
         preparedStatement.setDouble(6, cost);
         preparedStatement.setString(7, status.toString());
         preparedStatement.executeUpdate();
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        if (dbConnection != null) {
-            dbConnection.close();
-        }
     }
 
     public void updateOrder(long orderID, String description, long clientID, long mechanicID, LocalDate startDate,
-                            LocalDate endDate, double cost, Order.Status status) throws SQLException {
+                            LocalDate endDate, double cost, Status status) throws SQLException {
         String updateTableSQL = "UPDATE ORDERS SET DESCRIPTION= ?, CLIENT_ID= ?, MECHANIC_ID= ?, DATESTART= ?, DATEFINISH= ?, COST= ?, STATUS = ? WHERE id = ?";
         Connection dbConnection = getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(updateTableSQL);
@@ -356,12 +280,6 @@ public class DAO {
         preparedStatement.setString(7, status.toString());
         preparedStatement.setLong(8, orderID);
         preparedStatement.executeUpdate();
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        if (dbConnection != null) {
-            dbConnection.close();
-        }
     }
 
     public void deleteOrder(long orderID) throws SQLException {
@@ -371,11 +289,5 @@ public class DAO {
         preparedStatement.setLong(1, orderID);
         preparedStatement.executeUpdate();
         preparedStatement.executeUpdate();
-        if (preparedStatement != null) {
-            preparedStatement.close();
-        }
-        if (dbConnection != null) {
-            dbConnection.close();
-        }
     }
 }

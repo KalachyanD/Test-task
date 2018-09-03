@@ -1,36 +1,38 @@
-package com.haulmont.testtask.windows;
+package com.haulmont.testtask.windows.mechanic;
 
 import com.vaadin.data.Validator;
+import com.vaadin.data.util.converter.StringToDoubleConverter;
 import com.vaadin.data.validator.DoubleRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
 
-import java.sql.SQLException;
-
-import com.haulmont.testtask.ui.MainUI;
 import dao.DAO;
-import models.Mechanic;
+import com.haulmont.testtask.ui.MainUI;
 
-public class WindowEditMechanic extends Window {
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+
+
+public class WindowAddMechanic extends Window {
     private TextField name = new TextField("Name");
     private TextField surname = new TextField("Surname");
     private TextField patronymic = new TextField("Patronymic");
     private TextField hourlyPay = new TextField("Hourly Pay");
     private Button ok = new Button("OK", this::ok);
-    private Button cancel = new Button("Cancel",event -> close());
-    private long id;
+    private Button cancel = new Button("Cancel", event -> close());
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
 
-    public WindowEditMechanic(long id){
-        super("Edit Client"); // Set window caption
-        preload(id);
+    public WindowAddMechanic() {
+        super("Add Mechanic"); // Set window caption
         buildWindow();
         validation();
     }
 
-    private void buildWindow(){
+    private void buildWindow() {
         center(); //Position of window
         setClosable(true); // Enable the close button
         setModal(true); // Enable modal window mode
@@ -39,36 +41,27 @@ public class WindowEditMechanic extends Window {
         surname.setMaxLength(50);
         patronymic.setMaxLength(50);
         hourlyPay.setMaxLength(19);
+        ok.setEnabled(false);
 
-        VerticalLayout verticalFields = new VerticalLayout (name, surname, patronymic, hourlyPay);
+        VerticalLayout verticalFields = new VerticalLayout(name, surname, patronymic, hourlyPay);
         verticalFields.setSpacing(true);
         verticalFields.setMargin(true);
 
-        HorizontalLayout horizontalButtons = new HorizontalLayout(ok,cancel);
+        HorizontalLayout horizontalButtons = new HorizontalLayout(ok, cancel);
         horizontalButtons.setSpacing(false);
         horizontalButtons.setMargin(false);
 
-        VerticalLayout verticalMain = new VerticalLayout (verticalFields,horizontalButtons);
+        VerticalLayout verticalMain = new VerticalLayout();
         verticalMain.setSpacing(true);
         verticalMain.setMargin(true);
+
+        verticalMain.addComponent(verticalFields);
+        verticalMain.addComponent(horizontalButtons);
 
         setContent(verticalMain);
     }
 
-    private void preload(long id){
-        this.id = id;
-        try {
-            Mechanic mechanic = DAO.getInstance().loadMechanic(id);
-            name.setValue(mechanic.getName());
-            surname.setValue(mechanic.getSurname());
-            patronymic.setValue(mechanic.getPatronymic());
-            hourlyPay.setValue(Double.toString(mechanic.getHourlyPay()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void validation(){
+    private void validation() {
         name.addValidator(stringLengthValidator);
         surname.addValidator(stringLengthValidator);
         patronymic.addValidator(stringLengthValidator);
@@ -77,9 +70,11 @@ public class WindowEditMechanic extends Window {
         hourlyPay.setRequiredError("Prompt is empty.");
 
         //To convert string value to integer before validation
-        hourlyPay.setConverter(new ToDoubleConverter());
-        hourlyPay.addValidator(new DoubleRangeValidator("Value is negative",0.0,
-                Double.MAX_VALUE));
+        hourlyPay.setConverter(new StringToDoubleConverter());
+
+        //hourlyPay.setConverter(new ToDoubleConverter());
+        hourlyPay.addValidator(new DoubleRangeValidator("Value is negative",
+                0.0, Double.MAX_VALUE));
 
         //What if text field is empty - integer will be null in that case, so show blank when null
         hourlyPay.setNullRepresentation("");
@@ -105,7 +100,7 @@ public class WindowEditMechanic extends Window {
         hourlyPay.addTextChangeListener(event -> textChange(event, hourlyPay));
     }
 
-    private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
+    private void textChange(FieldEvents.TextChangeEvent event, TextField textField) {
         try {
             textField.setValue(event.getText());
 
@@ -122,16 +117,12 @@ public class WindowEditMechanic extends Window {
         }
     }
 
-    private void ok(Button.ClickEvent event){
+    private void ok(Button.ClickEvent event) {
         try {
-            DAO.getInstance().updateMechanic(id, name.getValue(), surname.getValue(),
+            DAO.getInstance().storeMechanic(name.getValue(), surname.getValue(),
                     patronymic.getValue(),
                     Double.parseDouble(hourlyPay.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridM.updateGrid();
-            getUI().design.horizontalLayoutGridButtonsOrd.updateGrid();
-            getUI().design.horizontalLayoutTopGrids.verticalGridM.buttonEditMechanic.setEnabled(false);
-            getUI().design.horizontalLayoutTopGrids.verticalGridM.buttonDeleteMechanic.setEnabled(false);
-            getUI().design.horizontalLayoutTopGrids.verticalGridM.buttonStatistic.setEnabled(false);
             close();
         } catch (SQLException e) {
             e.printStackTrace();

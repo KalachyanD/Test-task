@@ -1,5 +1,6 @@
-package com.haulmont.testtask.windows;
+package com.haulmont.testtask.windows.order;
 
+import com.haulmont.testtask.windows.ToDoubleConverter;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.DoubleRangeValidator;
@@ -20,6 +21,7 @@ import models.Client;
 import models.Mechanic;
 import models.Order;
 import com.haulmont.testtask.ui.*;
+import models.Status;
 
 /**
  * Created by User on 21.07.2017.
@@ -28,7 +30,7 @@ import com.haulmont.testtask.ui.*;
 public class WindowAddOrder extends Window {
 
     private TextField description = new TextField("Description");
-    private NativeSelect selectClient = new NativeSelect("Client");
+    private NativeSelect selectClient = new NativeSelect("client");
     private NativeSelect selectMechanic = new NativeSelect("Mechanic");
     private Date start = new Date();
     private DateField dateStart = new DateField("Date start",start);
@@ -67,8 +69,8 @@ public class WindowAddOrder extends Window {
             dateFinish.setValidationVisible(true);
             dateStart.setValidationVisible(true);
 
-            selectStatus.addItems(Order.Status.Planned, Order.Status.Completed, Order.Status.Accepted);
-            selectStatus.setValue(Order.Status.Planned);
+            selectStatus.addItems(Status.Planned, Status.Completed, Status.Accepted);
+            selectStatus.setValue(Status.Planned);
             selectStatus.setNullSelectionAllowed(false);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -167,7 +169,7 @@ public class WindowAddOrder extends Window {
             DAO.getInstance().storeOrder(description.getValue(), ((Client) selectClient.getValue()).getID(),
                     ((Mechanic) selectMechanic.getValue()).getID(),
                     dateStart, dateFinish, Double.parseDouble(cost.getValue()),
-                    Order.Status.valueOf(selectStatus.getValue().toString()));
+                    Status.valueOf(selectStatus.getValue().toString()));
             getUI().design.horizontalLayoutGridButtonsOrd.updateGrid();
             close();
         } catch (SQLException e) {
