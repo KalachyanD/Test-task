@@ -7,13 +7,10 @@ import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
 
-import dao.DAO;
 import com.haulmont.testtask.ui.MainUI;
+import dao.MechanicDAO;
 
 import java.sql.SQLException;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
-import java.util.Locale;
 
 
 public class WindowAddMechanic extends Window {
@@ -119,7 +116,7 @@ public class WindowAddMechanic extends Window {
 
     private void ok(Button.ClickEvent event) {
         try {
-            DAO.getInstance().storeMechanic(name.getValue(), surname.getValue(),
+            MechanicDAO.getInstance().store(name.getValue(), surname.getValue(),
                     patronymic.getValue(),
                     Double.parseDouble(hourlyPay.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridM.updateGrid();

@@ -16,10 +16,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import dao.DAO;
+import dao.ClientDAO;
+import dao.MechanicDAO;
+import dao.OrderDAO;
 import models.Client;
 import models.Mechanic;
-import models.Order;
 import com.haulmont.testtask.ui.*;
 import models.Status;
 
@@ -50,10 +51,10 @@ public class WindowAddOrder extends Window {
     private void preload() {
         try {
             List<Client> clients = new ArrayList<>();
-            clients = DAO.getInstance().LoadAllClients();
+            clients = ClientDAO.getInstance().LoadAll();
 
             List<Mechanic> mechanics = new ArrayList<>();
-            mechanics = DAO.getInstance().LoadAllMechanics();
+            mechanics = MechanicDAO.getInstance().LoadAll();
 
             selectClient.addItems(clients);
             selectClient.setValue(clients.get(0));
@@ -166,7 +167,7 @@ public class WindowAddOrder extends Window {
         LocalDate dateStart = this.dateStart.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate dateFinish = this.dateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         try {
-            DAO.getInstance().storeOrder(description.getValue(), ((Client) selectClient.getValue()).getID(),
+            OrderDAO.getInstance().store(description.getValue(), ((Client) selectClient.getValue()).getID(),
                     ((Mechanic) selectMechanic.getValue()).getID(),
                     dateStart, dateFinish, Double.parseDouble(cost.getValue()),
                     Status.valueOf(selectStatus.getValue().toString()));

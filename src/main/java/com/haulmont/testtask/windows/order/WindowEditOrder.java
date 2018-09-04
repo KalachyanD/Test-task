@@ -17,7 +17,9 @@ import java.util.Date;
 import java.util.List;
 
 import com.haulmont.testtask.ui.MainUI;
-import dao.DAO;
+import dao.ClientDAO;
+import dao.MechanicDAO;
+import dao.OrderDAO;
 import models.Client;
 import models.Mechanic;
 import models.Order;
@@ -77,13 +79,13 @@ public class WindowEditOrder extends Window {
     private void preload(long id) {
         this.id = id;
         try {
-            Order order = DAO.getInstance().loadOrder(id);
+            Order order = OrderDAO.getInstance().load(id);
 
             List<Client> clients = new ArrayList<>();
-            clients = DAO.getInstance().LoadAllClients();
+            clients = ClientDAO.getInstance().LoadAll();
 
             List<Mechanic> mechanics = new ArrayList<>();
-            mechanics = DAO.getInstance().LoadAllMechanics();
+            mechanics = MechanicDAO.getInstance().LoadAll();
 
             selectClient.addItems(clients);
             selectClient.setValue(clients.get((int) order.getClient().getID() - 1));
@@ -180,7 +182,7 @@ public class WindowEditOrder extends Window {
 
     private void ok(Button.ClickEvent event) {
         try {
-            DAO.getInstance().updateOrder(id, description.getValue(), ((Client) selectClient.getValue()).getID(),
+            OrderDAO.getInstance().update(id, description.getValue(), ((Client) selectClient.getValue()).getID(),
                     ((Mechanic) selectMechanic.getValue()).getID(),
                     this.dateStart.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                     this.dateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),

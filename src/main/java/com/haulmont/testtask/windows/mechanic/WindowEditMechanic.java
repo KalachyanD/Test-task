@@ -10,7 +10,7 @@ import com.vaadin.ui.*;
 import java.sql.SQLException;
 
 import com.haulmont.testtask.ui.MainUI;
-import dao.DAO;
+import dao.MechanicDAO;
 import models.Mechanic;
 
 public class WindowEditMechanic extends Window {
@@ -59,7 +59,7 @@ public class WindowEditMechanic extends Window {
     private void preload(long id){
         this.id = id;
         try {
-            Mechanic mechanic = DAO.getInstance().loadMechanic(id);
+            Mechanic mechanic = MechanicDAO.getInstance().load(id);
             name.setValue(mechanic.getName());
             surname.setValue(mechanic.getSurname());
             patronymic.setValue(mechanic.getPatronymic());
@@ -125,7 +125,7 @@ public class WindowEditMechanic extends Window {
 
     private void ok(Button.ClickEvent event){
         try {
-            DAO.getInstance().updateMechanic(id, name.getValue(), surname.getValue(),
+            MechanicDAO.getInstance().update(id, name.getValue(), surname.getValue(),
                     patronymic.getValue(),
                     Double.parseDouble(hourlyPay.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridM.updateGrid();

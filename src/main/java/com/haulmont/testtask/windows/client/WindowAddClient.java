@@ -10,7 +10,7 @@ import com.vaadin.ui.*;
 import java.sql.SQLException;
 
 import com.haulmont.testtask.ui.MainUI;
-import dao.DAO;
+import dao.ClientDAO;
 
 
 public class WindowAddClient extends Window {
@@ -109,7 +109,7 @@ public class WindowAddClient extends Window {
 
     private void ok(Button.ClickEvent event){
         try {
-            DAO.getInstance().storeClient(name.getValue(), surname.getValue(),
+            ClientDAO.getInstance().store(name.getValue(), surname.getValue(),
                     patronymic.getValue(),
                     Integer.parseInt(phoneNumber.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridC.updateGrid();

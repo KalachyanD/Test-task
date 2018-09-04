@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.haulmont.testtask.ui.MainUI;
-import dao.DAO;
+import dao.ClientDAO;
 import models.Client;
 
 public class VerticalLayoutGridButtonsC extends VerticalLayout {
@@ -28,7 +28,7 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
     public void updateGrid() {
         List<Client> clients = new ArrayList<>();
         try {
-            clients = DAO.getInstance().LoadAllClients();
+            clients = ClientDAO.getInstance().LoadAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -63,7 +63,7 @@ public class VerticalLayoutGridButtonsC extends VerticalLayout {
             buttonEditClient.setEnabled(false);
         } else {
             try {
-                DAO.getInstance().deleteClient(client.getID());
+                ClientDAO.getInstance().delete(client.getID());
                 updateGrid();
                 buttonDeleteClient.setEnabled(false);
                 buttonEditClient.setEnabled(false);

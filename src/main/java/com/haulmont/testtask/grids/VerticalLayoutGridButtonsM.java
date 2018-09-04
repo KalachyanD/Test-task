@@ -10,7 +10,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.DAO;
+import dao.MechanicDAO;
+import dao.OrderDAO;
 import models.Mechanic;
 import models.Order;
 
@@ -46,7 +47,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
     public void updateGrid() {
         List<Mechanic> mechanics = new ArrayList<>();
         try {
-            mechanics = DAO.getInstance().LoadAllMechanics();
+            mechanics = MechanicDAO.getInstance().LoadAll();
         } catch (SQLException e) {
 
         }
@@ -68,7 +69,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
             buttonDeleteMechanic.setEnabled(false);
         } else {
             try {
-                DAO.getInstance().deleteMechanic(mechanic.getID());
+                MechanicDAO.getInstance().delete(mechanic.getID());
                 updateGrid();
                 buttonEditMechanic.setEnabled(false);
                 buttonDeleteMechanic.setEnabled(false);
@@ -114,7 +115,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
                 private void preload(Mechanic mechanic) {
                     List<Order> orders = new ArrayList<>();
                     try {
-                        orders = DAO.getInstance().LoadAllOrders();
+                        orders = OrderDAO.getInstance().LoadAll();
                     } catch (SQLException e) {
 
                     }

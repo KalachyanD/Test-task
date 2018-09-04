@@ -12,7 +12,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import dao.DAO;
+import dao.ClientDAO;
+import dao.OrderDAO;
 import models.Client;
 import models.Order;
 import models.Status;
@@ -41,7 +42,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
 
         List<Order> orders = new ArrayList<>();
         try {
-            orders = DAO.getInstance().LoadAllOrders();
+            orders = OrderDAO.getInstance().LoadAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -80,7 +81,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         HeaderCell clientFilter = filterRow.getCell("client");
         List<Client> clients = new ArrayList<>();
         try {
-            clients = DAO.getInstance().LoadAllClients();
+            clients = ClientDAO.getInstance().LoadAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -126,7 +127,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
             buttonEditOrder.setEnabled(false);
         } else {
             try {
-                DAO.getInstance().deleteOrder(order.getID());
+                OrderDAO.getInstance().delete(order.getID());
                 updateGrid();
                 buttonDeleteOrder.setEnabled(false);
                 buttonEditOrder.setEnabled(false);
@@ -150,7 +151,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         List<Order> allOrders = new ArrayList<>();
         List<Order> orders = new ArrayList<>();
         try {
-            allOrders = DAO.getInstance().LoadAllOrders();
+            allOrders = OrderDAO.getInstance().LoadAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }

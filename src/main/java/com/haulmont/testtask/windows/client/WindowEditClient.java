@@ -10,7 +10,7 @@ import com.vaadin.ui.*;
 import java.sql.SQLException;
 
 import com.haulmont.testtask.ui.MainUI;
-import dao.DAO;
+import dao.ClientDAO;
 import models.Client;
 
 public class WindowEditClient extends Window {
@@ -33,7 +33,7 @@ public class WindowEditClient extends Window {
     private void preload(long id){
         this.id = id;
         try {
-            Client client = DAO.getInstance().loadClient(id);
+            Client client = ClientDAO.getInstance().load(id);
             name.setValue(client.getName());
             surname.setValue(client.getSurname());
             patronymic.setValue(client.getPatronymic());
@@ -124,7 +124,7 @@ public class WindowEditClient extends Window {
 
     private void ok(Button.ClickEvent event){
         try {
-            DAO.getInstance().updateClient(id, name.getValue(), surname.getValue(),
+            ClientDAO.getInstance().update(id, name.getValue(), surname.getValue(),
                     patronymic.getValue(),
                     Integer.parseInt(phoneNumber.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridC.updateGrid();
