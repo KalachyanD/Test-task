@@ -25,17 +25,17 @@ public class MechanicDAO {
 
     public List<Mechanic> LoadAll() throws SQLException {
         List<Mechanic> data = new ArrayList<Mechanic>();
-        String selectSQL = "SELECT * FROM MECHANIC";
+        String selectSQL = "SELECT id, name, surname, patronymic, hourlyPay FROM MECHANIC";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
         ResultSet rsMechanic = preparedStatement.executeQuery();
         Mechanic currentMechanic = null;
         while (rsMechanic.next()) {
             Long mechanicID = rsMechanic.getLong("id");
-            String name = rsMechanic.getString("NAME");
-            String surname = rsMechanic.getString("SURNAME");
-            String patronymic = rsMechanic.getString("PATRONYMIC");
-            Long hourlypay = rsMechanic.getLong("HOURLYPAY");
+            String name = rsMechanic.getString("name");
+            String surname = rsMechanic.getString("surname");
+            String patronymic = rsMechanic.getString("patronymic");
+            Long hourlypay = rsMechanic.getLong("hourlyPay");
             currentMechanic = new Mechanic(mechanicID, name, surname, patronymic, hourlypay);
             data.add(currentMechanic);
         }
@@ -50,10 +50,10 @@ public class MechanicDAO {
         ResultSet rsMechanic = preparedStatement.executeQuery();
         Mechanic currentMechanic = null;
         if (rsMechanic.next()) {
-            String name = rsMechanic.getString("NAME");
-            String surname = rsMechanic.getString("SURNAME");
-            String patronymic = rsMechanic.getString("PATRONYMIC");
-            Long hourlypay = rsMechanic.getLong("HOURLYPAY");
+            String name = rsMechanic.getString("name");
+            String surname = rsMechanic.getString("surname");
+            String patronymic = rsMechanic.getString("patronymic");
+            Long hourlypay = rsMechanic.getLong("hourlyPay");
             currentMechanic = new Mechanic(mechanicID, name, surname, patronymic, hourlypay);
         }
         return currentMechanic;

@@ -43,18 +43,17 @@ public class ClientDAO {
     }
 
     public Client load(long clientID) throws SQLException {
-        String selectSQL = "SELECT * FROM CLIENT WHERE ID = ?";
+        String selectSQL = "SELECT id,name,surname,patronymic,telephoneNumber FROM CLIENT WHERE ID = ?";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
         preparedStatement.setLong(1, clientID);
         ResultSet rsClients = preparedStatement.executeQuery();
         Client currentClient = null;
         if (rsClients.next()) {
-            String name = rsClients.getString("NAME");
-            String surname = rsClients.getString("SURNAME");
-            String patronymic = rsClients.getString("PATRONYMIC");
+            String name = rsClients.getString("name");
+            String surname = rsClients.getString("surname");
+            String patronymic = rsClients.getString("patronymic");
             Long telephoneNumber = rsClients.getLong("telephoneNumber");
-            currentClient = new Client(clientID, name, surname, patronymic, telephoneNumber);
         }
         return currentClient;
     }

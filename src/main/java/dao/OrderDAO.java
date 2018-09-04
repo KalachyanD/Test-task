@@ -28,9 +28,9 @@ public class OrderDAO {
         List<OrderDTO> orders = new ArrayList<OrderDTO>();
         String selectSQL = "SELECT o.id AS oID, o.description AS description, o.datestart AS datestart, o.datefinish" +
                 " AS datefinish, o.cost AS cost, o.status AS status, cl.id AS clID,cl.name AS clName, cl.surname AS" +
-                " clSurname,cl.patronymic AS clPatronymic,cl.telephoneNumber AS telephoneNumber,m.id AS mID,m.name AS" +
-                " mName,m.surname AS mSurname,m.patronymic AS mPatronymic,m.hourlyPay AS hourlypay FROM ORDERS AS o" +
-                " JOIN CLIENT AS cl ON o.client_id = cl.id JOIN MECHANIC AS m ON o.mechanic_id = m.id";
+                " clSurname,cl.Patronymic AS clPatronymic,m.id AS mID,m.name AS mName,m.surname AS mSurname," +
+                " m.Patronymic AS mPatronymic FROM ORDERS AS o JOIN CLIENT AS cl ON o.client_id = cl.id JOIN" +
+                " MECHANIC AS m ON o.mechanic_id = m.id";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
         ResultSet rsOrders = preparedStatement.executeQuery();
@@ -39,12 +39,16 @@ public class OrderDAO {
             Long orderID = rsOrders.getLong("oID");
             String description = rsOrders.getString("description");
 
-            ClientMechanicDTO client = new ClientMechanicDTO(rsOrders.getString("clName"),
+            ClientMechanicDTO client = new ClientMechanicDTO(
+                    rsOrders.getLong("clID"),
+                    rsOrders.getString("clName"),
                     rsOrders.getString("clSurname"),
                     rsOrders.getString("clPatronymic"));
 
             ClientMechanicDTO mechanic = new ClientMechanicDTO(
-                    rsOrders.getString("mName"),rsOrders.getString("mSurname"),
+                    rsOrders.getLong("mID"),
+                    rsOrders.getString("mName"),
+                    rsOrders.getString("mSurname"),
                     rsOrders.getString("mPatronymic"));
 
             LocalDate startDate = rsOrders.getDate("dateStart").toLocalDate();
@@ -67,9 +71,9 @@ public class OrderDAO {
     public OrderDTO load(long id) throws SQLException {
         String selectSQL = "SELECT o.id AS oID, o.description AS description, o.datestart AS datestart, o.datefinish" +
                 " AS datefinish, o.cost AS cost, o.status AS status, cl.id AS clID,cl.name AS clName, cl.surname AS" +
-                " clSurname,cl.patronymic AS clPatronymic,cl.telephoneNumber AS telephoneNumber,m.id AS mID,m.name " +
-                "AS mName,m.surname AS mSurname,m.patronymic AS mPatronymic, m.hourlyPay AS hourlypay FROM ORDERS AS" +
-                " o JOIN CLIENT AS cl ON o.client_id = cl.id JOIN MECHANIC AS m ON o.mechanic_id = m.id WHERE o.id = ?";
+                " clSurname,cl.Patronymic AS clPatronymic,m.id AS mID,m.name AS mName,m.surname AS mSurname," +
+                " m.Patronymic AS mPatronymic FROM ORDERS AS o JOIN CLIENT AS cl ON o.client_id = cl.id JOIN" +
+                " MECHANIC AS m ON o.mechanic_id = m.idWHERE o.id = ?";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
         preparedStatement.setLong(1, id);
@@ -79,11 +83,15 @@ public class OrderDAO {
             Long orderID = rsOrders.getLong("oID");
             String description = rsOrders.getString("description");
 
-            ClientMechanicDTO client = new ClientMechanicDTO(rsOrders.getString("clName"),
+            ClientMechanicDTO client = new ClientMechanicDTO(
+                    rsOrders.getLong("clID"),
+                    rsOrders.getString("clName"),
                     rsOrders.getString("clSurname"),
                     rsOrders.getString("clPatronymic"));
 
-            ClientMechanicDTO mechanic = new ClientMechanicDTO(rsOrders.getString("mName"),
+            ClientMechanicDTO mechanic = new ClientMechanicDTO(
+                    rsOrders.getLong("mID"),
+                    rsOrders.getString("mName"),
                     rsOrders.getString("mSurname"),
                     rsOrders.getString("mPatronymic"));
 

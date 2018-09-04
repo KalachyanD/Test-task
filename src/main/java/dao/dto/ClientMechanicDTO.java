@@ -6,14 +6,14 @@ public class ClientMechanicDTO {
     private String surname;
     private String patronymic;
 
-    public ClientMechanicDTO(String name, String surname, String patronymic){
+    public ClientMechanicDTO(Long ID, String name, String surname, String patronymic){
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
     }
 
     public ClientMechanicDTO(ClientMechanicDTO clientDTO){
-        this(clientDTO.getName(),clientDTO.getSurname(),clientDTO.getPatronymic());
+        this(clientDTO.getID(),clientDTO.getName(),clientDTO.getSurname(),clientDTO.getPatronymic());
     }
 
     public long getID(){
