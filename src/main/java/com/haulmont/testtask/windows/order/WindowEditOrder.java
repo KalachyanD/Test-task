@@ -20,6 +20,7 @@ import com.haulmont.testtask.ui.MainUI;
 import dao.ClientDAO;
 import dao.MechanicDAO;
 import dao.OrderDAO;
+import dao.dto.OrderDTO;
 import models.Client;
 import models.Mechanic;
 import models.Order;
@@ -79,7 +80,7 @@ public class WindowEditOrder extends Window {
     private void preload(long id) {
         this.id = id;
         try {
-            Order order = OrderDAO.getInstance().load(id);
+            OrderDTO order = OrderDAO.getInstance().load(id);
 
             List<Client> clients = new ArrayList<>();
             clients = ClientDAO.getInstance().LoadAll();
@@ -88,11 +89,11 @@ public class WindowEditOrder extends Window {
             mechanics = MechanicDAO.getInstance().LoadAll();
 
             selectClient.addItems(clients);
-            selectClient.setValue(clients.get((int) order.getClient().getID() - 1));
+            selectClient.setValue(clients.get((int) order.getClientDTO().getID() - 1));
             selectClient.setNullSelectionAllowed(false);
 
             selectMechanic.addItems(mechanics);
-            selectMechanic.setValue(mechanics.get((int) order.getMechanic().getID() - 1));
+            selectMechanic.setValue(mechanics.get((int) order.getMechanicDTO().getID() - 1));
             selectMechanic.setNullSelectionAllowed(false);
 
             description.setValue(order.getDescription());

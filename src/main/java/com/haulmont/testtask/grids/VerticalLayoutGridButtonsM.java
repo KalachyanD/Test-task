@@ -12,6 +12,7 @@ import java.util.List;
 
 import dao.MechanicDAO;
 import dao.OrderDAO;
+import dao.dto.OrderDTO;
 import models.Mechanic;
 import models.Order;
 
@@ -113,7 +114,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
                 }
 
                 private void preload(Mechanic mechanic) {
-                    List<Order> orders = new ArrayList<>();
+                    List<OrderDTO> orders = new ArrayList<>();
                     try {
                         orders = OrderDAO.getInstance().LoadAll();
                     } catch (SQLException e) {
@@ -121,7 +122,7 @@ public class VerticalLayoutGridButtonsM extends VerticalLayout {
                     }
 
                     for (int i = 0; i < orders.size(); ++i) {
-                        if (mechanic.getID() == orders.get(i).getMechanic().getID()) {
+                        if (mechanic.getID() == orders.get(i).getMechanicDTO().getID()) {
                             ++count;
                         }
                     }

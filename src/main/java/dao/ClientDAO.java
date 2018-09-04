@@ -25,17 +25,17 @@ public class ClientDAO {
 
     public List<Client> LoadAll() throws SQLException {
         List<Client> clients = new ArrayList<Client>();
-        String selectSQL = "SELECT * FROM CLIENT";
+        String selectSQL = "SELECT id,name,surname,patronymic,telephoneNumber FROM CLIENT";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
         ResultSet rsClients = preparedStatement.executeQuery();
         Client currentClient = null;
         while (rsClients.next()) {
             Long clientID = rsClients.getLong("id");
-            String name = rsClients.getString("NAME");
-            String surname = rsClients.getString("SURNAME");
-            String patronymic = rsClients.getString("PATRONYMIC");
-            Long telephoneNumber = rsClients.getLong("TELEPHONENUMBER");
+            String name = rsClients.getString("name");
+            String surname = rsClients.getString("surname");
+            String patronymic = rsClients.getString("patronymic");
+            Long telephoneNumber = rsClients.getLong("telephoneNumber");
             currentClient = new Client(clientID, name, surname, patronymic, telephoneNumber);
             clients.add(currentClient);
         }

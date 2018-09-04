@@ -14,6 +14,7 @@ import java.util.List;
 
 import dao.ClientDAO;
 import dao.OrderDAO;
+import dao.dto.OrderDTO;
 import models.Client;
 import models.Order;
 import models.Status;
@@ -40,22 +41,24 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
 
     public void updateGrid() {
 
-        List<Order> orders = new ArrayList<>();
+        List<OrderDTO> orders = new ArrayList<>();
         try {
             orders = OrderDAO.getInstance().LoadAll();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         // Create firstField gridOrders bound to the containerOrders
-        BeanItemContainer<Order> containerGridOrders = new BeanItemContainer<>(Order.class, orders);
+        BeanItemContainer<OrderDTO> containerGridOrders = new BeanItemContainer<>(OrderDTO.class, orders);
         gridOrders.setContainerDataSource(containerGridOrders);
-        gridOrders.setColumnOrder("description", "client", "status", "mechanic", "startDate", "endDate", "cost");
+        gridOrders.getColumn("clientDTO").setHeaderCaption("Client");
+        gridOrders.getColumn("mechanicDTO").setHeaderCaption("Mechanic");
+        gridOrders.setColumnOrder("description", "clientDTO", "status", "mechanicDTO", "startDate", "endDate", "cost");
     }
 
-    private void updateGrid(List<Order> orders){
-        BeanItemContainer<Order> containerGridOrders = new BeanItemContainer<>(Order.class, orders);
+    private void updateGrid(List<OrderDTO> orders){
+        BeanItemContainer<OrderDTO> containerGridOrders = new BeanItemContainer<>(OrderDTO.class, orders);
         gridOrders.setContainerDataSource(containerGridOrders);
-        gridOrders.setColumnOrder("description", "client", "status", "mechanic", "startDate", "endDate", "cost");
+        gridOrders.setColumnOrder("description", "clientDTO", "status", "mechanicDTO", "startDate", "endDate", "cost");
     }
 
     private void buildLayout() {
@@ -78,7 +81,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         filterFieldDescription.setImmediate(true);
         descriptionFilter.setComponent(filterFieldDescription);
 
-        HeaderCell clientFilter = filterRow.getCell("client");
+        HeaderCell clientFilter = filterRow.getCell("clientDTO");
         List<Client> clients = new ArrayList<>();
         try {
             clients = ClientDAO.getInstance().LoadAll();
@@ -98,7 +101,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         filterFieldStatus.setNullSelectionItemId("");
         statusFilter.setComponent(filterFieldStatus);
 
-        HeaderCell buttonFilter = filterRow.getCell("mechanic");
+        HeaderCell buttonFilter = filterRow.getCell("mechanicDTO");
         buttonFilter.setComponent(buttonApplyFilter);
 
         filterFieldClient.addValueChangeListener(event -> selectChange(event, filterFieldClient));
@@ -148,8 +151,8 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
     }
 
     private void applyFilter(Button.ClickEvent event) {
-        List<Order> allOrders = new ArrayList<>();
-        List<Order> orders = new ArrayList<>();
+        List<OrderDTO> allOrders = new ArrayList<>();
+        List<OrderDTO> orders = new ArrayList<>();
         try {
             allOrders = OrderDAO.getInstance().LoadAll();
         } catch (SQLException e) {
@@ -165,7 +168,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         }
         if(filterFieldDescription.isEmpty() && !filterFieldClient.isEmpty() && filterFieldStatus.isEmpty()){
             for(int i = 0;i<allOrders.size();++i){
-                if(filterFieldClient.getValue().toString().equals(allOrders.get(i).getClient().toString())){
+                if(filterFieldClient.getValue().toString().equals(allOrders.get(i).getClientDTO().toString())){
                     orders.add(allOrders.get(i));
                 }
             }
@@ -179,7 +182,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         }
         if(filterFieldDescription.isEmpty() && !filterFieldClient.isEmpty() && !filterFieldStatus.isEmpty()){
             for(int i = 0;i<allOrders.size();++i){
-                if(filterFieldClient.getValue().toString().equals(allOrders.get(i).getClient().toString())  &&
+                if(filterFieldClient.getValue().toString().equals(allOrders.get(i).getClientDTO().toString())  &&
                         filterFieldStatus.getValue() == allOrders.get(i).getStatus()){
                     orders.add(allOrders.get(i));
                 }
@@ -188,7 +191,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         if(!filterFieldDescription.isEmpty() && !filterFieldClient.isEmpty() && !filterFieldStatus.isEmpty()){
             for(int i = 0;i<allOrders.size();++i){
                 if(filterFieldDescription.getValue().toString().equals(allOrders.get(i).getDescription().toString()) &&
-                        filterFieldClient.getValue().toString().equals(allOrders.get(i).getClient().toString())  &&
+                        filterFieldClient.getValue().toString().equals(allOrders.get(i).getClientDTO().toString())  &&
                         filterFieldStatus.getValue() == allOrders.get(i).getStatus()){
                     orders.add(allOrders.get(i));
                 }
@@ -197,7 +200,7 @@ public class HorizontalLayoutGridButtonsOrd extends HorizontalLayout {
         if(!filterFieldDescription.isEmpty() && !filterFieldClient.isEmpty() && filterFieldStatus.isEmpty()){
             for(int i = 0;i<allOrders.size();++i){
                 if(filterFieldDescription.getValue().toString().equals(allOrders.get(i).getDescription().toString()) &&
-                        filterFieldClient.getValue().toString().equals(allOrders.get(i).getClient().toString())){
+                        filterFieldClient.getValue().toString().equals(allOrders.get(i).getClientDTO().toString())){
                     orders.add(allOrders.get(i));
                 }
             }

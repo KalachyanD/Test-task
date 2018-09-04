@@ -1,8 +1,7 @@
 package dao;
 
-import models.Client;
-import models.Mechanic;
-import models.Order;
+import dao.dto.ClientMechanicDTO;
+import dao.dto.OrderDTO;
 import models.Status;
 
 import java.sql.*;
@@ -25,8 +24,8 @@ public class OrderDAO {
         return instance;
     }
 
-    public List<Order> LoadAll() throws SQLException {
-        List<Order> orders = new ArrayList<Order>();
+    public List<OrderDTO> LoadAll() throws SQLException {
+        List<OrderDTO> orders = new ArrayList<OrderDTO>();
         String selectSQL = "SELECT o.id AS oID, o.description AS description, o.datestart AS datestart, o.datefinish" +
                 " AS datefinish, o.cost AS cost, o.status AS status, cl.id AS clID,cl.name AS clName, cl.surname AS" +
                 " clSurname,cl.patronymic AS clPatronymic,cl.telephoneNumber AS telephoneNumber,m.id AS mID,m.name AS" +
@@ -35,20 +34,18 @@ public class OrderDAO {
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
         ResultSet rsOrders = preparedStatement.executeQuery();
-        Order currentOrder = null;
+        OrderDTO currentOrder = null;
         while (rsOrders.next()) {
             Long orderID = rsOrders.getLong("oID");
             String description = rsOrders.getString("description");
 
-            Client client = new Client(rsOrders.getLong("clID"),
-                    rsOrders.getString("clName"),rsOrders.getString("clSurname"),
-                    rsOrders.getString("clPatronymic"),
-                    rsOrders.getLong("telephoneNumber"));
+            ClientMechanicDTO client = new ClientMechanicDTO(rsOrders.getString("clName"),
+                    rsOrders.getString("clSurname"),
+                    rsOrders.getString("clPatronymic"));
 
-            Mechanic mechanic = new Mechanic(rsOrders.getLong("mID"),
+            ClientMechanicDTO mechanic = new ClientMechanicDTO(
                     rsOrders.getString("mName"),rsOrders.getString("mSurname"),
-                    rsOrders.getString("mPatronymic"),
-                    rsOrders.getLong("hourlyPay"));
+                    rsOrders.getString("mPatronymic"));
 
             LocalDate startDate = rsOrders.getDate("dateStart").toLocalDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -61,13 +58,13 @@ public class OrderDAO {
 
             Double cost = rsOrders.getDouble("cost");
             Status status = Status.valueOf(rsOrders.getString("status"));
-            currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, status);
+            currentOrder = new OrderDTO(orderID, description, client, mechanic, startDate, endDate, cost, status);
             orders.add(currentOrder);
         }
         return orders;
     }
 
-    public Order load(long id) throws SQLException {
+    public OrderDTO load(long id) throws SQLException {
         String selectSQL = "SELECT o.id AS oID, o.description AS description, o.datestart AS datestart, o.datefinish" +
                 " AS datefinish, o.cost AS cost, o.status AS status, cl.id AS clID,cl.name AS clName, cl.surname AS" +
                 " clSurname,cl.patronymic AS clPatronymic,cl.telephoneNumber AS telephoneNumber,m.id AS mID,m.name " +
@@ -77,20 +74,18 @@ public class OrderDAO {
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
         preparedStatement.setLong(1, id);
         ResultSet rsOrders = preparedStatement.executeQuery();
-        Order currentOrder = null;
+        OrderDTO currentOrder = null;
         if (rsOrders.next()) {
             Long orderID = rsOrders.getLong("oID");
             String description = rsOrders.getString("description");
 
-            Client client = new Client(rsOrders.getLong("clID"),
-                    rsOrders.getString("clName"),rsOrders.getString("clSurname"),
-                    rsOrders.getString("clPatronymic"),
-                    rsOrders.getLong("telephoneNumber"));
+            ClientMechanicDTO client = new ClientMechanicDTO(rsOrders.getString("clName"),
+                    rsOrders.getString("clSurname"),
+                    rsOrders.getString("clPatronymic"));
 
-            Mechanic mechanic = new Mechanic(rsOrders.getLong("mID"),
-                    rsOrders.getString("mName"),rsOrders.getString("mSurname"),
-                    rsOrders.getString("mPatronymic"),
-                    rsOrders.getLong("hourlyPay"));
+            ClientMechanicDTO mechanic = new ClientMechanicDTO(rsOrders.getString("mName"),
+                    rsOrders.getString("mSurname"),
+                    rsOrders.getString("mPatronymic"));
 
             LocalDate startDate = rsOrders.getDate("dateStart").toLocalDate();
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -103,7 +98,7 @@ public class OrderDAO {
 
             Double cost = rsOrders.getDouble("cost");
             Status status = Status.valueOf(rsOrders.getString("status"));
-            currentOrder = new Order(orderID, description, client, mechanic, startDate, endDate, cost, status);
+            currentOrder = new OrderDTO(orderID, description, client, mechanic, startDate, endDate, cost, status);
             return currentOrder;
         }
         return currentOrder;
