@@ -1,6 +1,7 @@
 package com.haulmont.testtask.windows.client;
 
 import com.vaadin.data.Validator;
+import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.util.converter.StringToLongConverter;
 import com.vaadin.data.validator.LongRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -37,7 +38,7 @@ public class WindowAddClient extends Window {
         name.setMaxLength(50);
         surname.setMaxLength(50);
         patronymic.setMaxLength(50);
-        phoneNumber.setMaxLength(19);
+        //phoneNumber.setM
         ok.setEnabled(false);
 
         VerticalLayout verticalFields = new VerticalLayout (name, surname, patronymic, phoneNumber);
@@ -111,7 +112,7 @@ public class WindowAddClient extends Window {
         try {
             ClientDAO.getInstance().store(name.getValue(), surname.getValue(),
                     patronymic.getValue(),
-                    Integer.parseInt(phoneNumber.getConvertedValue().toString()));
+                    Long.parseLong(phoneNumber.getConvertedValue().toString()));
             getUI().design.horizontalLayoutTopGrids.verticalGridC.updateGrid();
             close();
 

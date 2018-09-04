@@ -58,7 +58,7 @@ public class ClientDAO {
         return currentClient;
     }
 
-    public void store(String name, String surname, String patronymic, int telephoneNumber)
+    public void store(String name, String surname, String patronymic, long telephoneNumber)
             throws SQLException {
         String insertTableSQL = "INSERT INTO CLIENT"
                 + "(NAME, SURNAME, PATRONYMIC, TELEPHONENUMBER) VALUES"
@@ -81,7 +81,7 @@ public class ClientDAO {
         preparedStatement.executeUpdate();
     }
 
-    public void update(long clientID, String name, String surname, String patronymic, int telephoneNumber)
+    public void update(long clientID, String name, String surname, String patronymic, long telephoneNumber)
             throws SQLException {
         String updateTableSQL = "UPDATE CLIENT SET NAME= ?,SURNAME= ?,PATRONYMIC= ?,TELEPHONENUMBER= ? WHERE id = ?";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
