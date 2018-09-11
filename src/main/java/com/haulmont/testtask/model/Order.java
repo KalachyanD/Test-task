@@ -1,4 +1,4 @@
-package com.haulmont.testtask.models;
+package com.haulmont.testtask.model;
 
 import java.time.LocalDate;
 
@@ -12,8 +12,8 @@ public class Order {
     private Double cost;
     private Status status;
 
-    public Order(long id, String description, Client client, Mechanic mechanic, LocalDate startDate,
-                 LocalDate endDate, double cost, Status status) {
+    public Order(Long id, String description, Client client, Mechanic mechanic, LocalDate startDate,
+                 LocalDate endDate, Double cost, Status status) {
         this.id = id;
         this.description = description;
         this.client = client;
@@ -25,11 +25,11 @@ public class Order {
     }
 
     public Order(Order order) {
-        this(order.getID(), order.getDescription(), order.getClient(), order.getMechanic(), order.getStartDate(),
+        this(order.getId(), order.getDescription(), order.getClient(), order.getMechanic(), order.getStartDate(),
                 order.getEndDate(), order.getCost(), order.getStatus());
     }
 
-    public long getID() {
+    public Long getId() {
         return id;
     }
 
@@ -73,11 +73,11 @@ public class Order {
         this.endDate = endDate;
     }
 
-    public double getCost() {
+    public Double getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(Double cost) {
         this.cost = cost;
     }
 

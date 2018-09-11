@@ -1,6 +1,7 @@
-package com.haulmont.testtask.ui.windows.order;
+package com.haulmont.testtask.ui.window.order;
 
-import com.haulmont.testtask.ui.converters.StringToDoubleConverter;
+import com.haulmont.testtask.dao.dto.FullNameDTO;
+import com.haulmont.testtask.ui.converter.StringToDoubleConverter;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.DoubleRangeValidator;
@@ -16,14 +17,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import com.haulmont.testtask.ui.layouts.MainUI;
+import com.haulmont.testtask.ui.layout.main.MainUI;
 import com.haulmont.testtask.dao.ClientDAO;
 import com.haulmont.testtask.dao.MechanicDAO;
 import com.haulmont.testtask.dao.OrderDAO;
 import com.haulmont.testtask.dao.dto.OrderDTO;
-import com.haulmont.testtask.models.Client;
-import com.haulmont.testtask.models.Mechanic;
-import com.haulmont.testtask.models.Status;
+import com.haulmont.testtask.model.Status;
 
 /**
  * Created by User on 21.07.2017.
@@ -40,11 +39,11 @@ public class WindowEditOrder extends Window {
     private NativeSelect selectStatus = new NativeSelect("Status");
     private Button ok = new Button("OK", this::ok);
     private Button cancel = new Button("Cancel", event -> close());
-    private long id;
+    private Long id;
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
 
-    public WindowEditOrder(long id) {
+    public WindowEditOrder(Long id) {
         super("Edit Order"); // Set window caption
         buildWindow();
         preload(id);
@@ -76,23 +75,23 @@ public class WindowEditOrder extends Window {
         setContent(verticalMain);
     }
 
-    private void preload(long id) {
+    private void preload(Long id) {
         this.id = id;
         try {
             OrderDTO order = OrderDAO.getInstance().load(id);
 
-            List<Client> clients = new ArrayList<>();
-            clients = ClientDAO.getInstance().LoadAll();
+            List<FullNameDTO> clients = new ArrayList<>();
+            clients = ClientDAO.getInstance().LoadAllFullName();
 
-            List<Mechanic> mechanics = new ArrayList<>();
-            mechanics = MechanicDAO.getInstance().LoadAll();
+            List<FullNameDTO> mechanics = new ArrayList<>();
+            mechanics = MechanicDAO.getInstance().LoadAllFullName();
 
             selectClient.addItems(clients);
-            selectClient.setValue(clients.get(order.getClientDTO().getId().intValue() - 1));
+            selectClient.setValue(clients.get(order.getClientDTO().getId().intValue()-1));
             selectClient.setNullSelectionAllowed(false);
 
             selectMechanic.addItems(mechanics);
-            selectMechanic.setValue(mechanics.get(order.getMechanicDTO().getId().intValue() - 1));
+            selectMechanic.setValue(mechanics.get(order.getMechanicDTO().getId().intValue()-1));
             selectMechanic.setNullSelectionAllowed(false);
 
             description.setValue(order.getDescription());
@@ -182,8 +181,8 @@ public class WindowEditOrder extends Window {
 
     private void ok(Button.ClickEvent event) {
         try {
-            OrderDAO.getInstance().update(id, description.getValue(), ((Client) selectClient.getValue()).getId(),
-                    ((Mechanic) selectMechanic.getValue()).getID(),
+            OrderDAO.getInstance().update(id, description.getValue(), ((FullNameDTO) selectClient.getValue()).getId(),
+                    ((FullNameDTO) selectMechanic.getValue()).getId(),
                     this.dateStart.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                     this.dateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                     Double.parseDouble(cost.getValue()),

@@ -1,22 +1,22 @@
 package com.haulmont.testtask.dao.dto;
 
 
-import com.haulmont.testtask.models.Status;
+import com.haulmont.testtask.model.Status;
 
 import java.time.LocalDate;
 
 public class OrderDTO{
     private Long id;
     private String description;
-    private ClientMechanicDTO client;
-    private ClientMechanicDTO mechanic;
+    private FullNameDTO client;
+    private FullNameDTO mechanic;
     private LocalDate startDate;
     private LocalDate endDate;
     private Double cost;
     private Status status;
 
-    public OrderDTO(long id, String description, ClientMechanicDTO client, ClientMechanicDTO mechanic, LocalDate startDate,
-                 LocalDate endDate, double cost, Status status) {
+    public OrderDTO(Long id, String description, FullNameDTO client, FullNameDTO mechanic,
+                    LocalDate startDate, LocalDate endDate, Double cost, Status status) {
         this.id = id;
         this.description = description;
         this.client = client;
@@ -28,11 +28,11 @@ public class OrderDTO{
     }
 
     public OrderDTO(OrderDTO order) {
-        this(order.getID(), order.getDescription(), order.getClientDTO(), order.getMechanicDTO(), order.getStartDate(),
+        this(order.getId(), order.getDescription(), order.getClientDTO(), order.getMechanicDTO(), order.getStartDate(),
                 order.getEndDate(), order.getCost(), order.getStatus());
     }
 
-    public long getID() {
+    public Long getId() {
         return id;
     }
 
@@ -44,19 +44,19 @@ public class OrderDTO{
         this.description = description;
     }
 
-    public ClientMechanicDTO getClientDTO() {
+    public FullNameDTO getClientDTO() {
         return client;
     }
 
-    public void setClientMechanicDTO(ClientMechanicDTO client) {
+    public void setClientMechanicDTO(FullNameDTO client) {
         this.client = client;
     }
 
-    public ClientMechanicDTO getMechanicDTO() {
+    public FullNameDTO getMechanicDTO() {
         return mechanic;
     }
 
-    public void setMechanicDTO(ClientMechanicDTO mechanic) {
+    public void setMechanicDTO(FullNameDTO mechanic) {
         this.mechanic = mechanic;
     }
 
@@ -76,11 +76,11 @@ public class OrderDTO{
         this.endDate = endDate;
     }
 
-    public double getCost() {
+    public Double getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(Double cost) {
         this.cost = cost;
     }
 

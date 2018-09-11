@@ -1,7 +1,7 @@
-package com.haulmont.testtask.ui.grids;
+package com.haulmont.testtask.ui.layout.grid;
 
-import com.haulmont.testtask.ui.windows.client.WindowAddClient;
-import com.haulmont.testtask.ui.windows.client.WindowEditClient;
+import com.haulmont.testtask.ui.window.client.WindowAddClient;
+import com.haulmont.testtask.ui.window.client.WindowEditClient;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
 
@@ -9,15 +9,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.haulmont.testtask.ui.layouts.MainUI;
+import com.haulmont.testtask.ui.layout.main.MainUI;
 import com.haulmont.testtask.dao.ClientDAO;
-import com.haulmont.testtask.models.Client;
+import com.haulmont.testtask.model.Client;
 
 public class LayoutGridButtonsClient extends VerticalLayout {
 
-    public Grid gridClients = new Grid("Clients");
-    public Button buttonDeleteClient = new Button("Delete", this::deleteClient);
-    public Button buttonEditClient = new Button("Edit", this::editClient);
+    public  Grid gridClients = new Grid("Clients");
+    public  Button buttonDeleteClient = new Button("Delete", this::deleteClient);
+    public  Button buttonEditClient = new Button("Edit", this::editClient);
     private Button buttonAddClient = new Button("Add", this::addClient);
     private Client client;
 

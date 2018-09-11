@@ -1,6 +1,8 @@
-package com.haulmont.testtask.ui.windows.order;
+package com.haulmont.testtask.ui.window.order;
 
-import com.haulmont.testtask.ui.converters.StringToDoubleConverter;
+import com.haulmont.testtask.dao.dto.FullNameDTO;
+import com.haulmont.testtask.ui.converter.StringToDoubleConverter;
+import com.haulmont.testtask.ui.layout.main.MainUI;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.DoubleRangeValidator;
@@ -19,10 +21,7 @@ import java.util.List;
 import com.haulmont.testtask.dao.ClientDAO;
 import com.haulmont.testtask.dao.MechanicDAO;
 import com.haulmont.testtask.dao.OrderDAO;
-import com.haulmont.testtask.models.Client;
-import com.haulmont.testtask.models.Mechanic;
-import com.haulmont.testtask.ui.layouts.*;
-import com.haulmont.testtask.models.Status;
+import com.haulmont.testtask.model.Status;
 
 /**
  * Created by User on 21.07.2017.
@@ -35,6 +34,7 @@ public class WindowAddOrder extends Window {
     private NativeSelect selectMechanic = new NativeSelect("Mechanic");
     private Date start = new Date();
     private DateField dateStart = new DateField("Date start",start);
+    //I should to use java.util.Date because Vaadin 7 require it.
     private DateField dateFinish = new DateField("Date finish",new Date(start.getYear(),start.getMonth(),start.getDate()+7));
     private TextField cost = new TextField("Cost");
     private NativeSelect selectStatus = new NativeSelect("Status");
@@ -50,11 +50,11 @@ public class WindowAddOrder extends Window {
 
     private void preload() {
         try {
-            List<Client> clients = new ArrayList<>();
-            clients = ClientDAO.getInstance().LoadAll();
+            List<FullNameDTO> clients = new ArrayList<>();
+            clients = ClientDAO.getInstance().LoadAllFullName();
 
-            List<Mechanic> mechanics = new ArrayList<>();
-            mechanics = MechanicDAO.getInstance().LoadAll();
+            List<FullNameDTO> mechanics = new ArrayList<>();
+            mechanics = MechanicDAO.getInstance().LoadAllFullName();
 
             selectClient.addItems(clients);
             selectClient.setValue(clients.get(0));
@@ -167,8 +167,8 @@ public class WindowAddOrder extends Window {
         LocalDate dateStart = this.dateStart.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate dateFinish = this.dateFinish.getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         try {
-            OrderDAO.getInstance().store(description.getValue(), ((Client) selectClient.getValue()).getId(),
-                    ((Mechanic) selectMechanic.getValue()).getID(),
+            OrderDAO.getInstance().store(description.getValue(), ((FullNameDTO) selectClient.getValue()).getId(),
+                    ((FullNameDTO) selectMechanic.getValue()).getId(),
                     dateStart, dateFinish, Double.parseDouble(cost.getValue()),
                     Status.valueOf(selectStatus.getValue().toString()));
             getUI().design.horizontalLayoutGridButtonsOrd.updateGrid();

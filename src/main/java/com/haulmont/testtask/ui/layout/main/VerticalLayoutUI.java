@@ -1,8 +1,8 @@
-package com.haulmont.testtask.ui.layouts;
+package com.haulmont.testtask.ui.layout.main;
 
 import com.vaadin.ui.*;
 
-import com.haulmont.testtask.ui.grids.LayoutGridButtonsOrder;
+import com.haulmont.testtask.ui.layout.grid.LayoutGridButtonsOrder;
 
 
 /**

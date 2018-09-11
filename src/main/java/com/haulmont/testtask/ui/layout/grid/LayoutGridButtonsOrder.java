@@ -1,7 +1,7 @@
-package com.haulmont.testtask.ui.grids;
+package com.haulmont.testtask.ui.layout.grid;
 
-import com.haulmont.testtask.ui.windows.order.WindowAddOrder;
-import com.haulmont.testtask.ui.windows.order.WindowEditOrder;
+import com.haulmont.testtask.ui.window.order.WindowAddOrder;
+import com.haulmont.testtask.ui.window.order.WindowEditOrder;
 import com.vaadin.data.Property;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.event.FieldEvents;
@@ -15,9 +15,8 @@ import java.util.List;
 import com.haulmont.testtask.dao.ClientDAO;
 import com.haulmont.testtask.dao.OrderDAO;
 import com.haulmont.testtask.dao.dto.OrderDTO;
-import com.haulmont.testtask.models.Client;
-import com.haulmont.testtask.models.Order;
-import com.haulmont.testtask.models.Status;
+import com.haulmont.testtask.model.Client;
+import com.haulmont.testtask.model.Status;
 
 /**
  * Created by User on 04.08.2017.
@@ -27,13 +26,13 @@ public class LayoutGridButtonsOrder extends HorizontalLayout {
 
     private Grid gridOrders = new Grid("Orders");
     private Button buttonAddOrder = new Button("Add", this::addOrder);
-    public Button buttonEditOrder = new Button("Edit", this::editOrder);
-    public Button buttonDeleteOrder = new Button("Delete", this::deleteOrder);
+    public  Button buttonEditOrder = new Button("Edit", this::editOrder);
+    public  Button buttonDeleteOrder = new Button("Delete", this::deleteOrder);
     private Button buttonApplyFilter = new Button("Apply", this::applyFilter);
     private TextField filterFieldDescription = new TextField();
     private NativeSelect filterFieldClient = new NativeSelect();
     private NativeSelect filterFieldStatus = new NativeSelect();
-    private Order order;
+    private OrderDTO order;
 
     public LayoutGridButtonsOrder() {
         buildLayout();
@@ -114,7 +113,7 @@ public class LayoutGridButtonsOrder extends HorizontalLayout {
     }
 
     private void selection() {
-        order = (Order) gridOrders.getSelectedRow();
+        order = (OrderDTO) gridOrders.getSelectedRow();
         buttonDeleteOrder.setEnabled(true);
         buttonEditOrder.setEnabled(true);
     }
@@ -130,7 +129,7 @@ public class LayoutGridButtonsOrder extends HorizontalLayout {
             buttonEditOrder.setEnabled(false);
         } else {
             try {
-                OrderDAO.getInstance().delete(order.getID());
+                OrderDAO.getInstance().delete(order.getId());
                 updateGrid();
                 buttonDeleteOrder.setEnabled(false);
                 buttonEditOrder.setEnabled(false);
@@ -145,73 +144,19 @@ public class LayoutGridButtonsOrder extends HorizontalLayout {
             buttonDeleteOrder.setEnabled(false);
             buttonEditOrder.setEnabled(false);
         } else {
-            WindowEditOrder window = new WindowEditOrder(order.getID());
+            WindowEditOrder window = new WindowEditOrder(order.getId());
             UI.getCurrent().addWindow(window);
         }
     }
 
     private void applyFilter(Button.ClickEvent event) {
-        List<OrderDTO> allOrders = new ArrayList<>();
+
         List<OrderDTO> orders = new ArrayList<>();
         try {
-            allOrders = OrderDAO.getInstance().LoadAll();
+            orders = OrderDAO.getInstance().filter(filterFieldDescription.getValue(),
+                    (Client)filterFieldClient.getValue(),(Status) filterFieldStatus.getValue());
         } catch (SQLException e) {
             e.printStackTrace();
-        }
-
-        if(!filterFieldDescription.isEmpty() && filterFieldClient.isEmpty() && filterFieldStatus.isEmpty()){
-            for(int i = 0;i<allOrders.size();++i){
-                if(filterFieldDescription.getValue().toString().equals(allOrders.get(i).getDescription().toString())){
-                    orders.add(allOrders.get(i));
-                }
-            }
-        }
-        if(filterFieldDescription.isEmpty() && !filterFieldClient.isEmpty() && filterFieldStatus.isEmpty()){
-            for(int i = 0;i<allOrders.size();++i){
-                if(filterFieldClient.getValue().toString().equals(allOrders.get(i).getClientDTO().toString())){
-                    orders.add(allOrders.get(i));
-                }
-            }
-        }
-        if(filterFieldDescription.isEmpty() && filterFieldClient.isEmpty() && !filterFieldStatus.isEmpty()){
-            for(int i = 0;i<allOrders.size();++i){
-                if(filterFieldStatus.getValue().toString().equals(allOrders.get(i).getStatus().toString())){
-                    orders.add(allOrders.get(i));
-                }
-            }
-        }
-        if(filterFieldDescription.isEmpty() && !filterFieldClient.isEmpty() && !filterFieldStatus.isEmpty()){
-            for(int i = 0;i<allOrders.size();++i){
-                if(filterFieldClient.getValue().toString().equals(allOrders.get(i).getClientDTO().toString())  &&
-                        filterFieldStatus.getValue() == allOrders.get(i).getStatus()){
-                    orders.add(allOrders.get(i));
-                }
-            }
-        }
-        if(!filterFieldDescription.isEmpty() && !filterFieldClient.isEmpty() && !filterFieldStatus.isEmpty()){
-            for(int i = 0;i<allOrders.size();++i){
-                if(filterFieldDescription.getValue().toString().equals(allOrders.get(i).getDescription().toString()) &&
-                        filterFieldClient.getValue().toString().equals(allOrders.get(i).getClientDTO().toString())  &&
-                        filterFieldStatus.getValue() == allOrders.get(i).getStatus()){
-                    orders.add(allOrders.get(i));
-                }
-            }
-        }
-        if(!filterFieldDescription.isEmpty() && !filterFieldClient.isEmpty() && filterFieldStatus.isEmpty()){
-            for(int i = 0;i<allOrders.size();++i){
-                if(filterFieldDescription.getValue().toString().equals(allOrders.get(i).getDescription().toString()) &&
-                        filterFieldClient.getValue().toString().equals(allOrders.get(i).getClientDTO().toString())){
-                    orders.add(allOrders.get(i));
-                }
-            }
-        }
-        if(!filterFieldDescription.isEmpty() && filterFieldClient.isEmpty() && !filterFieldStatus.isEmpty()){
-            for(int i = 0;i<allOrders.size();++i){
-                if(filterFieldDescription.getValue().toString().equals(allOrders.get(i).getDescription().toString()) &&
-                        filterFieldStatus.getValue() == allOrders.get(i).getStatus()){
-                    orders.add(allOrders.get(i));
-                }
-            }
         }
         updateGrid(orders);
     }

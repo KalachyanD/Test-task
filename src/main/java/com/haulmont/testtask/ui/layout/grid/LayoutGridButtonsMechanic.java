@@ -1,9 +1,9 @@
-package com.haulmont.testtask.ui.grids;
+package com.haulmont.testtask.ui.layout.grid;
 
 
-import com.haulmont.testtask.ui.windows.mechanic.WindowAddMechanic;
-import com.haulmont.testtask.ui.windows.mechanic.WindowEditMechanic;
-import com.haulmont.testtask.ui.windows.mechanic.WindowStatisticMechanic;
+import com.haulmont.testtask.ui.window.mechanic.WindowAddMechanic;
+import com.haulmont.testtask.ui.window.mechanic.WindowEditMechanic;
+import com.haulmont.testtask.ui.window.mechanic.WindowStatisticMechanic;
 import com.vaadin.data.util.BeanItemContainer;
 import com.vaadin.ui.*;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.haulmont.testtask.dao.MechanicDAO;
-import com.haulmont.testtask.models.Mechanic;
+import com.haulmont.testtask.model.Mechanic;
 
 /**
  * Created by User on 04.08.2017.
@@ -20,10 +20,10 @@ import com.haulmont.testtask.models.Mechanic;
 public class LayoutGridButtonsMechanic extends VerticalLayout {
 
     private Grid gridMechanics = new Grid("Mechanics");
-    public Button buttonDeleteMechanic = new Button("Delete", this::deleteMechanic);
-    public Button buttonEditMechanic = new Button("Edit", this::editMechanic);
+    public  Button buttonDeleteMechanic = new Button("Delete", this::deleteMechanic);
+    public  Button buttonEditMechanic = new Button("Edit", this::editMechanic);
     private Button buttonAddMechanic = new Button("Add", this::addMechanic);
-    public Button buttonStatistic = new Button("Statistic", this::statisticsMechanic);
+    public  Button buttonStatistic = new Button("Statistic", this::statisticsMechanic);
     private Mechanic mechanic;
 
     public LayoutGridButtonsMechanic() {
@@ -68,7 +68,7 @@ public class LayoutGridButtonsMechanic extends VerticalLayout {
             buttonDeleteMechanic.setEnabled(false);
         } else {
             try {
-                MechanicDAO.getInstance().delete(mechanic.getID());
+                MechanicDAO.getInstance().delete(mechanic.getId());
                 updateGrid();
                 buttonEditMechanic.setEnabled(false);
                 buttonDeleteMechanic.setEnabled(false);
@@ -88,7 +88,7 @@ public class LayoutGridButtonsMechanic extends VerticalLayout {
             buttonEditMechanic.setEnabled(false);
             buttonDeleteMechanic.setEnabled(false);
         } else {
-            WindowEditMechanic window = new WindowEditMechanic(mechanic.getID());
+            WindowEditMechanic window = new WindowEditMechanic(mechanic.getId());
             UI.getCurrent().addWindow(window);
         }
     }

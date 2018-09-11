@@ -1,25 +1,23 @@
-package com.haulmont.testtask.models;
+package com.haulmont.testtask.model;
 
-
-public class Mechanic {
+public class Client {
 
     private Long id;
     private String name;
     private String surname;
     private String patronymic;
-    private Double hourlyPay;
+    private Long phoneNumber;
 
-    public Mechanic(long id, String name, String surname, String patronymic, double hourlyPay) {
+    public Client(Long id, String name, String surname, String patronymic, Long telephoneNumber) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
-        this.hourlyPay= hourlyPay;
-
+        this.phoneNumber = telephoneNumber;
     }
 
-    public Mechanic(Mechanic mechanic) {
-        this(mechanic.getID(), mechanic.getName(), mechanic.getSurname(), mechanic.getPatronymic(), mechanic.getHourlyPay());
+    public Client(Client client) {
+        this(client.getId(), client.getName(), client.getSurname(), client.getPatronymic(), client.getPhoneNumber());
     }
 
     public String getName() {
@@ -46,26 +44,26 @@ public class Mechanic {
         this.patronymic = patronymic;
     }
 
-    public double getHourlyPay() {
-        return hourlyPay;
+    public Long getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setHourlyPay(double hourlyPay) {
-        this.hourlyPay = hourlyPay;
+    public void setPhoneNumber(Long phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    public long getID() {
+    public Long getId() {
         return id;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append( getName() );
-        builder.append( " ");
-        builder.append( getSurname() );
-        builder.append( " ");
-        builder.append( getPatronymic() );
+        builder.append(getName());
+        builder.append(" ");
+        builder.append(getSurname());
+        builder.append(" ");
+        builder.append(getPatronymic());
         return builder.toString();
     }
 }

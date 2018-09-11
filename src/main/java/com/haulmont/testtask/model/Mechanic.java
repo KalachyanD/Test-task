@@ -1,23 +1,25 @@
-package com.haulmont.testtask.models;
+package com.haulmont.testtask.model;
 
-public class Client {
+
+public class Mechanic {
 
     private Long id;
     private String name;
     private String surname;
     private String patronymic;
-    private Long phoneNumber;
+    private Double hourlyPay;
 
-    public Client(Long id, String name, String surname, String patronymic, Long telephoneNumber) {
+    public Mechanic(long id, String name, String surname, String patronymic, double hourlyPay) {
         this.id = id;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
-        this.phoneNumber = telephoneNumber;
+        this.hourlyPay= hourlyPay;
+
     }
 
-    public Client(Client client) {
-        this(client.getId(), client.getName(), client.getSurname(), client.getPatronymic(), client.getPhoneNumber());
+    public Mechanic(Mechanic mechanic) {
+        this(mechanic.getId(), mechanic.getName(), mechanic.getSurname(), mechanic.getPatronymic(), mechanic.getHourlyPay());
     }
 
     public String getName() {
@@ -44,26 +46,26 @@ public class Client {
         this.patronymic = patronymic;
     }
 
-    public long getPhoneNumber() {
-        return phoneNumber;
+    public Double getHourlyPay() {
+        return hourlyPay;
     }
 
-    public void setPhoneNumber(Long phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setHourlyPay(Double hourlyPay) {
+        this.hourlyPay = hourlyPay;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
-        builder.append(getName());
-        builder.append(" ");
-        builder.append(getSurname());
-        builder.append(" ");
-        builder.append(getPatronymic());
+        builder.append( getName() );
+        builder.append( " ");
+        builder.append( getSurname() );
+        builder.append( " ");
+        builder.append( getPatronymic() );
         return builder.toString();
     }
 }

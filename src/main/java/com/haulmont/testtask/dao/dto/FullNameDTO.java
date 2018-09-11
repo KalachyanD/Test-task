@@ -1,18 +1,19 @@
 package com.haulmont.testtask.dao.dto;
 
-public class ClientMechanicDTO {
+public class FullNameDTO {
     private Long id;
     private String name;
     private String surname;
     private String patronymic;
 
-    public ClientMechanicDTO(Long ID, String name, String surname, String patronymic){
+    public FullNameDTO(Long id, String name, String surname, String patronymic){
+        this.id = id;
         this.name = name;
         this.surname = surname;
         this.patronymic = patronymic;
     }
 
-    public ClientMechanicDTO(ClientMechanicDTO clientDTO){
+    public FullNameDTO(FullNameDTO clientDTO){
         this(clientDTO.getId(),clientDTO.getName(),clientDTO.getSurname(),clientDTO.getPatronymic());
     }
 

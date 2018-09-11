@@ -1,49 +1,35 @@
-package com.haulmont.testtask.ui.windows.client;
+package com.haulmont.testtask.ui.window.mechanic;
 
 import com.vaadin.data.Validator;
-import com.vaadin.data.util.converter.StringToLongConverter;
-import com.vaadin.data.validator.LongRangeValidator;
+import com.vaadin.data.util.converter.StringToDoubleConverter;
+import com.vaadin.data.validator.DoubleValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
 
+import com.haulmont.testtask.ui.layout.main.MainUI;
+import com.haulmont.testtask.dao.MechanicDAO;
+
 import java.sql.SQLException;
 
-import com.haulmont.testtask.ui.layouts.MainUI;
-import com.haulmont.testtask.dao.ClientDAO;
-import com.haulmont.testtask.models.Client;
 
-public class WindowEditClient extends Window {
+public class WindowAddMechanic extends Window {
     private TextField name = new TextField("Name");
     private TextField surname = new TextField("Surname");
     private TextField patronymic = new TextField("Patronymic");
-    private TextField phoneNumber = new TextField("Telephone");
-    private Button ok = new Button("OK",this::ok);
-    private Button cancel = new Button("Cancel",event -> close());
-    private long id;
+    private TextField hourlyPay = new TextField("Hourly Pay");
+    private Button ok = new Button("OK", this::ok);
+    private Button cancel = new Button("Cancel", event -> close());
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
-    public WindowEditClient(long id){
-        super("Edit client"); // Set window caption
-        preload(id);
+
+    public WindowAddMechanic() {
+        super("Add Mechanic"); // Set window caption
         buildWindow();
         validation();
     }
 
-    private void preload(long id){
-        this.id = id;
-        try {
-            Client client = ClientDAO.getInstance().load(id);
-            name.setValue(client.getName());
-            surname.setValue(client.getSurname());
-            patronymic.setValue(client.getPatronymic());
-            phoneNumber.setValue(Long.toString(client.getPhoneNumber()));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void buildWindow(){
+    private void buildWindow() {
         center(); //Position of window
         setClosable(true); // Enable the close button
         setModal(true); // Enable modal window mode
@@ -51,60 +37,67 @@ public class WindowEditClient extends Window {
         name.setMaxLength(50);
         surname.setMaxLength(50);
         patronymic.setMaxLength(50);
+        //hourlyPay.setMaxLength(19);
+        ok.setEnabled(false);
 
-        VerticalLayout verticalFields = new VerticalLayout (name, surname, patronymic, phoneNumber);
+        VerticalLayout verticalFields = new VerticalLayout(name, surname, patronymic, hourlyPay);
         verticalFields.setSpacing(true);
         verticalFields.setMargin(true);
 
-        HorizontalLayout horizontalButtons = new HorizontalLayout(ok,cancel);
+        HorizontalLayout horizontalButtons = new HorizontalLayout(ok, cancel);
         horizontalButtons.setSpacing(false);
         horizontalButtons.setMargin(false);
 
-        VerticalLayout verticalMain = new VerticalLayout (verticalFields,horizontalButtons);
+        VerticalLayout verticalMain = new VerticalLayout();
         verticalMain.setSpacing(true);
         verticalMain.setMargin(true);
+
+        verticalMain.addComponent(verticalFields);
+        verticalMain.addComponent(horizontalButtons);
 
         setContent(verticalMain);
     }
 
-    private void validation(){
+    private void validation() {
         name.addValidator(stringLengthValidator);
         surname.addValidator(stringLengthValidator);
         patronymic.addValidator(stringLengthValidator);
 
-        phoneNumber.setRequired(true);
-        phoneNumber.setRequiredError("Prompt is empty.");
+        hourlyPay.setRequired(true);
+        hourlyPay.setRequiredError("Prompt is empty.");
 
         //To convert string value to integer before validation
-        phoneNumber.setConverter(new StringToLongConverter());
-        phoneNumber.addValidator(new LongRangeValidator("Value is negative",(long) 0,
-                Long.MAX_VALUE));
+        hourlyPay.setConverter(new StringToDoubleConverter());
+        hourlyPay.addValidator(new DoubleValidator("DoubleValidator"));
+        //hourlyPay.setConverter(new StringToDoubleConverter());
+        //hourlyPay.addValidator(new DoubleRangeValidator("Value is negative",
+        //        0.0, Double.MAX_VALUE));
 
         //What if text field is empty - integer will be null in that case, so show blank when null
-        phoneNumber.setNullRepresentation("");
+        hourlyPay.setNullRepresentation("");
 
         name.setValidationVisible(true);
         surname.setValidationVisible(true);
         patronymic.setValidationVisible(true);
-        phoneNumber.setValidationVisible(true);
+        hourlyPay.setValidationVisible(true);
 
         name.setImmediate(true);
         surname.setImmediate(true);
         patronymic.setImmediate(true);
-        phoneNumber.setImmediate(true);
+        hourlyPay.setImmediate(true);
 
         name.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
         surname.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
         patronymic.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
-        phoneNumber.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
+        hourlyPay.setTextChangeEventMode(AbstractTextField.TextChangeEventMode.EAGER);
 
         name.addTextChangeListener(event -> textChange(event, name));
         surname.addTextChangeListener(event -> textChange(event, surname));
         patronymic.addTextChangeListener(event -> textChange(event, patronymic));
-        phoneNumber.addTextChangeListener(event -> textChange(event, phoneNumber));
+        hourlyPay.addTextChangeListener(event -> textChange(event, hourlyPay));
     }
 
-    private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
+    private void textChange(FieldEvents.TextChangeEvent event, TextField textField) {
         try {
             textField.setValue(event.getText());
 
@@ -113,7 +106,7 @@ public class WindowEditClient extends Window {
             surname.validate();
             name.validate();
             patronymic.validate();
-            phoneNumber.validate();
+            hourlyPay.validate();
 
             ok.setEnabled(true);
         } catch (Validator.InvalidValueException e) {
@@ -121,15 +114,12 @@ public class WindowEditClient extends Window {
         }
     }
 
-    private void ok(Button.ClickEvent event){
+    private void ok(Button.ClickEvent event) {
         try {
-            ClientDAO.getInstance().update(id, name.getValue(), surname.getValue(),
+            MechanicDAO.getInstance().store(name.getValue(), surname.getValue(),
                     patronymic.getValue(),
-                    Long.parseLong(phoneNumber.getConvertedValue().toString()));
-            getUI().design.horizontalLayoutTopGrids.verticalGridC.updateGrid();
-            getUI().design.horizontalLayoutGridButtonsOrd.updateGrid();
-            getUI().design.horizontalLayoutTopGrids.verticalGridC.buttonEditClient.setEnabled(false);
-            getUI().design.horizontalLayoutTopGrids.verticalGridC.buttonDeleteClient.setEnabled(false);
+                    Double.parseDouble(hourlyPay.getConvertedValue().toString()));
+            getUI().design.horizontalLayoutTopGrids.verticalGridM.updateGrid();
             close();
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,20 +1,17 @@
-package com.haulmont.testtask.ui.windows.mechanic;
+package com.haulmont.testtask.ui.window.mechanic;
 
-import com.haulmont.testtask.dao.OrderDAO;
-import com.haulmont.testtask.dao.dto.OrderDTO;
-import com.haulmont.testtask.models.Mechanic;
+import com.haulmont.testtask.dao.MechanicDAO;
+import com.haulmont.testtask.model.Mechanic;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class WindowStatisticMechanic extends Window {
 
     private Label label;
-    private int count = 0;
+    private long count = 0;
 
     public WindowStatisticMechanic(Mechanic mechanic) {
         super(mechanic.getName());
@@ -23,18 +20,12 @@ public class WindowStatisticMechanic extends Window {
     }
 
     private void preload(Mechanic mechanic) {
-        List<OrderDTO> orders = new ArrayList<>();
         try {
-            orders = OrderDAO.getInstance().LoadAll();
+            count = MechanicDAO.getInstance().statistic(mechanic.getId());
         } catch (SQLException e) {
-
+            e.printStackTrace();
         }
 
-        for (int i = 0; i < orders.size(); ++i) {
-            if (mechanic.getID() == orders.get(i).getMechanicDTO().getId()) {
-                ++count;
-            }
-        }
     }
 
     private void buildLayout() {

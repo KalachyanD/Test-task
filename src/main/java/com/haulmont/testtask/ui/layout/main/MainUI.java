@@ -1,5 +1,6 @@
-package com.haulmont.testtask.ui.layouts;
+package com.haulmont.testtask.ui.layout.main;
 
+import com.haulmont.testtask.ui.layout.main.VerticalLayoutUI;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.VaadinRequest;

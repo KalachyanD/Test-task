@@ -1,4 +1,4 @@
-package com.haulmont.testtask.ui.converters;
+package com.haulmont.testtask.ui.converter;
 
 import com.vaadin.data.util.converter.Converter;
 import java.util.Locale;
