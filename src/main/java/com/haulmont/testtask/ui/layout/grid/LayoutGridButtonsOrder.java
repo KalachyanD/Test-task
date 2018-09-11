@@ -72,7 +72,7 @@ public class LayoutGridButtonsOrder extends HorizontalLayout {
 
         addComponents(gridOrders, buttonAddOrder, buttonEditOrder, buttonDeleteOrder);
         updateGrid();
-        gridOrders.removeColumn("ID");
+        gridOrders.removeColumn("id");
         buttonDeleteOrder.setEnabled(false);
         buttonEditOrder.setEnabled(false);
 

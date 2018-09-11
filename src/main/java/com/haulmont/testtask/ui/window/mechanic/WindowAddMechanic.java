@@ -2,6 +2,7 @@ package com.haulmont.testtask.ui.window.mechanic;
 
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.converter.StringToDoubleConverter;
+import com.vaadin.data.validator.DoubleRangeValidator;
 import com.vaadin.data.validator.DoubleValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
@@ -11,6 +12,8 @@ import com.haulmont.testtask.ui.layout.main.MainUI;
 import com.haulmont.testtask.dao.MechanicDAO;
 
 import java.sql.SQLException;
+import java.text.NumberFormat;
+import java.util.Locale;
 
 
 public class WindowAddMechanic extends Window {
@@ -67,8 +70,16 @@ public class WindowAddMechanic extends Window {
         hourlyPay.setRequiredError("Prompt is empty.");
 
         //To convert string value to integer before validation
-        hourlyPay.setConverter(new StringToDoubleConverter());
-        hourlyPay.addValidator(new DoubleValidator("DoubleValidator"));
+        StringToDoubleConverter plainIntegerConverter = new StringToDoubleConverter() {
+            protected java.text.NumberFormat getFormat(Locale locale) {
+                NumberFormat format = super.getFormat(locale);
+                format.setGroupingUsed(false);
+                return format;
+            };
+        };
+        hourlyPay.setConverter(plainIntegerConverter);
+        hourlyPay.addValidator(new DoubleRangeValidator("DoubleRangeValidator",Double.MIN_VALUE,
+                Double.MAX_VALUE));
         //hourlyPay.setConverter(new StringToDoubleConverter());
         //hourlyPay.addValidator(new DoubleRangeValidator("Value is negative",
         //        0.0, Double.MAX_VALUE));

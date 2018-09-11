@@ -36,7 +36,7 @@ public class LayoutGridButtonsMechanic extends VerticalLayout {
         gridMechanics.addSelectionListener(event -> selection());
         addComponents(gridMechanics, buttonDeleteMechanic, buttonEditMechanic, buttonAddMechanic, buttonStatistic);
         updateGrid();
-        gridMechanics.removeColumn("ID");
+        gridMechanics.removeColumn("id");
         buttonDeleteMechanic.setEnabled(false);
         buttonEditMechanic.setEnabled(false);
         buttonStatistic.setEnabled(false);
