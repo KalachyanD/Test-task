@@ -115,6 +115,8 @@ public class WindowAddClient extends Window {
             close();
 
         } catch (SQLException e) {
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
     }

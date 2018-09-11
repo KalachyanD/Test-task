@@ -3,6 +3,7 @@ package com.haulmont.testtask.ui.window.mechanic;
 import com.haulmont.testtask.dao.MechanicDAO;
 import com.haulmont.testtask.model.Mechanic;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -23,6 +24,8 @@ public class WindowStatisticMechanic extends Window {
         try {
             count = MechanicDAO.getInstance().statistic(mechanic.getId());
         } catch (SQLException e) {
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
 

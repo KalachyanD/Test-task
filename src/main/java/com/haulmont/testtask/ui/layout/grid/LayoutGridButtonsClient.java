@@ -31,6 +31,8 @@ public class LayoutGridButtonsClient extends VerticalLayout {
             clients = ClientDAO.getInstance().LoadAll();
         } catch (SQLException e) {
             e.printStackTrace();
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
         }
 
         // Have firstField containerGridClients of some type to contain the data
@@ -72,6 +74,8 @@ public class LayoutGridButtonsClient extends VerticalLayout {
                         Notification.Type.WARNING_MESSAGE);
             } catch (SQLException e) {
                 e.printStackTrace();
+                Notification.show("System error", "Database error",
+                        Notification.Type.WARNING_MESSAGE);
             }
         }
     }

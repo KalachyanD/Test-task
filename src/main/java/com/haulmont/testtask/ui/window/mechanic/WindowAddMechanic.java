@@ -122,6 +122,8 @@ public class WindowAddMechanic extends Window {
             getUI().design.horizontalLayoutTopGrids.verticalGridM.updateGrid();
             close();
         } catch (SQLException e) {
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
     }

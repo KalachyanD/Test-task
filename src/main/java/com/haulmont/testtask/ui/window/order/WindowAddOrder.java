@@ -74,6 +74,8 @@ public class WindowAddOrder extends Window {
             selectStatus.setValue(Status.Planned);
             selectStatus.setNullSelectionAllowed(false);
         } catch (SQLException e) {
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -174,6 +176,8 @@ public class WindowAddOrder extends Window {
             getUI().design.horizontalLayoutGridButtonsOrd.updateGrid();
             close();
         } catch (SQLException e) {
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
     }

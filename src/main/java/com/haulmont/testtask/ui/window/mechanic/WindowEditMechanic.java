@@ -66,6 +66,8 @@ public class WindowEditMechanic extends Window {
             patronymic.setValue(mechanic.getPatronymic());
             hourlyPay.setValue(Double.toString(mechanic.getHourlyPay()));
         } catch (SQLException e) {
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
     }
@@ -138,6 +140,8 @@ public class WindowEditMechanic extends Window {
             getUI().design.horizontalLayoutTopGrids.verticalGridM.buttonStatistic.setEnabled(false);
             close();
         } catch (SQLException e) {
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
     }

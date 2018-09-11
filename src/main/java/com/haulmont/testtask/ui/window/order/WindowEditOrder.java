@@ -109,6 +109,8 @@ public class WindowEditOrder extends Window {
             dateFinish.setValue(Date.from(localDateEnd.atStartOfDay(ZoneId.systemDefault()).toInstant()));
 
         } catch (SQLException e) {
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
 
@@ -192,6 +194,8 @@ public class WindowEditOrder extends Window {
             getUI().design.horizontalLayoutGridButtonsOrd.buttonEditOrder.setEnabled(false);
             close();
         } catch (SQLException e) {
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
     }

@@ -44,6 +44,8 @@ public class LayoutGridButtonsOrder extends HorizontalLayout {
         try {
             orders = OrderDAO.getInstance().LoadAll();
         } catch (SQLException e) {
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
         // Create firstField gridOrders bound to the containerOrders
@@ -85,6 +87,8 @@ public class LayoutGridButtonsOrder extends HorizontalLayout {
         try {
             clients = ClientDAO.getInstance().LoadAll();
         } catch (SQLException e) {
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
         filterFieldClient.addItems(clients);
@@ -134,6 +138,8 @@ public class LayoutGridButtonsOrder extends HorizontalLayout {
                 buttonDeleteOrder.setEnabled(false);
                 buttonEditOrder.setEnabled(false);
             } catch (SQLException e) {
+                Notification.show("System error", "Database error",
+                        Notification.Type.WARNING_MESSAGE);
                 e.printStackTrace();
             }
         }
@@ -156,6 +162,8 @@ public class LayoutGridButtonsOrder extends HorizontalLayout {
             orders = OrderDAO.getInstance().filter(filterFieldDescription.getValue(),
                     (Client)filterFieldClient.getValue(),(Status) filterFieldStatus.getValue());
         } catch (SQLException e) {
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
         updateGrid(orders);

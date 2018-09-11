@@ -132,6 +132,8 @@ public class WindowEditClient extends Window {
             getUI().design.horizontalLayoutTopGrids.verticalGridC.buttonDeleteClient.setEnabled(false);
             close();
         } catch (SQLException e) {
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
     }

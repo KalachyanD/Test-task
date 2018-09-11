@@ -48,7 +48,9 @@ public class LayoutGridButtonsMechanic extends VerticalLayout {
         try {
             mechanics = MechanicDAO.getInstance().LoadAll();
         } catch (SQLException e) {
-
+            Notification.show("System error", "Database error",
+                    Notification.Type.WARNING_MESSAGE);
+            e.printStackTrace();
         }
 
         BeanItemContainer<Mechanic> containerGridMechanics = new BeanItemContainer<>(Mechanic.class, mechanics);
@@ -77,6 +79,8 @@ public class LayoutGridButtonsMechanic extends VerticalLayout {
                 Notification.show("Deleting is impossible", "This mechanic locate in Order Table.",
                         Notification.Type.WARNING_MESSAGE);
             } catch (SQLException e) {
+                Notification.show("System error", "Database error",
+                        Notification.Type.WARNING_MESSAGE);
                 e.printStackTrace();
             }
         }
