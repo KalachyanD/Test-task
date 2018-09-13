@@ -105,11 +105,9 @@ public class WindowEditClient extends Window {
     }
 
     private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
-        try {
             textField.setValue(event.getText());
-
             textField.setCursorPosition(event.getCursorPosition());
-
+        try {
             surname.validate();
             name.validate();
             patronymic.validate();

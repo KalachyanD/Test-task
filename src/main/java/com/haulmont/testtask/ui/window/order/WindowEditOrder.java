@@ -1,8 +1,8 @@
 package com.haulmont.testtask.ui.window.order;
 
 import com.haulmont.testtask.dao.dto.FullNameDTO;
-import com.haulmont.testtask.ui.converter.StringToDoubleConverter;
 import com.vaadin.data.Validator;
+import com.vaadin.data.util.converter.StringToDoubleConverter;
 import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.DoubleRangeValidator;
 import com.vaadin.data.validator.StringLengthValidator;
@@ -129,7 +129,7 @@ public class WindowEditOrder extends Window {
         cost.setRequiredError("Prompt is empty.");
 
         //To convert string value to integer before validation
-        cost.setConverter(new StringToDoubleConverter());
+        cost.setConverter(new com.haulmont.testtask.ui.converter.StringToDoubleConverter());
         cost.addValidator(new DoubleRangeValidator("Value is negative", 0.0,
                 Double.MAX_VALUE));
 
@@ -156,11 +156,9 @@ public class WindowEditOrder extends Window {
     }
 
     private void textChange(FieldEvents.TextChangeEvent event, TextField textField) {
-        try {
             textField.setValue(event.getText());
-
             textField.setCursorPosition(event.getCursorPosition());
-
+        try {
             cost.validate();
             description.validate();
 

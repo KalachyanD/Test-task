@@ -12,14 +12,13 @@ import java.sql.SQLException;
 import com.haulmont.testtask.ui.layout.main.MainUI;
 import com.haulmont.testtask.dao.ClientDAO;
 
-
 public class WindowAddClient extends Window {
     private TextField name = new TextField("Name");
     private TextField surname = new TextField("Surname");
     private TextField patronymic = new TextField("Patronymic");
     private TextField phoneNumber = new TextField("Telephone");
-    private Button ok= new Button("OK",this::ok);
-    private Button cancel = new Button("Cancel",event -> close());
+    private Button ok = new Button("OK", this::ok);
+    private Button cancel = new Button("Cancel", event -> close());
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
 
@@ -69,6 +68,7 @@ public class WindowAddClient extends Window {
 
         //What if text field is empty - integer will be null in that case, so show blank when null
         phoneNumber.setNullRepresentation("");
+
         name.setValidationVisible(true);
         surname.setValidationVisible(true);
         patronymic.setValidationVisible(true);
@@ -91,10 +91,9 @@ public class WindowAddClient extends Window {
     }
 
     private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
-        try {
             textField.setValue(event.getText());
             textField.setCursorPosition(event.getCursorPosition());
-
+        try {
             surname.validate();
             name.validate();
             patronymic.validate();

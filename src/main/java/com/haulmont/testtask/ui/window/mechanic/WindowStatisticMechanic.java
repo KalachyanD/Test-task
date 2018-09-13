@@ -2,6 +2,7 @@ package com.haulmont.testtask.ui.window.mechanic;
 
 import com.haulmont.testtask.dao.MechanicDAO;
 import com.haulmont.testtask.model.Mechanic;
+
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Notification;
 import com.vaadin.ui.VerticalLayout;

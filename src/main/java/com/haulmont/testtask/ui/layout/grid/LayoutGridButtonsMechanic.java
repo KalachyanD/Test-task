@@ -40,7 +40,6 @@ public class LayoutGridButtonsMechanic extends VerticalLayout {
         buttonDeleteMechanic.setEnabled(false);
         buttonEditMechanic.setEnabled(false);
         buttonStatistic.setEnabled(false);
-
     }
 
     public void updateGrid() {

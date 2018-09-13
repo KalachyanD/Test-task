@@ -4,6 +4,7 @@ import com.haulmont.testtask.dao.dto.FullNameDTO;
 import com.haulmont.testtask.dao.dto.OrderDTO;
 import com.haulmont.testtask.model.Client;
 import com.haulmont.testtask.model.Status;
+import com.vaadin.ui.Notification;
 
 import java.sql.*;
 import java.time.LocalDate;
@@ -172,8 +173,8 @@ public class OrderDAO {
         byte index = 0;
 
         if (filterDescription != null && !filterDescription.isEmpty()) {
-            stringBuilder.append(" AND ").append("description = ? ");
-            indexValueMap.put((int)++index, filterDescription);
+            stringBuilder.append(" AND ").append("description LIKE ? ");
+            indexValueMap.put((int)++index, "%"+filterDescription+"%");
         }
         if (filterClient != null && filterClient.getId() != null) {
             stringBuilder.append(" AND ").append("cl.id = ? ");
@@ -191,7 +192,11 @@ public class OrderDAO {
             try {
                 preparedStatement.setString(key, value);
             } catch (SQLException e) {
+                com.vaadin.ui.Notification.show("System error", "Database error",
+                        Notification.Type.WARNING_MESSAGE);
                 throw new RuntimeException(e);
+            }catch (RuntimeException e ){
+                e.printStackTrace();
             }
         });
 

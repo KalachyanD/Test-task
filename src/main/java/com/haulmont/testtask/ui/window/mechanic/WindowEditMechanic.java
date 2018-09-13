@@ -1,6 +1,5 @@
 package com.haulmont.testtask.ui.window.mechanic;
 
-import com.haulmont.testtask.ui.converter.StringToDoubleConverter;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.converter.Converter;
 import com.vaadin.data.validator.DoubleRangeValidator;
@@ -25,8 +24,8 @@ public class WindowEditMechanic extends Window {
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
 
-    public WindowEditMechanic(long id){
-        super("Edit client"); // Set window caption
+    public WindowEditMechanic(Long id){
+        super("Edit mechanic"); // Set window caption
         preload(id);
         buildWindow();
         validation();
@@ -80,12 +79,10 @@ public class WindowEditMechanic extends Window {
         hourlyPay.setRequired(true);
         hourlyPay.setRequiredError("Prompt is empty.");
 
-        //To convert string value to integer before validation
-        //hourlyPay.setConverter(new StringToDoubleConverter());
-        hourlyPay.setConverter(new StringToDoubleConverter());
-
+        //To convert string value to double before validation
+        hourlyPay.setConverter(new com.haulmont.testtask.ui.converter.StringToDoubleConverter());
         hourlyPay.addValidator(new DoubleRangeValidator("Value is negative",0.0,
-                Double.MAX_VALUE));
+        Double.MAX_VALUE));
 
         //What if text field is empty - integer will be null in that case, so show blank when null
         hourlyPay.setNullRepresentation("");
@@ -114,7 +111,6 @@ public class WindowEditMechanic extends Window {
     private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
         try {
             textField.setValue(event.getText());
-
             textField.setCursorPosition(event.getCursorPosition());
 
             surname.validate();

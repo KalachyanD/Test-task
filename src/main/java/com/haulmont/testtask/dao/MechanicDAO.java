@@ -36,7 +36,7 @@ public class MechanicDAO {
             String name = rsMechanic.getString("name");
             String surname = rsMechanic.getString("surname");
             String patronymic = rsMechanic.getString("patronymic");
-            Long hourlypay = rsMechanic.getLong("hourlyPay");
+            Double hourlypay = rsMechanic.getDouble("hourlyPay");
             currentMechanic = new Mechanic(mechanicId, name, surname, patronymic, hourlypay);
             data.add(currentMechanic);
         }
@@ -72,7 +72,7 @@ public class MechanicDAO {
             String name = rsMechanic.getString("name");
             String surname = rsMechanic.getString("surname");
             String patronymic = rsMechanic.getString("patronymic");
-            Long hourlyPay = rsMechanic.getLong("hourlyPay");
+            Double hourlyPay = rsMechanic.getDouble("hourlyPay");
             currentMechanic = new Mechanic(mechanicId, name, surname, patronymic, hourlyPay);
         }
         return currentMechanic;

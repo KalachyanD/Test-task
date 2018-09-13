@@ -3,7 +3,6 @@ package com.haulmont.testtask.ui.window.mechanic;
 import com.vaadin.data.Validator;
 import com.vaadin.data.util.converter.StringToDoubleConverter;
 import com.vaadin.data.validator.DoubleRangeValidator;
-import com.vaadin.data.validator.DoubleValidator;
 import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.ui.*;
@@ -12,9 +11,6 @@ import com.haulmont.testtask.ui.layout.main.MainUI;
 import com.haulmont.testtask.dao.MechanicDAO;
 
 import java.sql.SQLException;
-import java.text.NumberFormat;
-import java.util.Locale;
-
 
 public class WindowAddMechanic extends Window {
     private TextField name = new TextField("Name");
@@ -40,7 +36,6 @@ public class WindowAddMechanic extends Window {
         name.setMaxLength(50);
         surname.setMaxLength(50);
         patronymic.setMaxLength(50);
-        //hourlyPay.setMaxLength(19);
         ok.setEnabled(false);
 
         VerticalLayout verticalFields = new VerticalLayout(name, surname, patronymic, hourlyPay);
@@ -51,12 +46,9 @@ public class WindowAddMechanic extends Window {
         horizontalButtons.setSpacing(false);
         horizontalButtons.setMargin(false);
 
-        VerticalLayout verticalMain = new VerticalLayout();
+        VerticalLayout verticalMain = new VerticalLayout(verticalFields, horizontalButtons);
         verticalMain.setSpacing(true);
         verticalMain.setMargin(true);
-
-        verticalMain.addComponent(verticalFields);
-        verticalMain.addComponent(horizontalButtons);
 
         setContent(verticalMain);
     }
@@ -69,20 +61,10 @@ public class WindowAddMechanic extends Window {
         hourlyPay.setRequired(true);
         hourlyPay.setRequiredError("Prompt is empty.");
 
-        //To convert string value to integer before validation
-        StringToDoubleConverter plainIntegerConverter = new StringToDoubleConverter() {
-            protected java.text.NumberFormat getFormat(Locale locale) {
-                NumberFormat format = super.getFormat(locale);
-                format.setGroupingUsed(false);
-                return format;
-            };
-        };
-        hourlyPay.setConverter(plainIntegerConverter);
-        hourlyPay.addValidator(new DoubleRangeValidator("DoubleRangeValidator",Double.MIN_VALUE,
+        //To convert string value to double before validation
+        hourlyPay.setConverter(new com.haulmont.testtask.ui.converter.StringToDoubleConverter());
+        hourlyPay.addValidator(new DoubleRangeValidator("Value is negative.",0.0,
                 Double.MAX_VALUE));
-        //hourlyPay.setConverter(new StringToDoubleConverter());
-        //hourlyPay.addValidator(new DoubleRangeValidator("Value is negative",
-        //        0.0, Double.MAX_VALUE));
 
         //What if text field is empty - integer will be null in that case, so show blank when null
         hourlyPay.setNullRepresentation("");
@@ -111,7 +93,6 @@ public class WindowAddMechanic extends Window {
     private void textChange(FieldEvents.TextChangeEvent event, TextField textField) {
         try {
             textField.setValue(event.getText());
-
             textField.setCursorPosition(event.getCursorPosition());
 
             surname.validate();
