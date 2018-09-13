@@ -28,7 +28,7 @@ public class LayoutGridButtonsClient extends VerticalLayout {
     public void updateGrid() {
         List<Client> clients = new ArrayList<>();
         try {
-            clients = ClientDAO.getInstance().LoadAll();
+            clients = ClientDAO.getInstance().getAll();
         } catch (SQLException e) {
             e.printStackTrace();
             Notification.show("System error", "Database error",

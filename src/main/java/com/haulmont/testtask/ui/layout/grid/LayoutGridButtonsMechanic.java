@@ -45,7 +45,7 @@ public class LayoutGridButtonsMechanic extends VerticalLayout {
     public void updateGrid() {
         List<Mechanic> mechanics = new ArrayList<>();
         try {
-            mechanics = MechanicDAO.getInstance().LoadAll();
+            mechanics = MechanicDAO.getInstance().getAll();
         } catch (SQLException e) {
             Notification.show("System error", "Database error",
                     Notification.Type.WARNING_MESSAGE);

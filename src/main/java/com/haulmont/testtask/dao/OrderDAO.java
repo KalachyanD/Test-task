@@ -28,7 +28,7 @@ public class OrderDAO {
         return instance;
     }
 
-    public List<OrderDTO> LoadAll() throws SQLException {
+    public List<OrderDTO> getAll() throws SQLException {
         List<OrderDTO> orders = new ArrayList<OrderDTO>();
         String selectSQL = "SELECT o.id AS oID, o.description AS description, o.datestart AS datestart, o.datefinish" +
                 " AS datefinish, o.cost AS cost, o.status AS status, cl.id AS clID,cl.name AS clName, cl.surname AS" +
@@ -72,7 +72,7 @@ public class OrderDAO {
         return orders;
     }
 
-    public OrderDTO load(Long id) throws SQLException {
+    public OrderDTO get(Long id) throws SQLException {
         String selectSQL = "SELECT o.id AS oID, o.description AS description, o.datestart AS datestart, o.datefinish" +
                 " AS datefinish, o.cost AS cost, o.status AS status, cl.id AS clID,cl.name AS clName, cl.surname AS" +
                 " clSurname,cl.Patronymic AS clPatronymic,m.id AS mID,m.name AS mName,m.surname AS mSurname," +
@@ -116,8 +116,8 @@ public class OrderDAO {
         return currentOrder;
     }
 
-    public void store(String description, Long clientId, Long mechanicId, LocalDate startDate,
-                      LocalDate endDate, Double cost, Status status) throws SQLException {
+    public void create(String description, Long clientId, Long mechanicId, LocalDate startDate,
+                       LocalDate endDate, Double cost, Status status) throws SQLException {
         String insertTableSQL = "INSERT INTO ORDERS"
                 + "(DESCRIPTION, CLIENT_ID, MECHANIC_ID, DATESTART, DATEFINISH, COST, STATUS) VALUES"
                 + "(?,?,?,?,?,?,?)";
@@ -133,8 +133,8 @@ public class OrderDAO {
         preparedStatement.executeUpdate();
     }
 
-    public void update(Long orderId, String description, Long clientId, Long mechanicId, LocalDate startDate,
-                       LocalDate endDate, Double cost, Status status) throws SQLException {
+    public void edit(Long orderId, String description, Long clientId, Long mechanicId, LocalDate startDate,
+                     LocalDate endDate, Double cost, Status status) throws SQLException {
         String updateTableSQL = "UPDATE ORDERS SET DESCRIPTION= ?, CLIENT_ID= ?, MECHANIC_ID= ?, DATESTART= ?, DATEFINISH= ?, COST= ?, STATUS = ? WHERE id = ?";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(updateTableSQL);

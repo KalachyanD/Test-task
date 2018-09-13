@@ -25,8 +25,7 @@ public class WindowStatisticMechanic extends Window {
         try {
             count = MechanicDAO.getInstance().statistic(mechanic.getId());
         } catch (SQLException e) {
-            Notification.show("System error", "Database error",
-                    Notification.Type.WARNING_MESSAGE);
+            Notification.show("System error", "Database error", Notification.Type.WARNING_MESSAGE);
             e.printStackTrace();
         }
 

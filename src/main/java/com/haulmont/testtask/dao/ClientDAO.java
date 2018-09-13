@@ -24,7 +24,7 @@ public class ClientDAO {
         return instance;
     }
 
-    public List<Client> LoadAll() throws SQLException {
+    public List<Client> getAll() throws SQLException {
         List<Client> clients = new ArrayList<Client>();
         String selectSQL = "SELECT id,name,surname,patronymic,telephoneNumber FROM CLIENT";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
@@ -43,7 +43,7 @@ public class ClientDAO {
         return clients;
     }
 
-    public List<FullNameDTO> LoadAllFullName() throws SQLException {
+    public List<FullNameDTO> getAllFullName() throws SQLException {
         List<FullNameDTO> clients = new ArrayList<>();
         String selectSQL = "SELECT id,name,surname,patronymic FROM CLIENT";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
@@ -61,7 +61,7 @@ public class ClientDAO {
         return clients;
     }
 
-    public Client load(Long clientId) throws SQLException {
+    public Client get(Long clientId) throws SQLException {
         String selectSQL = "SELECT id,name,surname,patronymic,telephoneNumber FROM CLIENT WHERE ID = ?";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
@@ -78,7 +78,7 @@ public class ClientDAO {
         return currentClient;
     }
 
-    public void store(String name, String surname, String patronymic, Long telephoneNumber)
+    public void create(String name, String surname, String patronymic, Long telephoneNumber)
             throws SQLException {
         String insertTableSQL = "INSERT INTO CLIENT"
                 + "(NAME, SURNAME, PATRONYMIC, TELEPHONENUMBER) VALUES"
@@ -101,7 +101,7 @@ public class ClientDAO {
         preparedStatement.executeUpdate();
     }
 
-    public void update(Long clientId, String name, String surname, String patronymic, Long telephoneNumber)
+    public void edit(Long clientId, String name, String surname, String patronymic, Long telephoneNumber)
             throws SQLException {
         String updateTableSQL = "UPDATE CLIENT SET NAME= ?,SURNAME= ?,PATRONYMIC= ?,TELEPHONENUMBER= ? WHERE id = ?";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();

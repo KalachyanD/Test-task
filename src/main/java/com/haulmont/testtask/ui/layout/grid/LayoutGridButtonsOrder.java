@@ -42,7 +42,7 @@ public class LayoutGridButtonsOrder extends HorizontalLayout {
 
         List<OrderDTO> orders = new ArrayList<>();
         try {
-            orders = OrderDAO.getInstance().LoadAll();
+            orders = OrderDAO.getInstance().getAll();
         } catch (SQLException e) {
             Notification.show("System error", "Database error",
                     Notification.Type.WARNING_MESSAGE);
@@ -85,7 +85,7 @@ public class LayoutGridButtonsOrder extends HorizontalLayout {
         HeaderCell clientFilter = filterRow.getCell("clientDTO");
         List<Client> clients = new ArrayList<>();
         try {
-            clients = ClientDAO.getInstance().LoadAll();
+            clients = ClientDAO.getInstance().getAll();
         } catch (SQLException e) {
             Notification.show("System error", "Database error",
                     Notification.Type.WARNING_MESSAGE);

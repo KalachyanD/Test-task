@@ -24,7 +24,7 @@ public class MechanicDAO {
         return instance;
     }
 
-    public List<Mechanic> LoadAll() throws SQLException {
+    public List<Mechanic> getAll() throws SQLException {
         List<Mechanic> data = new ArrayList<Mechanic>();
         String selectSQL = "SELECT id, name, surname, patronymic, hourlyPay FROM MECHANIC";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
@@ -43,7 +43,7 @@ public class MechanicDAO {
         return data;
     }
 
-    public List<FullNameDTO> LoadAllFullName() throws SQLException {
+    public List<FullNameDTO> getAllFullName() throws SQLException {
         List<FullNameDTO> data = new ArrayList<>();
         String selectSQL = "SELECT id, name, surname, patronymic FROM MECHANIC";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
@@ -61,7 +61,7 @@ public class MechanicDAO {
         return data;
     }
 
-    public Mechanic load(Long mechanicId) throws SQLException {
+    public Mechanic get(Long mechanicId) throws SQLException {
         String selectSQL = "SELECT * FROM MECHANIC WHERE ID = ?";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
         PreparedStatement preparedStatement = dbConnection.prepareStatement(selectSQL);
@@ -78,7 +78,7 @@ public class MechanicDAO {
         return currentMechanic;
     }
 
-    public void update(Long mechanicId, String name, String surname, String patronymic, Double hourlyPay)
+    public void edit(Long mechanicId, String name, String surname, String patronymic, Double hourlyPay)
             throws SQLException {
         String updateTableSQL = "UPDATE MECHANIC SET NAME= ?,SURNAME= ?,PATRONYMIC= ?,HOURLYPAY= ? WHERE id = ?";
         Connection dbConnection = ConnectionDB.getInstance().getDBConnection();
@@ -91,7 +91,7 @@ public class MechanicDAO {
         preparedStatement.executeUpdate();
     }
 
-    public void store(String name, String surname, String patronymic, Double hourlyPay)
+    public void create(String name, String surname, String patronymic, Double hourlyPay)
             throws SQLException {
         String insertTableSQL = "INSERT INTO MECHANIC"
                 + "(NAME, SURNAME, PATRONYMIC, HOURLYPAY) VALUES"
