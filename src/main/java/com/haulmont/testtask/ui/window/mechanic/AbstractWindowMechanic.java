@@ -19,13 +19,11 @@ public abstract class AbstractWindowMechanic extends Window {
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
 
-    public AbstractWindowMechanic(String str){
+    protected AbstractWindowMechanic(String str){
         super(str);
     }
 
-    protected void setOk(Button ok){
-        this.ok=ok;
-    }
+    protected void preload(Long id){}
 
     protected void buildWindow(){
         center(); //Position of window
@@ -89,7 +87,7 @@ public abstract class AbstractWindowMechanic extends Window {
         hourlyPay.addTextChangeListener(event -> textChange(event, hourlyPay));
     }
 
-    protected void textChange(FieldEvents.TextChangeEvent event, TextField textField){
+    private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
         textField.setValue(event.getText());
         textField.setCursorPosition(event.getCursorPosition());
         try {
@@ -118,6 +116,10 @@ public abstract class AbstractWindowMechanic extends Window {
 
     protected TextField getHourlyPay() {
         return hourlyPay;
+    }
+
+    protected void setOk(Button ok){
+        this.ok=ok;
     }
 
     @Override

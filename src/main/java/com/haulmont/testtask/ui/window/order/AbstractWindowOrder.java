@@ -3,6 +3,7 @@ package com.haulmont.testtask.ui.window.order;
 import com.haulmont.testtask.ui.converter.StringToDoubleConverter;
 import com.haulmont.testtask.ui.layout.main.MainUI;
 
+import com.vaadin.data.Property;
 import com.vaadin.data.Validator;
 import com.vaadin.data.validator.DateRangeValidator;
 import com.vaadin.data.validator.DoubleRangeValidator;
@@ -10,6 +11,8 @@ import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.event.FieldEvents;
 import com.vaadin.shared.ui.datefield.Resolution;
 import com.vaadin.ui.*;
+
+import java.util.Date;
 
 public abstract class AbstractWindowOrder extends Window {
 
@@ -22,23 +25,15 @@ public abstract class AbstractWindowOrder extends Window {
     private NativeSelect selectStatus = new NativeSelect("Status");
     private Button ok;
     private Button cancel = new Button("Cancel", event -> close());
+    private Date today = new Date();
 
-    public AbstractWindowOrder(String str){
+    protected AbstractWindowOrder(String str){
         super(str);
     }
 
-    protected void setOk(Button ok){
-        this.ok=ok;
-    }
+    protected void preload(){}
 
-    protected void setDateStart(DateField dateStart){
-        this.dateStart=dateStart;
-    }
-
-    protected void setDateFinish(DateField dateFinish)
-    {
-        this.dateFinish=dateFinish;
-    }
+    protected void preload(Long id){}
 
     protected void buildWindow() {
         center(); //Position of window
@@ -70,6 +65,10 @@ public abstract class AbstractWindowOrder extends Window {
         description.addValidator(new StringLengthValidator("Prompt is empty.",
                 1, 50, false));
 
+        selectClient.addValueChangeListener(event -> selectChange(event, selectClient));
+        selectMechanic.addValueChangeListener(event -> selectChange(event, selectMechanic));
+        selectStatus.addValueChangeListener(event -> selectChange(event, selectStatus));
+
         cost.setRequired(true);
         cost.setRequiredError("Prompt is empty.");
 
@@ -83,10 +82,13 @@ public abstract class AbstractWindowOrder extends Window {
         dateStart.addValueChangeListener(event -> dateChange());
         dateFinish.addValueChangeListener(event -> dateChange());
 
-        dateStart.addValidator(new DateRangeValidator("Wrong date", null, dateStart.getValue(),
-                Resolution.DAY));
-        dateFinish.addValidator(new DateRangeValidator("Wrong date", dateStart.getValue(), null,
-                Resolution.DAY));
+        DateRangeValidator dateStartValidator =  new DateRangeValidator("Wrong date", null, today,
+                Resolution.DAY);
+        DateRangeValidator dateFinishValidator =  new DateRangeValidator("Wrong date", today,null ,
+                Resolution.DAY);
+
+        dateStart.addValidator(dateStartValidator);
+        dateFinish.addValidator(dateFinishValidator);
 
         description.setValidationVisible(true);
         cost.setValidationVisible(true);
@@ -99,25 +101,12 @@ public abstract class AbstractWindowOrder extends Window {
 
         cost.addTextChangeListener(event -> textChange(event, cost));
         description.addTextChangeListener(event -> textChange(event, description));
-
-
     }
 
-    protected void textChange(FieldEvents.TextChangeEvent event, TextField textField) {
-        textField.setValue(event.getText());
-        textField.setCursorPosition(event.getCursorPosition());
+    private void commonValidator(){
         try {
             cost.validate();
             description.validate();
-
-            ok.setEnabled(true);
-        } catch (Validator.InvalidValueException e) {
-            ok.setEnabled(false);
-        }
-    }
-
-    protected void dateChange(){
-        try {
             dateStart.validate();
             dateFinish.validate();
 
@@ -125,6 +114,28 @@ public abstract class AbstractWindowOrder extends Window {
         } catch (Validator.InvalidValueException e) {
             ok.setEnabled(false);
         }
+    }
+
+    private void textChange(FieldEvents.TextChangeEvent event, TextField textField) {
+        textField.setValue(event.getText());
+        textField.setCursorPosition(event.getCursorPosition());
+        commonValidator();
+    }
+
+    private void dateChange(){
+        if(dateStart.isEmpty()){
+            dateStart.setValue(today);
+        }
+        if(dateFinish.isEmpty()){
+            dateFinish.setValue(today);
+        }
+
+        commonValidator();
+    }
+
+    private void selectChange(Property.ValueChangeEvent event, NativeSelect select) {
+        select.setValue(event.getProperty().getValue());
+        commonValidator();
     }
 
     protected TextField getDescript() {
@@ -153,6 +164,19 @@ public abstract class AbstractWindowOrder extends Window {
 
     protected NativeSelect getSelectStatus() {
         return selectStatus;
+    }
+
+    protected void setDateStart(DateField dateStart){
+        this.dateStart=dateStart;
+    }
+
+    protected void setDateFinish(DateField dateFinish)
+    {
+        this.dateFinish=dateFinish;
+    }
+
+    protected void setOk(Button ok){
+        this.ok=ok;
     }
 
     @Override

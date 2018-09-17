@@ -19,7 +19,8 @@ public class WindowEditClient extends AbstractWindowClient {
         validation();
     }
 
-    private void preload(Long id){
+    @Override
+    protected void preload(Long id){
         this.id = id;
         try {
             Client client = ClientDAO.getInstance().get(id);

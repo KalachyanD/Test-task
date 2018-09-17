@@ -19,7 +19,8 @@ public class WindowEditMechanic extends AbstractWindowMechanic {
         validation();
     }
 
-    private void preload(Long id){
+    @Override
+    protected void preload(Long id){
         this.id = id;
         try {
             Mechanic mechanic = MechanicDAO.getInstance().get(id);

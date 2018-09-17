@@ -18,10 +18,6 @@ import com.haulmont.testtask.dao.dto.OrderDTO;
 import com.haulmont.testtask.model.Client;
 import com.haulmont.testtask.model.Status;
 
-/**
- * Created by User on 04.08.2017.
- */
-
 public class LayoutGridButtonsOrder extends HorizontalLayout {
 
     private Grid gridOrders = new Grid("Orders");
@@ -169,26 +165,25 @@ public class LayoutGridButtonsOrder extends HorizontalLayout {
         updateGrid(orders);
     }
 
-    private void textChange(FieldEvents.TextChangeEvent event, TextField textField) {
-        textField.setValue(event.getText());
-        textField.setCursorPosition(event.getCursorPosition());
+    private void checkEnabledApply(){
+        if ( ( filterFieldClient.isEmpty() && filterFieldDescription.isEmpty() && filterFieldStatus.isEmpty() )
+                || gridOrders.getContainerDataSource().size() == 0) {
 
-        if (filterFieldClient.isEmpty() && filterFieldDescription.isEmpty() && filterFieldStatus.isEmpty()) {
             buttonApplyFilter.setEnabled(false);
-            updateGrid();
-        } else {
+        }
+        else {
             buttonApplyFilter.setEnabled(true);
         }
     }
 
+    private void textChange(FieldEvents.TextChangeEvent event, TextField textField) {
+        textField.setValue(event.getText());
+        textField.setCursorPosition(event.getCursorPosition());
+        checkEnabledApply();
+    }
+
     private void selectChange(Property.ValueChangeEvent event, NativeSelect select) {
         select.setValue(event.getProperty().getValue());
-
-        if (filterFieldClient.isEmpty() && filterFieldDescription.isEmpty() && filterFieldStatus.isEmpty()) {
-            buttonApplyFilter.setEnabled(false);
-            updateGrid();
-        } else {
-            buttonApplyFilter.setEnabled(true);
-        }
+        checkEnabledApply();
     }
 }

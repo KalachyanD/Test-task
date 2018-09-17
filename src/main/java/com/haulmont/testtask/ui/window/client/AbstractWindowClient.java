@@ -19,13 +19,11 @@ public abstract class AbstractWindowClient extends Window {
     private StringLengthValidator stringLengthValidator = new StringLengthValidator("Prompt is empty.",
             1, 50, false);
 
-    public AbstractWindowClient(String str){
+    protected AbstractWindowClient(String str){
         super(str);
     }
 
-    protected void setOk(Button ok){
-        this.ok=ok;
-    }
+    protected void preload(Long id){}
 
     protected void buildWindow(){
         center(); //Position of window
@@ -89,7 +87,7 @@ public abstract class AbstractWindowClient extends Window {
         phoneNumber.addTextChangeListener(event -> textChange(event, phoneNumber));
     }
 
-    protected void textChange(FieldEvents.TextChangeEvent event, TextField textField){
+    private void textChange(FieldEvents.TextChangeEvent event, TextField textField){
         textField.setValue(event.getText());
         textField.setCursorPosition(event.getCursorPosition());
         try {
@@ -118,6 +116,10 @@ public abstract class AbstractWindowClient extends Window {
 
     protected TextField getPhoneNumber() {
         return phoneNumber;
+    }
+
+    protected void setOk(Button ok){
+        this.ok=ok;
     }
 
     @Override

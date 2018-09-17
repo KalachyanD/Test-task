@@ -30,7 +30,8 @@ public class WindowEditOrder extends AbstractWindowOrder {
         validation();
     }
 
-    private void preload(Long id) {
+    @Override
+    protected void preload(Long id) {
         this.id = id;
         try {
             OrderDTO order = OrderDAO.getInstance().get(id);
@@ -74,18 +75,21 @@ public class WindowEditOrder extends AbstractWindowOrder {
 
         getDateFinish().validate();
         getDateFinish().setValidationVisible(true);
-
     }
 
     private void ok(Button.ClickEvent event) {
+
         try {
-            OrderDAO.getInstance().edit(id, getDescript().getValue(),
-                    ((FullNameDTO) getSelectStatus().getValue()).getId(),
+            OrderDAO.getInstance().edit(
+                    id,
+                    getDescript().getValue(),
+                    ((FullNameDTO) getSelectClient().getValue()).getId(),
                     ((FullNameDTO) getSelectMechanic().getValue()).getId(),
                     getDateStart().getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                     getDateFinish().getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
                     Double.parseDouble(getCost().getValue()),
                     Status.valueOf(getSelectStatus().getValue().toString()));
+
             getUI().design.horizontalLayoutGridButtonsOrd.updateGrid();
             getUI().design.horizontalLayoutGridButtonsOrd.buttonDeleteOrder.setEnabled(false);
             getUI().design.horizontalLayoutGridButtonsOrd.buttonEditOrder.setEnabled(false);

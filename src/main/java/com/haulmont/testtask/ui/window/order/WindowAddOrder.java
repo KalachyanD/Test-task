@@ -29,7 +29,8 @@ public class WindowAddOrder extends AbstractWindowOrder {
         validation();
     }
 
-    private void preload() {
+    @Override
+    protected void preload() {
         try {
             List<FullNameDTO> clients = new ArrayList<>();
             clients = ClientDAO.getInstance().getAllFullName();
@@ -65,11 +66,13 @@ public class WindowAddOrder extends AbstractWindowOrder {
         LocalDate dateStart = this.getDateStart().getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate dateFinish = this.getDateFinish().getValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
         try {
-            OrderDAO.getInstance().create(getDescript().getValue(),
+            OrderDAO.getInstance().create(
+                    getDescript().getValue(),
                     ((FullNameDTO) getSelectClient().getValue()).getId(),
                     ((FullNameDTO) getSelectMechanic().getValue()).getId(),
                     dateStart, dateFinish, Double.parseDouble(getCost().getValue()),
                     Status.valueOf(getSelectStatus().getValue().toString()));
+
             getUI().design.horizontalLayoutGridButtonsOrd.updateGrid();
             close();
         } catch (SQLException e) {
